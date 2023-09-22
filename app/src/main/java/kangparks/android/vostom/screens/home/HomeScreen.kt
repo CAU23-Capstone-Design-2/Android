@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -27,6 +29,7 @@ import kangparks.android.vostom.Greeting
 import kangparks.android.vostom.navigations.Content
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kangparks.android.vostom.ui.theme.Purple100
 
 
 @Composable
@@ -53,7 +56,7 @@ fun HomeScreen(navController : NavHostController){
 
         Column(
             modifier = Modifier
-                .size(300.dp)
+                .size(500.dp)
                 .verticalScroll(rememberScrollState())
                 .padding(30.dp)
         ) {
@@ -62,9 +65,9 @@ fun HomeScreen(navController : NavHostController){
             }
         }
 
-        Spacer(modifier = Modifier.height(10.dp))
-
-        Button(modifier = Modifier.width(300.dp).height(100.dp).padding(20.dp), onClick = { navController.navigate(Content.LearningScript.route) }) {
+        Button(modifier = Modifier.width(500.dp).height(100.dp).padding(20.dp),
+            colors = ButtonDefaults.buttonColors(Purple100),
+            onClick = { navController.navigate(Content.LearningScript.route) }) {
             Text(text = "스크립트 녹음하기", fontSize = 20.sp)
         }
     }
