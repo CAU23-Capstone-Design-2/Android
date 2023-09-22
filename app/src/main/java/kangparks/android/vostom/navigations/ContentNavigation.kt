@@ -22,10 +22,10 @@ sealed class Content(val route : String){
 
 fun NavGraphBuilder.contentNavigation(navController : NavHostController){
     navigation(startDestination = Content.Home.route, route = Nav.CONTENT){
-        composable(Content.Home.route) { HomeScreen() }
+        composable(Content.Home.route) { HomeScreen(navController = navController) }
         composable(Content.LearningGuide.route){ LearningGuideScreen() }
         composable(Content.LearningPitch.route) { LearningPitchScreen() }
-        composable(Content.LearningScript.route) { LearningScriptScreen() }
+        composable(Content.LearningScript.route) { LearningScriptScreen(navController = navController) }
         composable(Content.LearningSing.route) { LearningSingScreen() }
         composable(Content.Loading.route) { LoadingScreen() }
     }
