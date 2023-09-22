@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -48,6 +50,17 @@ fun HomeScreen(navController : NavHostController){
             textAlign = TextAlign.Left,
             lineHeight = 25.sp
         )
+
+        Column(
+            modifier = Modifier
+                .size(300.dp)
+                .verticalScroll(rememberScrollState())
+                .padding(30.dp)
+        ) {
+            repeat(100) {
+                Text("Item $it", modifier = Modifier.padding(2.dp))
+            }
+        }
 
         Spacer(modifier = Modifier.height(10.dp))
 
