@@ -11,13 +11,22 @@ import kangparks.android.vostom.screens.learning.LearningScriptScreen
 import kangparks.android.vostom.screens.learning.LearningSingScreen
 import kangparks.android.vostom.screens.learning.LoadingScreen
 
-fun NavGraphBuilder.ContentNavigation(navController : NavHostController){
-    navigation(startDestination = "home", route = "content_graph"){
-        composable("home") { HomeScreen() }
-        composable("learning_guide"){ LearningGuideScreen() }
-        composable("learning_pitch") { LearningPitchScreen() }
-        composable("learning_script") { LearningScriptScreen() }
-        composable("learning_sing") { LearningSingScreen() }
-        composable("loading") { LoadingScreen() }
+sealed class Content(val route : String){
+    object Home : Content(route = "home")
+    object LearningGuide : Content(route = "learning_guide")
+    object LearningPitch : Content(route = "learning_pitch")
+    object LearningScript : Content(route = "learning_script")
+    object LearningSing : Content(route = "learning_sing")
+    object Loading : Content(route = "loading")
+}
+
+fun NavGraphBuilder.contentNavigation(navController : NavHostController){
+    navigation(startDestination = Content.Home.route, route = Nav.CONTENT){
+        composable(Content.Home.route) { HomeScreen() }
+        composable(Content.LearningGuide.route){ LearningGuideScreen() }
+        composable(Content.LearningPitch.route) { LearningPitchScreen() }
+        composable(Content.LearningScript.route) { LearningScriptScreen() }
+        composable(Content.LearningSing.route) { LearningSingScreen() }
+        composable(Content.Loading.route) { LoadingScreen() }
     }
 }

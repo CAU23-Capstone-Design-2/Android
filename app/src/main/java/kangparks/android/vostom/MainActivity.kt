@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import kangparks.android.vostom.navigations.RootNavigation
+import kangparks.android.vostom.navigations.VostomApp
 import kangparks.android.vostom.ui.theme.VostomTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,8 +23,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-//                    Greeting("Android")
-                    RootNavigation()
+                    VostomApp()
                 }
             }
         }
