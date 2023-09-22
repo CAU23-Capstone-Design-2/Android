@@ -42,33 +42,11 @@ fun HomeScreen(navController : NavHostController){
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        Text(
-            text = "다음 제공되는 스크립트를\n따라 읽어보세요!",
-            modifier = Modifier
-                .padding(10.dp)
-                .fillMaxWidth(),
-            fontSize = 25.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black,
-            textAlign = TextAlign.Left,
-            lineHeight = 25.sp
-        )
-
-        Column(
-            modifier = Modifier
-                .size(500.dp)
-                .verticalScroll(rememberScrollState())
-                .padding(30.dp)
-        ) {
-            repeat(100) {
-                Text("Item $it", modifier = Modifier.padding(2.dp))
-            }
-        }
 
         Button(modifier = Modifier.width(500.dp).height(100.dp).padding(20.dp),
             colors = ButtonDefaults.buttonColors(Purple100),
             onClick = { navController.navigate(Content.LearningScript.route) }) {
-            Text(text = "스크립트 녹음하기", fontSize = 20.sp)
+            Text(text = "Vostom 시작하기", fontSize = 20.sp)
         }
     }
 
