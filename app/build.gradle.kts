@@ -51,7 +51,7 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
 
     // Jetpack Compose dependencies
@@ -63,7 +63,7 @@ dependencies {
     implementation("androidx.compose.material3:material3")
 
     // android Navigation dependencies
-    val nav_version = "2.5.3"
+    val nav_version = "2.7.3"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version") // Kotlin
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version") // Kotlin
     implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version") // Feature module Support

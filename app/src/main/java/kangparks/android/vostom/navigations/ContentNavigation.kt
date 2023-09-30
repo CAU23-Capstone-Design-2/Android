@@ -3,7 +3,7 @@ package kangparks.android.vostom.navigations
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navigation
+import androidx.navigation.navigation
 import kangparks.android.vostom.screens.home.HomeScreen
 import kangparks.android.vostom.screens.learning.LearningGuideScreen
 import kangparks.android.vostom.screens.learning.LearningPitchScreen
