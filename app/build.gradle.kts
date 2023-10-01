@@ -23,7 +23,7 @@ android {
 
         buildConfigField("String", "kakao_api_key", getApiKey("kakao_api_key"))
 
-        manifestPlaceholders["kakao_api_key"] = getApiKey("kakao_api_key")
+        manifestPlaceholders["NATIVE_APP_KEY"] = getApiKey("NATIVE_APP_KEY") as String
     }
 
     buildTypes {
@@ -91,7 +91,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:$nav_version") // Jetpack Compose Integration
 
     // Kakao Login
-    implementation("com.kakao.sdk:v2-user:2.16.0")
+    implementation("com.kakao.sdk:v2-user:2.4.0")
 
     // Splash Screen
     implementation("androidx.core:core-splashscreen:1.0.1")
