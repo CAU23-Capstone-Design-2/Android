@@ -12,7 +12,7 @@ sealed class Auth(val route : String){
 
 fun NavGraphBuilder.authNavigation(navController : NavHostController){
     navigation(startDestination = Auth.Login.route, route = Nav.AUTH){
-        composable(route = Auth.Login.route) { LoginScreen() }
+        composable(route = Auth.Login.route) { LoginScreen(navHostController = navController) }
     }
 }
 

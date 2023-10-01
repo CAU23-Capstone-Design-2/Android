@@ -23,16 +23,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import kangparks.android.vostom.components.background.VideoBackground
 import kangparks.android.vostom.components.button.RoundedButton
+import kangparks.android.vostom.utils.helper.auth.withKakaoLogin
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(){
+fun LoginScreen(navHostController: NavHostController){
+    val context = LocalContext.current
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
     )
@@ -72,7 +77,11 @@ fun LoginScreen(){
                     .fillMaxSize(),verticalArrangement = Arrangement.Bottom){
                     RoundedButton(
                         text = "Vostom 시작하기",
-                        onClick = { }
+                        onClick = { withKakaoLogin(
+                            appKey = "",
+                            context = context,
+                            navHostController = navHostController
+                        )}
                     )
                 }
             }
