@@ -77,6 +77,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.material3:material3-window-size-class")
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
 
@@ -102,6 +103,14 @@ dependencies {
     implementation("com.google.android.exoplayer:exoplayer-ui:$exoPlayerVersion")
     implementation("com.google.android.exoplayer:exoplayer-dash:$exoPlayerVersion")
     implementation("com.google.android.exoplayer:exoplayer-ui:$exoPlayerVersion")
+
+    // lottie
+    val lottieVersion = "6.1.0"
+    implementation("com.airbnb.android:lottie:$lottieVersion")
+    implementation("com.airbnb.android:lottie-compose:$lottieVersion")
+
+    // coil
+    implementation("io.coil-kt:coil-compose:2.4.0")
 
     // testing dependencies
     testImplementation("junit:junit:4.13.2")
