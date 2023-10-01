@@ -23,9 +23,11 @@ fun RootNavigation(
     navController: NavHostController
 ){
     // 추후 토큰 조회 로직 구현 예정
-    val token = true
+//    val token = false
 
-    NavHost(navController = navController, startDestination = if(token == null) Nav.AUTH else Nav.CONTENT){
+    val curNav = if(true) Nav.AUTH else Nav.CONTENT
+
+    NavHost(navController = navController, startDestination = curNav){
         authNavigation(navController = navController)
         contentNavigation(navController = navController)
     }

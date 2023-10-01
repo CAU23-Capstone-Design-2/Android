@@ -51,7 +51,7 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
 
     // Jetpack Compose dependencies
@@ -62,8 +62,13 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
 
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1")
+
+    // accompanist - status bar
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.17.0")
+
     // android Navigation dependencies
-    val nav_version = "2.7.3"
+    val nav_version = "2.5.3"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version") // Kotlin
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version") // Kotlin
     implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version") // Feature module Support
@@ -72,6 +77,15 @@ dependencies {
     // Kakao Login
     implementation("com.kakao.sdk:v2-user:2.16.0")
 
+    // Splash Screen
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
+    // exo player
+    val exoPlayerVersion = "2.19.1"
+    implementation("com.google.android.exoplayer:exoplayer:$exoPlayerVersion")
+    implementation("com.google.android.exoplayer:exoplayer-ui:$exoPlayerVersion")
+    implementation("com.google.android.exoplayer:exoplayer-dash:$exoPlayerVersion")
+    implementation("com.google.android.exoplayer:exoplayer-ui:$exoPlayerVersion")
 
     // testing dependencies
     testImplementation("junit:junit:4.13.2")

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Vostom.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#161517</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.AppCompat</item>
+        <item name="android:windowSplashScreenBrandingImage">@drawable/branding_dark</item>
+    </style>
+</resources>
