@@ -297,8 +297,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="branding" />
-                            <entry key="sourceFile" value="$USER_HOME$/Downloads/branding.svg" />
+                            <entry key="outputName" value="screen_title" />
+                            <entry key="sourceFile" value="$USER_HOME$/Downloads/screen_title.svg" />
                           </map>
                         </option>
                       </PersistentState>
