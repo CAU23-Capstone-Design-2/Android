@@ -27,6 +27,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.kakao.sdk.common.model.ApplicationContextInfo
+import kangparks.android.vostom.BuildConfig
 import kangparks.android.vostom.components.background.VideoBackground
 import kangparks.android.vostom.components.button.RoundedButton
 import kangparks.android.vostom.utils.helper.auth.withKakaoLogin
@@ -37,6 +39,8 @@ import kangparks.android.vostom.utils.helper.auth.withKakaoLogin
 @Composable
 fun LoginScreen(navHostController: NavHostController){
     val context = LocalContext.current
+
+    val kakaoAppKey = BuildConfig.kakao_api_key
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -78,7 +82,7 @@ fun LoginScreen(navHostController: NavHostController){
                     RoundedButton(
                         text = "Vostom 시작하기",
                         onClick = { withKakaoLogin(
-                            appKey = "",
+                            appKey = kakaoAppKey,
                             context = context,
                             navHostController = navHostController
                         )}

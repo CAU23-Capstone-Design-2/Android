@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -18,6 +20,10 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "kakao_api_key", getApiKey("kakao_api_key"))
+
+        manifestPlaceholders["kakao_api_key"] = getApiKey("kakao_api_key")
     }
 
     buildTypes {
@@ -27,6 +33,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "kakao_api_key", getApiKey("kakao_api_key"))
+        }
+        getByName("debug"){
+            buildConfigField("String", "kakao_api_key", getApiKey("kakao_api_key"))
         }
     }
     compileOptions {
@@ -38,6 +48,8 @@ android {
     }
     buildFeatures {
         compose = true
+        viewBinding = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.3"
@@ -47,6 +59,10 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+}
+
+fun getApiKey(propertyKey :String):String {
+    return gradleLocalProperties(rootDir).getProperty(propertyKey)
 }
 
 dependencies {
