@@ -18,7 +18,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Vostom">
+            android:theme="@style/Theme.Vostom.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,7 +34,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:host="oauth"
-                    android:scheme="kakaofbaae6842afe216a6c150de50c3634ec" />
+                    android:scheme="kakao${NATIVE_APP_KEY}" />
             </intent-filter>
         </activity>
     </application>
