@@ -6,26 +6,24 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import kangparks.android.vostom.Greeting
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
 import kangparks.android.vostom.navigations.Content
 
 @Composable
-fun LearningPitchScreen(navController : NavHostController){
-
+fun LearningSecondSingScreen(navController : NavHostController){
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
         LearningLayoutTemplate(
             hasBackButton = true,
-            backButtonContent = "처음으로",
+            backButtonContent = "아전 단계로",
             backButtonAction = { navController.popBackStack()},
             hasMainContent = true,
-            mainContent = "예시처럼 내 목소리의 음역대를 측정해보세요.",
+            mainContent = "좋아하는 노래를 찾아 신나게 불러봐요",
             hasNextButton = true,
-            nextButtonContent = "음역대 측정하기",
-            nextButtonAction = { navController.navigate(Content.LearningScript.route) } // 임시 이동
+            nextButtonContent = "노래 녹음하기",
+            nextButtonAction = { navController.navigate(Content.Loading.route) } // 임시 이동
         ){}
     }
 }

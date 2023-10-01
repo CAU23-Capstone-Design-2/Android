@@ -9,16 +9,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,12 +23,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.kakao.sdk.common.model.ApplicationContextInfo
 import kangparks.android.vostom.BuildConfig
 import kangparks.android.vostom.components.background.VideoBackground
 import kangparks.android.vostom.components.button.RoundedButton
+import kangparks.android.vostom.navigations.Nav
 import kangparks.android.vostom.utils.helper.auth.withKakaoLogin
-
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,8 +46,8 @@ fun LoginScreen(navHostController: NavHostController){
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .windowInsetsPadding(WindowInsets.displayCutout)
-                    .padding(horizontal = 20.dp).padding(bottom = 48.dp)
+                    .windowInsetsPadding(WindowInsets.statusBars)
+                    .padding(horizontal = 20.dp).padding(bottom = 58.dp)
                 ,
                 contentAlignment = Alignment.Center
             ) {
@@ -81,11 +76,17 @@ fun LoginScreen(navHostController: NavHostController){
                     .fillMaxSize(),verticalArrangement = Arrangement.Bottom){
                     RoundedButton(
                         text = "Vostom 시작하기",
-                        onClick = { withKakaoLogin(
-                            appKey = kakaoAppKey,
-                            context = context,
-                            navHostController = navHostController
-                        )}
+                        onClick = {
+                            // 임시
+                            navHostController.navigate(route = Nav.CONTENT){
+                                navHostController.popBackStack()
+                            }
+//                            withKakaoLogin(
+//                                appKey = kakaoAppKey,
+//                                context = context,
+//                                navHostController = navHostController
+//                            )
+                        }
                     )
                 }
             }
