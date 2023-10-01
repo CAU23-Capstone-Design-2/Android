@@ -66,6 +66,12 @@ fun VideoBackground(modifier : Modifier = Modifier){
         }
     }
 
+    DisposableEffect(exoPlayer){
+        onDispose {
+            exoPlayer.release()
+        }
+    }
+
     Box(modifier = modifier.fillMaxSize()){
         AndroidView(factory = { context ->
             StyledPlayerView(context).apply {
