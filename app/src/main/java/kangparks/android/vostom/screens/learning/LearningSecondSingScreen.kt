@@ -17,7 +17,7 @@ fun LearningSecondSingScreen(navController : NavHostController){
     ) {
         LearningLayoutTemplate(
             hasBackButton = true,
-            backButtonContent = "아전 단계로",
+            backButtonContent = "이전 단계로",
             backButtonAction = { navController.popBackStack()},
             hasMainContent = true,
             mainContent = "좋아하는 노래를 찾아 신나게 불러봐요",
