@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import kangparks.android.vostom.Greeting
+import kangparks.android.vostom.components.player.MusicPlayer
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
 import kangparks.android.vostom.navigations.Content
 
@@ -26,6 +27,8 @@ fun LearningPitchScreen(navController : NavHostController){
             hasNextButton = true,
             nextButtonContent = "음역대 측정하기",
             nextButtonAction = { navController.navigate(Content.LearningScript.route) } // 임시 이동
-        ){}
+        ){
+            MusicPlayer()
+        }
     }
 }

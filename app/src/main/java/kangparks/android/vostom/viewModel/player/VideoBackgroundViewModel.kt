@@ -1,4 +1,4 @@
-package kangparks.android.vostom.viewModel.videobackground
+package kangparks.android.vostom.viewModel.player
 
 import androidx.lifecycle.ViewModel
 import com.google.android.exoplayer2.ExoPlayer

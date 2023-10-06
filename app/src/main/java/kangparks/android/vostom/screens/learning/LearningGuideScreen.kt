@@ -1,5 +1,8 @@
 package kangparks.android.vostom.screens.learning
 
+import android.app.Activity
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -14,9 +17,12 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.airbnb.lottie.RenderMode
@@ -30,9 +36,9 @@ import kangparks.android.vostom.Greeting
 import kangparks.android.vostom.components.buttonsheet.BottomSheet
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
 import kangparks.android.vostom.navigations.Content
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LearningGuideScreen(navController : NavHostController){
     val singingAnimation by rememberLottieComposition(
@@ -41,13 +47,23 @@ fun LearningGuideScreen(navController : NavHostController){
         composition = singingAnimation,
         iterations = LottieConstants.IterateForever,
     )
-
     val coroutineScope = rememberCoroutineScope()
-    val modalSheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = true,
-        confirmValueChange = {  true},
+    val doubleBackToExitPressedOnce = remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
-    )
+    BackHandler(enabled = true) {
+        if(doubleBackToExitPressedOnce.value){
+            (context as Activity).finish()
+        }else{
+            doubleBackToExitPressedOnce.value = true
+            Toast.makeText(context, "'뒤로' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show()
+
+            coroutineScope.launch {
+                delay(2000)
+                doubleBackToExitPressedOnce.value = false
+            }
+        }
+    }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
