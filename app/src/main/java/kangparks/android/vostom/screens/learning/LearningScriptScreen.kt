@@ -3,6 +3,7 @@ package kangparks.android.vostom.screens.learning
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -26,6 +27,8 @@ fun LearningScriptScreen(navController : NavHostController){
             hasNextButton = true,
             nextButtonContent = "스크립트 녹음하기",
             nextButtonAction = { navController.navigate(Content.LearningFirstSing.route) } // 임시 이동
-        ){}
+        ){
+            Text(text = "스크립트 스크립트")
+        }
     }
 }

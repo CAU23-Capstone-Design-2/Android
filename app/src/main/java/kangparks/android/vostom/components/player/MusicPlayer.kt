@@ -3,6 +3,7 @@ package kangparks.android.vostom.components.player
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -84,6 +85,12 @@ fun MusicPlayer(
             if(isPlaying.value) viewModel.stopMusic()
             else viewModel.playMusic()}
         ) {
+//            if(isPlaying.value){
+//                Icon(painter = , contentDescription = )
+//            }
+//            else{
+//                Icon(painter = , contentDescription = )
+//            }
             Text(text = isPlaying.value.toString(), fontSize = 12.sp)
 
         }

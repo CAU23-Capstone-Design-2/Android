@@ -21,6 +21,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kangparks.android.vostom.Greeting
+import kangparks.android.vostom.components.button.RoundedButton
 
 @Composable
 fun HomeScreen(navController : NavHostController){
@@ -42,5 +43,6 @@ fun HomeScreen(navController : NavHostController){
             .padding(bottom = 48.dp)
     ){
         Text(text = "여긴 홈스크린! - 나중에 구현할 예정")
+
     }
 }

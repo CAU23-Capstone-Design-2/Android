@@ -79,7 +79,7 @@ fun LearningGuideScreen(navController : NavHostController){
             nextButtonAction = {
                 navController.navigate(Content.LearningPitch.route)
             },
-            nextButtonBottomPaddingValue = 60
+            nextButtonBottomPaddingValue = 60,
         ){
             Box(modifier = Modifier
                 .height(250.dp)
