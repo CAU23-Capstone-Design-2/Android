@@ -12,6 +12,8 @@ import kangparks.android.vostom.screens.learning.LearningPitchScreen
 import kangparks.android.vostom.screens.learning.LearningScriptScreen
 import kangparks.android.vostom.screens.learning.LearningSecondSingScreen
 import kangparks.android.vostom.screens.learning.LoadingScreen
+import kangparks.android.vostom.screens.permission.PermissionGuideScreen
+import kangparks.android.vostom.screens.setting.SettingScreen
 
 sealed class Content(val route : String){
     object Home : Content(route = "home")
@@ -22,6 +24,8 @@ sealed class Content(val route : String){
     object LearningSecondSing : Content(route = "learning_second_sing")
     object LearningCount : Content(route = "learning_count")
     object Loading : Content(route = "loading")
+    object PermissionGuide : Content(route = "permission_guide")
+    object Setting : Content(route = "setting")
 }
 
 fun NavGraphBuilder.contentNavigation(navController : NavHostController){
@@ -36,5 +40,7 @@ fun NavGraphBuilder.contentNavigation(navController : NavHostController){
         composable(Content.LearningSecondSing.route) { LearningSecondSingScreen(navController = navController) }
         composable(Content.LearningCount.route){ LearningCountScreen(navController = navController) }
         composable(Content.Loading.route) { LoadingScreen(navController = navController) }
+        composable(Content.PermissionGuide.route) { PermissionGuideScreen(navController = navController) }
+        composable(Content.Setting.route){ SettingScreen()}
     }
 }

@@ -6,7 +6,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import kangparks.android.vostom.Greeting
+import kangparks.android.vostom.components.canvas.VoiceMeasureLine
 import kangparks.android.vostom.components.player.MusicPlayer
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
 import kangparks.android.vostom.navigations.Content
@@ -26,6 +26,7 @@ fun LearningPitchScreen(navController : NavHostController){
             nextButtonAction = { navController.navigate(Content.LearningScript.route) } // 임시 이동
         ){
             MusicPlayer()
+//            VoiceMeasureLine()
         }
     }
 }

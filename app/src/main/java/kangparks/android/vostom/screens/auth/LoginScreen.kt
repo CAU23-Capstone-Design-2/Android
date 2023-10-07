@@ -100,7 +100,7 @@ fun LoginScreen(navHostController: NavHostController){
                         onClick = {
                             // 임시
                             navHostController.navigate(route = Nav.CONTENT){
-                                navHostController.popBackStack()
+//                                navHostController.popBackStack()
                             }
 //                            withKakaoLogin(
 //                                appKey = kakaoAppKey,
