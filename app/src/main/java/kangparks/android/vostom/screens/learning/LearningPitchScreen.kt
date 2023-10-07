@@ -19,12 +19,9 @@ fun LearningPitchScreen(navController : NavHostController){
         color = MaterialTheme.colorScheme.background
     ) {
         LearningLayoutTemplate(
-            hasBackButton = true,
             backButtonContent = "처음으로",
             backButtonAction = { navController.popBackStack()},
-            hasMainContent = true,
             mainContent = "예시처럼 내 목소리의 음역대를 측정해보세요.",
-            hasNextButton = true,
             nextButtonContent = "음역대 측정하기",
             nextButtonAction = { navController.navigate(Content.LearningScript.route) } // 임시 이동
         ){

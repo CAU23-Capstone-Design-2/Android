@@ -28,8 +28,8 @@ fun NavGraphBuilder.contentNavigation(navController : NavHostController){
     val isLearnUserVoice = false
 
     navigation(startDestination = if(isLearnUserVoice)Content.Home.route else Content.LearningGuide.route, route = Nav.CONTENT){
-        composable(Content.Home.route) { HomeScreen(navController = navController ) }
-        composable(Content.LearningGuide.route){ LearningGuideScreen(navController = navController ) }
+        composable(Content.Home.route,) { HomeScreen(navController = navController ) }
+        composable(Content.LearningGuide.route,){ LearningGuideScreen(navController = navController ) }
         composable(Content.LearningPitch.route) { LearningPitchScreen(navController = navController ) }
         composable(Content.LearningScript.route) { LearningScriptScreen(navController = navController) }
         composable(Content.LearningFirstSing.route) { LearningFirstSingScreen(navController = navController) }

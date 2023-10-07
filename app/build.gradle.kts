@@ -88,7 +88,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
 
     // accompanist - status bar
-    implementation("com.google.accompanist:accompanist-systemuicontroller:0.17.0")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.28.0")
 
     // android Navigation dependencies
     val nav_version = "2.5.3"

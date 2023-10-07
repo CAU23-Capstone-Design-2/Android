@@ -20,9 +20,8 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun LearningAppBar(
-    hasBackButton : Boolean = false,
     backButtonAction : () -> Unit = {},
-    backButtonContent : String = "",
+    backButtonContent : String? = null,
     modifier: Modifier = Modifier,
 ){
     Row (
@@ -30,7 +29,7 @@ fun LearningAppBar(
         horizontalArrangement = Arrangement.Start,
         modifier = modifier.height(40.dp).fillMaxWidth()
     ){
-        if(hasBackButton){
+        if(backButtonContent != null){
             Row (
                 horizontalArrangement = Arrangement.Center,
                 modifier = Modifier.clickable { backButtonAction() }

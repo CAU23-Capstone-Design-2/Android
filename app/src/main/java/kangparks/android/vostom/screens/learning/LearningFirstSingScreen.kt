@@ -17,12 +17,9 @@ fun LearningFirstSingScreen(navController : NavHostController){
         color = MaterialTheme.colorScheme.background
     ) {
         LearningLayoutTemplate(
-            hasBackButton = true,
             backButtonContent = "아전 단계로",
             backButtonAction = { navController.popBackStack()},
-            hasMainContent = true,
             mainContent = "아래 제공되는 동요 중 하나를 선택해 신나게 불러 봐요!",
-            hasNextButton = true,
             nextButtonContent = "동요 녹음하기",
             nextButtonAction = { navController.navigate(Content.LearningSecondSing.route) } // 임시 이동
         ){}
