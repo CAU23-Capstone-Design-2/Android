@@ -51,14 +51,10 @@ fun LoadingScreen(navController : NavHostController){
                     composition = loadingAnimation,
                     progress = { progress },
                     contentScale = ContentScale.FillHeight,
-                )}
-
-
-
+                )
+            }
         }
-
         OthersContentBottomSheet()
-
     }
 
 }

@@ -53,7 +53,6 @@ fun LearningLayoutTemplate(
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.statusBars)
             .padding(horizontal = 20.dp, vertical = 20.dp),
-//            .padding(bottom = 58.dp),
     ) {
         LearningAppBar(backButtonAction, backButtonContent)
         Spacer(modifier = Modifier.height(30.dp))

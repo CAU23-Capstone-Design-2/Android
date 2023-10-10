@@ -79,7 +79,7 @@ fun VideoBackground(modifier : Modifier = Modifier){
                     }
                     Lifecycle.Event.ON_RESUME -> {
 //                        it.onResume()
-                        it.player?.prepare()
+                        it.player?.play()
                     }
                     else -> Unit
                 }

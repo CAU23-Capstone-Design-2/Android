@@ -86,8 +86,8 @@ fun LearningGuideScreen(navController: NavHostController) {
         LearningLayoutTemplate(
             backButtonContent = "첫화면(임시)",
             backButtonAction = { navController.popBackStack() },
-            mainContent = "내 목소리에 어울리는 노래를 찾기 위해 목소리 학습하는 과정이 필요해요!",
-            subContent = "조용한 환경에서 진행하면 학습 정확도가 높아집니다.\uD83D\uDE06",
+            mainContent = "내 목소리에 어울리는 노래를 찾기 위해 목소리 학습을 진행해주세요.",
+            subContent = "조용한 환경에서 진행하면 학습 정확도가 높아집니다!\uD83D\uDE06",
             nextButtonContent = "나의 목소리 학습 시작하기",
             nextButtonAction = {
                 if (getResultOfCurrentPermissions(context)) {
