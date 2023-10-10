@@ -69,7 +69,6 @@ dependencies {
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-//    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
 
     // Jetpack Compose dependencies
     val compose_ui_version = "1.7.2"
@@ -96,6 +95,9 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version") // Kotlin
     implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version") // Feature module Support
     implementation("androidx.navigation:navigation-compose:$nav_version") // Jetpack Compose Integration
+
+    // accompanist - navigation
+    implementation("com.google.accompanist:accompanist-navigation-material:0.30.1")
 
     // Kakao Login
     implementation("com.kakao.sdk:v2-user:2.4.0")

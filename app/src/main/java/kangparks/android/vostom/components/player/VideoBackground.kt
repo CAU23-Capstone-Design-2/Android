@@ -59,6 +59,7 @@ fun VideoBackground(modifier : Modifier = Modifier){
 
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
+            exoPlayer.release()
         }
     }
 
@@ -77,8 +78,8 @@ fun VideoBackground(modifier : Modifier = Modifier){
                         it.player?.pause()
                     }
                     Lifecycle.Event.ON_RESUME -> {
-                        it.onResume()
-                        it.player?.play()
+//                        it.onResume()
+                        it.player?.prepare()
                     }
                     else -> Unit
                 }

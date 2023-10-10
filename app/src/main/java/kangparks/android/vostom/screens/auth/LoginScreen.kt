@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -68,7 +69,8 @@ fun LoginScreen(navHostController: NavHostController){
                 modifier = Modifier
                     .fillMaxSize()
                     .windowInsetsPadding(WindowInsets.statusBars)
-                    .padding(horizontal = 20.dp).padding(bottom = 58.dp)
+                    .padding(horizontal = 20.dp)
+                    .padding(bottom = 58.dp)
                 ,
                 contentAlignment = Alignment.Center
             ) {
@@ -93,7 +95,8 @@ fun LoginScreen(navHostController: NavHostController){
                     )
                     Spacer(modifier = Modifier.height(300.dp))
                 }
-                Column(modifier = Modifier.padding(bottom = 20.dp)
+                Column(modifier = Modifier
+                    .padding(bottom = 20.dp)
                     .fillMaxSize(),verticalArrangement = Arrangement.Bottom){
                     RoundedButton(
                         text = "Vostom 시작하기",

@@ -28,7 +28,9 @@ sealed class Content(val route : String){
     object Setting : Content(route = "setting")
 }
 
-fun NavGraphBuilder.contentNavigation(navController : NavHostController){
+fun NavGraphBuilder.contentNavigation(
+    navController : NavHostController,
+){
     val isLearnUserVoice = false
 
     navigation(startDestination = if(isLearnUserVoice)Content.Home.route else Content.LearningGuide.route, route = Nav.CONTENT){

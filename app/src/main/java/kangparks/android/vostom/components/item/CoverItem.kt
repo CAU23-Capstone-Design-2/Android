@@ -29,7 +29,7 @@ fun CoverItem(
     coverItemMetaData: CoverItemMetaData,
     modifier : Modifier = Modifier){
     Row(
-        modifier = modifier.padding(vertical = 20.dp),
+        modifier = modifier.padding(vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ){
         AsyncImage(

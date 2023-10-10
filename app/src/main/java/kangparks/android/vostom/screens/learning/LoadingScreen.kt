@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -19,12 +20,10 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
-import kangparks.android.vostom.Greeting
-import kangparks.android.vostom.components.buttonsheet.BottomSheet
+import kangparks.android.vostom.components.bottomsheet.OthersContentBottomSheet
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
-import kangparks.android.vostom.navigations.Content
-import kangparks.android.vostom.utils.helper.permission.getResultOfCurrentPermissions
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoadingScreen(navController : NavHostController){
     val loadingAnimation by rememberLottieComposition(
@@ -34,7 +33,6 @@ fun LoadingScreen(navController : NavHostController){
         composition = loadingAnimation,
         iterations = LottieConstants.IterateForever
     )
-
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -55,7 +53,12 @@ fun LoadingScreen(navController : NavHostController){
                     contentScale = ContentScale.FillHeight,
                 )}
 
+
+
         }
-        BottomSheet()
+
+        OthersContentBottomSheet()
+
     }
+
 }
