@@ -1,6 +1,5 @@
 package kangparks.android.vostom.components.template
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,7 +33,9 @@ fun LearningLayoutTemplate(
     nextButtonContent: String? = null,
     nextButtonAction: () -> Unit = {},
     nextButtonBottomPaddingValue: Int = 0,
-    content: @Composable () -> Unit
+    contentModifier: Modifier = Modifier,
+    contentAlignment : Alignment = Alignment.TopCenter,
+    content: @Composable () -> Unit,
 ) {
 
     val isDarkTheme = isSystemInDarkTheme()
@@ -71,8 +72,8 @@ fun LearningLayoutTemplate(
             contentAlignment = Alignment.Center
         ) {
             Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.TopCenter
+                modifier = contentModifier.fillMaxSize(),
+                contentAlignment = contentAlignment
             ) {
                 content()
             }
