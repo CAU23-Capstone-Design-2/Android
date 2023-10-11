@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -18,7 +17,7 @@ import kangparks.android.vostom.components.item.CoverItem
 import kangparks.android.vostom.components.item.SongItem
 import kangparks.android.vostom.models.content.Singer
 import kangparks.android.vostom.viewModel.bottomsheet.OthersContentBottomSheetViewModel
-import kangparks.android.vostom.viewModel.bottomsheet.OthersContentDetailViewModel
+import kangparks.android.vostom.viewModel.content.OthersContentDetailViewModel
 import kangparks.android.vostom.viewModel.bottomsheet.OthersContentViewType
 
 @Composable

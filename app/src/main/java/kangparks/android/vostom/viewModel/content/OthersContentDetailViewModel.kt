@@ -1,4 +1,4 @@
-package kangparks.android.vostom.viewModel.bottomsheet
+package kangparks.android.vostom.viewModel.content
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
