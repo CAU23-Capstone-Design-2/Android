@@ -22,7 +22,7 @@ import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout.RESIZE_MODE_ZOOM
 import com.google.android.exoplayer2.ui.StyledPlayerView
-import kangparks.android.vostom.utils.builder.media.getMediaItem
+import kangparks.android.vostom.utils.media.getMediaItem
 import kangparks.android.vostom.viewModel.player.VideoBackgroundViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)

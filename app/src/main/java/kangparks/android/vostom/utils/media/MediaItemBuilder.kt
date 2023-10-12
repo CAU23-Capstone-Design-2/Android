@@ -1,4 +1,4 @@
-package kangparks.android.vostom.utils.builder.media
+package kangparks.android.vostom.utils.media
 
 import android.content.Context
 import android.net.Uri

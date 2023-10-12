@@ -33,6 +33,8 @@ class MainActivity : ComponentActivity() {
 
         installSplashScreen()
 
+        cacheDir
+
         // SplashScreen 시간 조절을 위한 뷰 그리기 일시 중단
         val content: View = findViewById(android.R.id.content)
         content.viewTreeObserver.addOnPreDrawListener(
