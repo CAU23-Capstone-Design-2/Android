@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import kangparks.android.vostom.screens.home.HomeScreen
+import kangparks.android.vostom.screens.learning.DetailGuideScreen
 import kangparks.android.vostom.screens.learning.LearningCountScreen
 import kangparks.android.vostom.screens.learning.LearningFirstSingScreen
 import kangparks.android.vostom.screens.learning.LearningGuideScreen
@@ -18,7 +19,8 @@ import kangparks.android.vostom.screens.setting.SettingScreen
 sealed class Content(val route : String){
     object Home : Content(route = "home")
     object LearningGuide : Content(route = "learning_guide")
-    object LearningPitch : Content(route = "learning_pitch")
+    object DetailGuide : Content(route = "detail_guide")
+//    object LearningPitch : Content(route = "learning_pitch")
     object LearningScript : Content(route = "learning_script")
     object LearningFirstSing : Content(route = "learning_first_sing")
     object LearningSecondSing : Content(route = "learning_second_sing")
@@ -36,7 +38,8 @@ fun NavGraphBuilder.contentNavigation(
     navigation(startDestination = if(isLearnUserVoice)Content.Home.route else Content.LearningGuide.route, route = Nav.CONTENT){
         composable(Content.Home.route,) { HomeScreen(navController = navController ) }
         composable(Content.LearningGuide.route,){ LearningGuideScreen(navController = navController ) }
-        composable(Content.LearningPitch.route) { LearningPitchScreen(navController = navController ) }
+        composable(Content.DetailGuide.route) { DetailGuideScreen(navController = navController)}
+//        composable(Content.LearningPitch.route) { LearningPitchScreen(navController = navController ) }
         composable(Content.LearningScript.route) { LearningScriptScreen(navController = navController) }
         composable(Content.LearningFirstSing.route) { LearningFirstSingScreen(navController = navController) }
         composable(Content.LearningSecondSing.route) { LearningSecondSingScreen(navController = navController) }
