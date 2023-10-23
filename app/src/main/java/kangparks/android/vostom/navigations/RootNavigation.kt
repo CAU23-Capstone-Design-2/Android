@@ -12,15 +12,12 @@ object Nav {
 
 @Composable
 fun VostomApp() {
-    val navController = rememberNavController()
-    RootNavigation(
-        navController = navController
-    )
+    RootNavigation()
 }
 
 @Composable
 fun RootNavigation(
-    navController: NavHostController
+    navController: NavHostController = rememberNavController(),
 ){
     // 추후 토큰 조회 로직 구현 예정
 //    val token = false
@@ -29,6 +26,8 @@ fun RootNavigation(
 
     NavHost(navController = navController, startDestination = curNav){
         authNavigation(navController = navController)
-        contentNavigation(navController = navController)
+        contentNavigation(
+            navController = navController,
+        )
     }
 }

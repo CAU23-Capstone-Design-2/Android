@@ -17,12 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kangparks.android.vostom.components.button.IconAndTextButton
 
 @Composable
 fun LearningAppBar(
-    hasBackButton : Boolean = false,
     backButtonAction : () -> Unit = {},
-    backButtonContent : String = "",
+    backButtonContent : String? = null,
     modifier: Modifier = Modifier,
 ){
     Row (
@@ -30,16 +30,11 @@ fun LearningAppBar(
         horizontalArrangement = Arrangement.Start,
         modifier = modifier.height(40.dp).fillMaxWidth()
     ){
-        if(hasBackButton){
-            Row (
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.clickable { backButtonAction() }
-            ){
-                Icon(Icons.Rounded.ArrowBack, contentDescription = "back button")
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(text = backButtonContent, fontSize = 16.sp, fontWeight = FontWeight.Bold )
-            }
-
+        if(backButtonContent != null){
+            IconAndTextButton(
+                backButtonAction = backButtonAction,
+                backButtonContent = backButtonContent
+            )
         }
     }
 }

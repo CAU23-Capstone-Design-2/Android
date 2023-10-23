@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun MainContent(content : String, modifier : Modifier = Modifier){
     Box {
-        Text(text = content, fontSize = 22.sp, fontWeight = FontWeight.Bold, lineHeight = 30.sp)
+        Text(text = content, fontSize = 22.sp, fontWeight = FontWeight.Bold, lineHeight = 32.sp)
     }
 
 }

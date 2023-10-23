@@ -1,6 +1,5 @@
-package kangparks.android.vostom.components.background
+package kangparks.android.vostom.components.player
 
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,21 +19,18 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout.RESIZE_MODE_ZOOM
 import com.google.android.exoplayer2.ui.StyledPlayerView
-import kangparks.android.vostom.viewModel.videobackground.VideoBackgroundViewModel
+import kangparks.android.vostom.utils.media.getMediaItem
+import kangparks.android.vostom.viewModel.player.VideoBackgroundViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun VideoBackground(modifier : Modifier = Modifier){
     val context = LocalContext.current
-    val packageName = context.packageName
-    val resId = context.resources.getIdentifier("login_background", "raw", context.packageName)
-    val uriPath = "android.resource://$packageName/$resId"
-    val mediaItem = MediaItem.Builder().setUri(Uri.parse(uriPath)).build()
 
+    val mediaItem = getMediaItem(context, "login_background", "raw")
     val exoPlayer = remember(context){
         ExoPlayer.Builder(context).build().apply {
             setMediaItem(mediaItem)
@@ -63,14 +59,9 @@ fun VideoBackground(modifier : Modifier = Modifier){
 
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
+            exoPlayer.release()
         }
     }
-
-//    DisposableEffect(exoPlayer){
-//        onDispose {
-//            exoPlayer.release()
-//        }
-//    }
 
     Box(modifier = modifier.fillMaxSize()){
         AndroidView(factory = { context ->
@@ -87,7 +78,7 @@ fun VideoBackground(modifier : Modifier = Modifier){
                         it.player?.pause()
                     }
                     Lifecycle.Event.ON_RESUME -> {
-                        it.onResume()
+//                        it.onResume()
                         it.player?.play()
                     }
                     else -> Unit

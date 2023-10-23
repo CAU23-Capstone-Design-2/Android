@@ -26,19 +26,17 @@ import kangparks.android.vostom.components.content.SubContent
 
 @Composable
 fun LearningLayoutTemplate(
-    hasBackButton : Boolean = false,
-    backButtonContent : String = "",
-    backButtonAction : () -> Unit = {},
-    hasMainContent : Boolean = false,
-    mainContent : String = "",
-    hasSubContent : Boolean = false,
-    subContent : String = "",
-    hasNextButton : Boolean = false,
-    nextButtonContent : String = "",
-    nextButtonAction : () -> Unit = {},
-    nextButtonBottomPaddingValue : Int = 0,
-    content : @Composable () -> Unit
-){
+    backButtonContent: String? = null,
+    backButtonAction: () -> Unit = {},
+    mainContent: String? = null,
+    subContent: String? = null,
+    nextButtonContent: String? = null,
+    nextButtonAction: () -> Unit = {},
+    nextButtonBottomPaddingValue: Int = 0,
+    contentModifier: Modifier = Modifier,
+    contentAlignment : Alignment = Alignment.TopCenter,
+    content: @Composable () -> Unit,
+) {
 
     val isDarkTheme = isSystemInDarkTheme()
     val systemUiController = rememberSystemUiController()
@@ -54,16 +52,15 @@ fun LearningLayoutTemplate(
         modifier = Modifier
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.statusBars)
-            .padding(horizontal = 20.dp, vertical = 20.dp)
-            .padding(bottom = 58.dp),
-    ){
-        LearningAppBar(hasBackButton, backButtonAction, backButtonContent)
+            .padding(horizontal = 20.dp, vertical = 20.dp),
+    ) {
+        LearningAppBar(backButtonAction, backButtonContent)
         Spacer(modifier = Modifier.height(30.dp))
-        if(hasMainContent){
+        if (mainContent != null) {
             MainContent(mainContent)
             Spacer(modifier = Modifier.height(20.dp))
         }
-        if(hasSubContent){
+        if (subContent != null) {
             SubContent(subContent)
             Spacer(modifier = Modifier.height(20.dp))
         }
@@ -72,18 +69,21 @@ fun LearningLayoutTemplate(
                 .fillMaxWidth()
                 .fillMaxHeight(),
             contentAlignment = Alignment.Center
-        ){
-            Box (modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(),
-                contentAlignment = Alignment.TopCenter){
+        ) {
+            Box(
+                modifier = contentModifier.fillMaxSize(),
+                contentAlignment = contentAlignment
+            ) {
                 content()
             }
-            if(hasNextButton){
-                Box (modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight().padding(bottom = nextButtonBottomPaddingValue.dp),
-                    contentAlignment = Alignment.BottomCenter){
+            if (nextButtonContent != null) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .padding(bottom = nextButtonBottomPaddingValue.dp + 58.dp),
+                    contentAlignment = Alignment.BottomCenter
+                ) {
                     RoundedButton(
                         text = nextButtonContent,
                         onClick = nextButtonAction
