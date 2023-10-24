@@ -10,7 +10,7 @@ import kangparks.android.vostom.components.template.LearningLayoutTemplate
 import kangparks.android.vostom.navigations.Content
 
 @Composable
-fun LearningSecondSingScreen(navController : NavHostController){
+fun GuideSingingScreen(navController : NavHostController){
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background

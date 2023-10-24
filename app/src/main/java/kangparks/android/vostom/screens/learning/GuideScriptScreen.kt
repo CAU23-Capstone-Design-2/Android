@@ -29,7 +29,7 @@ import kangparks.android.vostom.components.template.LearningLayoutTemplate
 import kangparks.android.vostom.navigations.Content
 
 @Composable
-fun LearningScriptScreen(navController: NavHostController) {
+fun GuideScriptScreen(navController: NavHostController) {
 
     val scrollState = rememberScrollState()
 
@@ -43,7 +43,7 @@ fun LearningScriptScreen(navController: NavHostController) {
             mainContent = "다음 제공되는 스크립트를 따라 읽어보세요.",
             subContent = "예상 소요시간 : 3분",
             nextButtonContent = "스크립트 녹음하기",
-            nextButtonAction = { navController.navigate(Content.LearningFirstSing.route) } // 임시 이동
+            nextButtonAction = { navController.navigate(Content.CountDown.route) } // 임시 이동
         ) {
             Box(
                 modifier = Modifier
