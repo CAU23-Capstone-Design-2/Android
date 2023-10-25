@@ -1,6 +1,5 @@
 package kangparks.android.vostom.utils.helper.search
 import android.util.Log
-import androidx.lifecycle.LiveData
 import kangparks.android.vostom.models.item.YoutubePlayItem
 import org.json.JSONObject
 import org.jsoup.Jsoup
@@ -22,15 +21,10 @@ suspend fun getSongList(keyword : String) : List<YoutubePlayItem>?{
     }
     keywordForQuery = keywordForQuery.substring(0, keywordForQuery.length-1)
 
-//    Log.d("Search Result :","keyword : $keywordForQuery")
-
     try {
-//        Log.d("Search Result :","스크래핑 시작")
         val docs : Document = Jsoup.connect(baseUrl+keywordForQuery).get()
 
         val videoResults = docs.select("script")
-
-//        Log.d("Search Result :","스크래핑 성공")
 
         for(video in videoResults){
             val scriptData = video.data()
@@ -71,10 +65,6 @@ suspend fun getSongList(keyword : String) : List<YoutubePlayItem>?{
 
                         listOfSong.add(YoutubePlayItem(countItem, titleText, thumbnailUrl, url))
                         countItem++
-
-                        Log.d("Search Result :","thumbnailUrl: $thumbnailUrl")
-//                        Log.d("Search Result :", "title: $titleText")
-//                        Log.d("Search Result :","url: $url")
                     }catch(e: Exception){
                         Log.d("Search Result :","$e")
                     }

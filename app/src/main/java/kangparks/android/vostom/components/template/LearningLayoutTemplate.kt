@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -49,6 +50,7 @@ fun LearningLayoutTemplate(
     othersOptionButtonBottomPaddingValue : Int = 0,
     contentModifier: Modifier = Modifier,
     contentAlignment : Alignment = Alignment.TopCenter,
+    color : Color = MaterialTheme.colorScheme.onSurface,
     content: @Composable () -> Unit,
 ){
 
@@ -58,7 +60,7 @@ fun LearningLayoutTemplate(
     SideEffect {
         systemUiController.setSystemBarsColor(
             color = Color.Transparent,
-            darkIcons = !isDarkTheme
+            darkIcons = if(color == Color.White) isDarkTheme else !isDarkTheme
         )
     }
 
@@ -68,10 +70,17 @@ fun LearningLayoutTemplate(
             .windowInsetsPadding(WindowInsets.statusBars)
             .padding(horizontal = 20.dp, vertical = 20.dp),
     ) {
-        LearningAppBar(backButtonAction, backButtonContent)
+        LearningAppBar(
+            backButtonAction,
+            backButtonContent,
+            color = color
+        )
         Spacer(modifier = Modifier.height(30.dp))
         if (mainContent != null) {
-            MainContent(mainContent)
+            MainContent(
+                content = mainContent,
+                color = color
+            )
             Spacer(modifier = Modifier.height(20.dp))
         }
         if (subAnnotatedString != null) {
@@ -79,7 +88,10 @@ fun LearningLayoutTemplate(
             Spacer(modifier = Modifier.height(20.dp))
         }
         else if (subContent != null) {
-            SubContent(subContent)
+            SubContent(
+                content = subContent,
+                color = color
+            )
             Spacer(modifier = Modifier.height(20.dp))
         }
         Box(
@@ -128,10 +140,7 @@ fun LearningLayoutTemplate(
                                 }
                             )
                         }
-
                     }
-
-
                 }
             }
         }

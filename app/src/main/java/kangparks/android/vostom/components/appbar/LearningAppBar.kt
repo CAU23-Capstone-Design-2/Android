@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -24,6 +26,7 @@ fun LearningAppBar(
     backButtonAction : () -> Unit = {},
     backButtonContent : String? = null,
     modifier: Modifier = Modifier,
+    color : Color = MaterialTheme.colorScheme.onSurface
 ){
     Row (
         verticalAlignment = Alignment.CenterVertically,
@@ -33,7 +36,8 @@ fun LearningAppBar(
         if(backButtonContent != null){
             IconAndTextButton(
                 backButtonAction = backButtonAction,
-                backButtonContent = backButtonContent
+                backButtonContent = backButtonContent,
+                color = color
             )
         }
     }
