@@ -38,7 +38,7 @@ fun DetailGuideScreen(navController: NavHostController){
             nextButtonContent = "학습 시작",
             nextButtonAction = {
                 if (getResultOfCurrentPermissions(context)) {
-                    navController.navigate(Content.LearningScript.route)
+                    navController.navigate(Content.GuideScript.route)
                 } else {
                     navController.navigate(Content.PermissionGuide.route)
                 }

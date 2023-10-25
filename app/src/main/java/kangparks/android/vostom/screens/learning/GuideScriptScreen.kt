@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -23,14 +24,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import drawVerticalScrollbar
 import kangparks.android.vostom.R
+import kangparks.android.vostom.components.content.ScriptContent
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
 import kangparks.android.vostom.navigations.Content
 
 @Composable
 fun GuideScriptScreen(navController: NavHostController) {
-
     val scrollState = rememberScrollState()
 
     Surface(
@@ -43,50 +48,12 @@ fun GuideScriptScreen(navController: NavHostController) {
             mainContent = "다음 제공되는 스크립트를 따라 읽어보세요.",
             subContent = "예상 소요시간 : 3분",
             nextButtonContent = "스크립트 녹음하기",
-            nextButtonAction = { navController.navigate(Content.CountDown.route) } // 임시 이동
+            nextButtonAction = { navController.navigate(Content.CountDown.route+"/${Content.LearningScript.route}") }
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .drawVerticalScrollbar(scrollState).verticalScroll(scrollState)
+            ScriptContent(
+                scrollState = scrollState,
+                scriptID = R.string.learning_script
             )
-            {
-                Text(
-                    text = stringResource(id = R.string.learning_script),
-                    fontSize = 16.sp,
-                    lineHeight = 32.sp,
-                    modifier = Modifier.padding(bottom = 170.dp)
-                )
-            }
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.Bottom,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(
-                                    Color.Transparent,
-                                    Color.White
-                                )
-                            ),
-                            alpha = 1.0f
-                        )
-                ) {}
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(10.dp)
-                        .background(Color.White)
-                ) {}
-
-            }
         }
     }
 }

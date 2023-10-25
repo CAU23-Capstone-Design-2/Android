@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 fun RoundedButton(
     modifier: Modifier = Modifier,
     text : String,
+    buttonContainerColor : Color = Color(0xFF8B62FF),
     onClick : () -> Unit = {}
 ) {
     Button(
@@ -24,7 +25,7 @@ fun RoundedButton(
         modifier = modifier.height(50.dp).fillMaxWidth(),
         shape = RoundedCornerShape(15),
         colors = ButtonDefaults.textButtonColors(
-            containerColor = Color(0xFF8B62FF),
+            containerColor = buttonContainerColor,
             contentColor = Color(0xFFFFFFFF)
         ),
     ) {

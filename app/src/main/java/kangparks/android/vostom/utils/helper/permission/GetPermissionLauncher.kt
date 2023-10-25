@@ -23,7 +23,7 @@ fun getPermissionLauncher(context : Context, navController: NavHostController): 
                     Toast.makeText(context, "필수 권한이 설정 되었습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
-            navController.navigate(Content.LearningScript.route){
+            navController.navigate(Content.GuideScript.route){
                 navController.popBackStack()
             }
         }

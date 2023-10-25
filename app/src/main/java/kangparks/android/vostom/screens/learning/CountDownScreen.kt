@@ -16,7 +16,10 @@ import kangparks.android.vostom.navigations.Content
 import kotlinx.coroutines.delay
 
 @Composable
-fun CountDownScreen(navController : NavHostController){
+fun CountDownScreen(
+    navController : NavHostController,
+    destination : String
+){
     val countValue = remember{ mutableIntStateOf(4) }
 
     LaunchedEffect(null){
@@ -24,7 +27,7 @@ fun CountDownScreen(navController : NavHostController){
             countValue.value -= 1
             delay(1000)
         }
-        navController.navigate(Content.GuideSinging.route)
+        navController.navigate(destination)
     }
 
     Surface(

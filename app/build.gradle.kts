@@ -120,6 +120,12 @@ dependencies {
     // coil
     implementation("io.coil-kt:coil-compose:2.4.0")
 
+    // Jsoup
+    implementation("org.jsoup:jsoup:1.13.1")
+
+    //json parser
+    implementation ("org.json:json:20210307")
+
     // testing dependencies
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
