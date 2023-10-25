@@ -1,15 +1,18 @@
 package kangparks.android.vostom.utils.helper.search
-import android.icu.util.RangeValueIterator
 import android.util.Log
+import androidx.lifecycle.LiveData
+import kangparks.android.vostom.models.item.YoutubePlayItem
 import org.json.JSONObject
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.jsoup.nodes.Element
 
 const val baseUrl = "https://www.youtube.com/results?search_query=tj+%EB%85%B8%EB%9E%98%EB%B0%A9+"
 
 @OptIn(ExperimentalStdlibApi::class)
-suspend fun getSongList(keyword : String){
+suspend fun getSongList(keyword : String) : List<YoutubePlayItem>?{
+    var listOfSong = mutableListOf<YoutubePlayItem>()
+    var countItem = 0
+
     val keywordList = keyword.split(" ")
 
     var keywordForQuery = ""
@@ -19,19 +22,15 @@ suspend fun getSongList(keyword : String){
     }
     keywordForQuery = keywordForQuery.substring(0, keywordForQuery.length-1)
 
-//    lateinit var thumbnailUri : String
-//    lateinit var title : String
-//    lateinit var contentUri : String
-
-    Log.d("Search Result :","keyword : $keywordForQuery")
+//    Log.d("Search Result :","keyword : $keywordForQuery")
 
     try {
-        Log.d("Search Result :","스크래핑 시작")
+//        Log.d("Search Result :","스크래핑 시작")
         val docs : Document = Jsoup.connect(baseUrl+keywordForQuery).get()
 
         val videoResults = docs.select("script")
 
-        Log.d("Search Result :","스크래핑 성공")
+//        Log.d("Search Result :","스크래핑 성공")
 
         for(video in videoResults){
             val scriptData = video.data()
@@ -70,24 +69,22 @@ suspend fun getSongList(keyword : String){
                         val webCommandMetadata = commandMetadata.getJSONObject("webCommandMetadata")
                         val url = webCommandMetadata.getString("url")
 
+                        listOfSong.add(YoutubePlayItem(countItem, titleText, thumbnailUrl, url))
+                        countItem++
+
                         Log.d("Search Result :","thumbnailUrl: $thumbnailUrl")
-                        Log.d("Search Result :", "title: $titleText")
-                        Log.d("Search Result :","url: $url")
+//                        Log.d("Search Result :", "title: $titleText")
+//                        Log.d("Search Result :","url: $url")
                     }catch(e: Exception){
-                        println(e)
                         Log.d("Search Result :","$e")
                     }
                 }
             }
         }
-
-
-    } catch (
-        e: Exception
-    ){
-//        println(e.message)
+    } catch (e: Exception){
         Log.d("Search Result :","$e")
-        return
+        return null
     }
 
+    return listOfSong
 }
