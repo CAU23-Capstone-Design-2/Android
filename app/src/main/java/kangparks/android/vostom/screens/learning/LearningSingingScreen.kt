@@ -42,9 +42,10 @@ fun LearningSingingScreen(
             backButtonContent = "녹음 다시 하기",
             backButtonAction = {  },
             mainContent = "사용자의 노래를 녹음 중 입니다.",
-            nextButtonContent = "임시 버튼",
+            nextButtonContent = "노래 녹음 완료하기",
             nextButtonAction = { navController.navigate(Content.FinishLearningSinging.route) },
             nextButtonContainerColor = Color(0xFFFC803B),
+            contentHorizontalPadding = 0,
             color = Color.White
         ){
             songItem.value?.let {
@@ -52,7 +53,7 @@ fun LearningSingingScreen(
                 Text(
                     text = it.contentUri ,
                     color = Color.White,
-                    )
+                )
 
                 Box {
                     YoutubePlayer(
@@ -62,5 +63,6 @@ fun LearningSingingScreen(
                 }
             }
         }
+
     }
 }

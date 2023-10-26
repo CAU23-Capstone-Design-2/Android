@@ -133,6 +133,9 @@ dependencies {
     //json parser
     implementation ("org.json:json:20210307")
 
+    // WebView
+    implementation("com.google.accompanist:accompanist-webview:0.24.13-rc")
+
     // testing dependencies
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
