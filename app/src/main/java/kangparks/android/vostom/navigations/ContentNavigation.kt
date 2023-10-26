@@ -5,10 +5,12 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import kangparks.android.vostom.screens.home.HomeScreen
+import kangparks.android.vostom.screens.learning.AddFileScreen
 import kangparks.android.vostom.screens.learning.CountDownScreen
 import kangparks.android.vostom.screens.learning.DetailGuideScreen
 import kangparks.android.vostom.screens.learning.FinishLearningScriptScreen
 import kangparks.android.vostom.screens.learning.FinishLearningSingingScreen
+import kangparks.android.vostom.screens.learning.GuideFinishLearningScreen
 import kangparks.android.vostom.screens.learning.GuideScreen
 import kangparks.android.vostom.screens.learning.GuideScriptScreen
 import kangparks.android.vostom.screens.learning.GuideSingingScreen
@@ -30,6 +32,8 @@ sealed class Content(val route : String){
     object GuideSinging : Content(route = "guide_singing")
     object LearningSinging : Content(route = "learning_singing")
     object FinishLearningSinging : Content(route = "finish_learning_singing")
+    object AddFile : Content(route = "add_file")
+    object GuideFinishLearning : Content(route = "guide_finish_learning")
     object CountDown : Content(route = "count_down")
     object Loading : Content(route = "loading")
     object Setting : Content(route = "setting")
@@ -74,6 +78,8 @@ fun NavGraphBuilder.contentNavigation(
             )
         }
         composable(Content.FinishLearningSinging.route){ FinishLearningSingingScreen(navController = navController)}
+        composable(Content.AddFile.route){ AddFileScreen(navController = navController) }
+        composable(Content.GuideFinishLearning.route){ GuideFinishLearningScreen(navController = navController) }
         composable(Content.Loading.route) { LoadingScreen(navController = navController) }
         composable(Content.Setting.route){ SettingScreen()}
     }

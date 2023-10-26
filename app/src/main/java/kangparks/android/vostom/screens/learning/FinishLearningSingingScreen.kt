@@ -76,7 +76,7 @@ fun FinishLearningSingingScreen(navController : NavHostController){
             }, // 임시 이동
             othersOptionButtonContent = "아니요! 목소리 학습 마무리 할게요.",
             othersOptionButtonAction = {
-                navController.navigate(Content.Loading.route)
+                navController.navigate(Content.AddFile.route)
             } // 임시 이동
         ){
             Column(
