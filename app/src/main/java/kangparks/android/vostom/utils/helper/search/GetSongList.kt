@@ -62,6 +62,7 @@ suspend fun getSongList(keyword : String) : List<YoutubePlayItem>?{
                         val commandMetadata = navigationEndpoint.getJSONObject("commandMetadata")
                         val webCommandMetadata = commandMetadata.getJSONObject("webCommandMetadata")
                         val url = webCommandMetadata.getString("url")
+//                        val urlParts = url.split("/watch?v=", "&pp")
 
                         listOfSong.add(YoutubePlayItem(countItem, titleText, thumbnailUrl, url))
                         countItem++

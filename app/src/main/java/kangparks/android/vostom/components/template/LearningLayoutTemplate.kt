@@ -51,6 +51,7 @@ fun LearningLayoutTemplate(
     contentModifier: Modifier = Modifier,
     contentAlignment : Alignment = Alignment.TopCenter,
     color : Color = MaterialTheme.colorScheme.onSurface,
+    contentHorizontalPadding : Int = 20,
     content: @Composable () -> Unit,
 ){
 
@@ -67,33 +68,38 @@ fun LearningLayoutTemplate(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .windowInsetsPadding(WindowInsets.statusBars)
-            .padding(horizontal = 20.dp, vertical = 20.dp),
+            .windowInsetsPadding(WindowInsets.statusBars).padding(vertical = 20.dp),
     ) {
-        LearningAppBar(
-            backButtonAction,
-            backButtonContent,
-            color = color
-        )
-        Spacer(modifier = Modifier.height(30.dp))
-        if (mainContent != null) {
-            MainContent(
-                content = mainContent,
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 20.dp,),
+        ){
+            LearningAppBar(
+                backButtonAction,
+                backButtonContent,
                 color = color
             )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(30.dp))
+            if (mainContent != null) {
+                MainContent(
+                    content = mainContent,
+                    color = color
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+            }
+            if (subAnnotatedString != null) {
+                SubContentWithAnnotatedString(subAnnotatedString)
+                Spacer(modifier = Modifier.height(20.dp))
+            }
+            else if (subContent != null) {
+                SubContent(
+                    content = subContent,
+                    color = color
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+            }
         }
-        if (subAnnotatedString != null) {
-            SubContentWithAnnotatedString(subAnnotatedString)
-            Spacer(modifier = Modifier.height(20.dp))
-        }
-        else if (subContent != null) {
-            SubContent(
-                content = subContent,
-                color = color
-            )
-            Spacer(modifier = Modifier.height(20.dp))
-        }
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -101,7 +107,10 @@ fun LearningLayoutTemplate(
             contentAlignment = Alignment.Center
         ) {
             Box(
-                modifier = contentModifier.fillMaxSize(),
+                modifier = contentModifier.fillMaxSize()
+                    .padding(
+                        horizontal = contentHorizontalPadding.dp,
+                    ),
                 contentAlignment = contentAlignment
             ) {
                 content()
@@ -111,7 +120,11 @@ fun LearningLayoutTemplate(
                     modifier = Modifier
                         .fillMaxWidth()
                         .fillMaxHeight()
-                        .padding(bottom = nextButtonBottomPaddingValue.dp + 58.dp),
+                        .padding(
+                            bottom = nextButtonBottomPaddingValue.dp + 58.dp,
+                            start = 20.dp,
+                            end = 20.dp
+                        ),
                     contentAlignment = Alignment.BottomCenter
                 ) {
                     Column(
@@ -134,10 +147,11 @@ fun LearningLayoutTemplate(
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 14.sp,
                                 textDecoration = TextDecoration.Underline,
-                                modifier = Modifier.padding(bottom = othersOptionButtonBottomPaddingValue.dp)
+                                modifier = Modifier
+                                    .padding(bottom = othersOptionButtonBottomPaddingValue.dp)
                                     .clickable {
                                         othersOptionButtonAction()
-                                }
+                                    }
                             )
                         }
                     }
