@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 
 val permissions = arrayOf(
     Manifest.permission.RECORD_AUDIO,
+//    Manifest.permission.BLUETOOTH_CONNECT
 //    Manifest.permission.READ_EXTERNAL_STORAGE,
 )
 

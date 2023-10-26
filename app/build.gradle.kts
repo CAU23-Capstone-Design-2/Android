@@ -123,6 +123,13 @@ dependencies {
     // Jsoup
     implementation("org.jsoup:jsoup:1.13.1")
 
+    // Youtube Player
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
+
+    // Youtube Extractor
+    implementation("com.github.HaarigerHarald:android-youtubeExtractor:v1.7.0")
+//    implementation("com.github.HaarigerHarald:android-youtubeExtractor:master-SNAPSHOT")
+
     //json parser
     implementation ("org.json:json:20210307")
 
