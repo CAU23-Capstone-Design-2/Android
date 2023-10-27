@@ -27,23 +27,11 @@ import kangparks.android.vostom.viewModel.player.VideoBackgroundViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun VideoBackground(modifier : Modifier = Modifier){
-    val context = LocalContext.current
-
-    val mediaItem = getMediaItem(context, "login_background", "raw")
-    val exoPlayer = remember(context){
-        ExoPlayer.Builder(context).build().apply {
-            setMediaItem(mediaItem)
-            playWhenReady = true
-            prepare()
-            volume = 0f
-            repeatMode = Player.REPEAT_MODE_ALL
-        }
-    }
-
-    val viewModel = remember {
-        VideoBackgroundViewModel(exoPlayer)
-    }
+fun VideoBackground(
+    modifier : Modifier = Modifier,
+    viewModel : VideoBackgroundViewModel,
+    exoPlayer : ExoPlayer,
+){
 
     var lifecycle by remember {
         mutableStateOf(Lifecycle.Event.ON_CREATE)

@@ -15,10 +15,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -29,21 +27,42 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.Player
 import kangparks.android.vostom.BuildConfig
 import kangparks.android.vostom.components.player.VideoBackground
 import kangparks.android.vostom.components.button.RoundedButton
 import kangparks.android.vostom.navigations.Nav
+import kangparks.android.vostom.utils.media.getMediaItem
+import kangparks.android.vostom.viewModel.player.VideoBackgroundViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(navHostController: NavHostController){
     val kakaoAppKey = BuildConfig.kakao_api_key
     val doubleBackToExitPressedOnce = remember { mutableStateOf(false) }
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+
+    val isBackgroundRelease = remember { mutableStateOf(false) }
+    val mediaItem = getMediaItem(context, "login_background", "raw")
+    val exoPlayer = remember(context){
+        ExoPlayer.Builder(context).build().apply {
+            setMediaItem(mediaItem)
+            playWhenReady = true
+            prepare()
+            volume = 0f
+            repeatMode = Player.REPEAT_MODE_ALL
+        }
+    }
+
+    val viewModel = remember {
+        VideoBackgroundViewModel(exoPlayer)
+    }
 
     BackHandler(enabled = true) {
         if(doubleBackToExitPressedOnce.value){
@@ -64,7 +83,10 @@ fun LoginScreen(navHostController: NavHostController){
     )
     {
         Box {
-            VideoBackground()
+            VideoBackground(
+                viewModel = viewModel,
+                exoPlayer = exoPlayer
+            )
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -102,9 +124,13 @@ fun LoginScreen(navHostController: NavHostController){
                         text = "Vostom 시작하기",
                         onClick = {
                             // 임시
+                            exoPlayer.release()
                             navHostController.navigate(route = Nav.CONTENT){
-//                                navHostController.popBackStack()
+                                navHostController.popBackStack()
                             }
+//                            navHostController.navigate(route = Nav.CONTENT){
+//                                navHostController.popBackStack()
+//                            }
 //                            withKakaoLogin(
 //                                appKey = kakaoAppKey,
 //                                context = context,

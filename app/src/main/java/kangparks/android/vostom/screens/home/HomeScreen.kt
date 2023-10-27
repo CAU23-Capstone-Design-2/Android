@@ -1,5 +1,6 @@
 package kangparks.android.vostom.screens.home
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,8 +24,11 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kangparks.android.vostom.Greeting
+import kangparks.android.vostom.components.appbar.ContentAppBar
 import kangparks.android.vostom.components.button.RoundedButton
+import kangparks.android.vostom.components.navigationBar.BottomNavigationBar
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(navController : NavHostController){
 
@@ -35,6 +41,7 @@ fun HomeScreen(navController : NavHostController){
             darkIcons = !isDarkTheme
         )
     }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -42,7 +49,15 @@ fun HomeScreen(navController : NavHostController){
             .padding(horizontal = 20.dp)
             .padding(bottom = 48.dp)
     ){
-        Text(text = "여긴 홈스크린! - 나중에 구현할 예정")
-
+        Column {
+            ContentAppBar(
+                sideButtonAction = {},
+                sideButtonContent = "커버곡 생성하기",
+                contentTitleFront = "Vos",
+                contentFrontColor = Color(0xFF8e5fe9),
+                contentTitleBack = "tom",
+                contentBackColor = Color(0xFFe0a2ff),
+            )
+        }
     }
 }
