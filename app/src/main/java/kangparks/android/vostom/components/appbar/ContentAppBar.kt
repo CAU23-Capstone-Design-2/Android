@@ -2,9 +2,12 @@ package kangparks.android.vostom.components.appbar
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,15 +34,21 @@ fun ContentAppBar(
     contentFrontColor : Color? = Color.Black,
     contentBackColor : Color? = Color.Black,
     containerModifier : Modifier = Modifier,
-    color : Color = MaterialTheme.colorScheme.onSurface
+    color : Color = MaterialTheme.colorScheme.onSurface,
 ){
 
+    Column{
     Row(
+        modifier = containerModifier
+            .height(60.dp)
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = containerModifier.height(60.dp).fillMaxWidth()
+
     ){
-        Row(){
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ){
             if(backButtonContent != null){
                 IconAndTextButton(
                     backButtonAction = backButtonAction,
@@ -90,5 +99,8 @@ fun ContentAppBar(
 //                modifier = Modifier.weight(1f)
 
         }
+    }
+    Spacer(modifier = Modifier.height(10.dp))
+
     }
 }
