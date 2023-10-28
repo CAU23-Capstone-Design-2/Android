@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -15,45 +14,40 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import kangparks.android.vostom.models.content.CoverSong
+import kangparks.android.vostom.models.content.Singer
 
 @Composable
-fun CoverSongItem(
-    content: CoverSong,
+fun OthersItem(
+    content: Singer,
     onClick: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
-            .width(140.dp)
+            .width(120.dp)
             .clickable(onClick = onClick)
     ) {
         AsyncImage(
-            model = content.albumArtUri,
+            model = content.imageUri,
             contentDescription = null,
             modifier = Modifier
-                .size(140.dp)
-                .clip(RoundedCornerShape(5.dp)),
+                .size(120.dp)
+                .clip(CircleShape),
             contentScale = ContentScale.Crop
         )
         Spacer(modifier = Modifier.height(10.dp))
         Text(
-            text = content.title,
+            text = content.name,
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-        Spacer(modifier = Modifier.height(5.dp))
-        Text(
-            text = content.singer,
-            fontSize = 13.sp,
-            fontWeight = FontWeight.Normal,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.width(120.dp)
         )
     }
 }

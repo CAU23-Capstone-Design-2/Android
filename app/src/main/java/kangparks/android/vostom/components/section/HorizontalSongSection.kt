@@ -1,42 +1,74 @@
 package kangparks.android.vostom.components.section
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.KeyboardArrowRight
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kangparks.android.vostom.components.item.CoverSongItem
-import kangparks.android.vostom.models.content.CoverSong
 
 @Composable
-fun HorizontalSongSection(
-    title : String,
-    sideButtonAction : ()->Unit = {},
-    contents : List<CoverSong>,
-) {
-    Column {
-        Text(
-            text = title,
-            fontWeight = FontWeight.ExtraBold,
-            fontSize = 20.sp,
-            modifier = Modifier.padding(start = 20.dp, bottom = 15.dp)
-        )
+fun <T> HorizontalSongSection(
+    title: String,
+    sideButtonAction: ()->Unit = {},
+    contents: List<T>,
+    contentPaddingValue : Int = 10,
+    renderItem: @Composable (T) -> Unit = {}
+) where T : Any{
+    Column{
+        Row(
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(start = 20.dp, bottom = 10.dp)
+        ){
+            Text(
+                text = title,
+                fontWeight = FontWeight.ExtraBold,
+                fontSize = 19.sp,
+            )
+            Box (
+                modifier = Modifier.fillMaxHeight().clickable {  },
+                contentAlignment = Alignment.Center
+            ){
+                Icon(
+                    imageVector = Icons.Rounded.KeyboardArrowRight,
+                    contentDescription = "Next Button",
+                    modifier = Modifier
+                        .width(30.dp)
+                        .height(30.dp)
+                )
+            }
+        }
+
         LazyRow(
             contentPadding = PaddingValues(horizontal = 20.dp)
         ){
 
             items(contents.size){ index ->
-                CoverSongItem(
-                    content = contents[index]
-                )
-                Spacer(modifier = Modifier.width(10.dp))
+                renderItem(contents[index])
+//                CoverSongItem(
+//                    content = contents[index]
+//                )
+                Spacer(modifier = Modifier.width(contentPaddingValue.dp))
             }
         }
     }

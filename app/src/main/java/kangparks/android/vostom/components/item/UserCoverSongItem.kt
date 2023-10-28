@@ -2,9 +2,9 @@ package kangparks.android.vostom.components.item
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -22,7 +22,7 @@ import coil.compose.AsyncImage
 import kangparks.android.vostom.models.content.CoverSong
 
 @Composable
-fun CoverSongItem(
+fun UserCoverSongItem(
     content: CoverSong,
     onClick: () -> Unit = {},
 ) {
@@ -55,5 +55,24 @@ fun CoverSongItem(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
+        Spacer(modifier = Modifier.height(5.dp))
+        Row {
+            AsyncImage(
+                model = content.userImgUri,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(20.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
+            Spacer(modifier = Modifier.width(5.dp))
+            Text(
+                text = content.user + "님의 커버",
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Normal,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
     }
 }

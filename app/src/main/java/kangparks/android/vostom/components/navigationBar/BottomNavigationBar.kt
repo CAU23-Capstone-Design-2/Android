@@ -31,7 +31,7 @@ import kangparks.android.vostom.navigations.Content
 
 @ExperimentalMaterial3Api
 @Composable
-fun BottomNavigationBar(navController : NavHostController){
+fun BottomNavigationBar(navController: NavHostController) {
     val items = listOf(
         BottomBarContent.Home,
         BottomBarContent.GroupList,
@@ -41,16 +41,18 @@ fun BottomNavigationBar(navController : NavHostController){
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    val bottomBarDestination = items.any {it.route == currentDestination?.route}
+    val bottomBarDestination = items.any { it.route == currentDestination?.route }
 
-    if (bottomBarDestination){
+    if (bottomBarDestination) {
         Row(
             modifier = Modifier
                 .height(84.dp)
-                .fillMaxWidth().background(Color.LightGray).padding(top = 12.dp),
+                .fillMaxWidth()
+                .background(Color(0xFFF9F9F9))
+                .padding(top = 12.dp),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.Top
-        ){
+        ) {
             items.forEach { item ->
                 Column(
                     modifier = Modifier
@@ -58,14 +60,14 @@ fun BottomNavigationBar(navController : NavHostController){
                         .height(40.dp)
                         .clip(shape = MaterialTheme.shapes.small)
                         .clickable {
-                            navController.navigate(item.route){
+                            navController.navigate(item.route) {
                                 popUpTo(Content.Home.route)
                                 launchSingleTop = true
                             }
                         },
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Top
-                ){
+                ) {
                     Icon(
                         imageVector = item.icon,
                         contentDescription = "icon",
