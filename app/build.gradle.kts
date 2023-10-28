@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "kangparks.android.vostom"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "kangparks.android.vostom"
         minSdk = 29
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
