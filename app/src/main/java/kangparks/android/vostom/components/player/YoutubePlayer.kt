@@ -1,14 +1,20 @@
 package kangparks.android.vostom.components.player
 
+import android.util.Log
+import android.webkit.WebView
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
@@ -19,9 +25,9 @@ import com.google.accompanist.web.rememberWebViewState
 
 @Composable
 fun YoutubePlayer(
-    contentId : String,
+    contentId: String,
     lifecycleOwner: LifecycleOwner
-){
+) {
     val webViewClient = AccompanistWebViewClient()
     val webChromeClient = AccompanistWebChromeClient()
 
@@ -35,11 +41,13 @@ fun YoutubePlayer(
         )
 
     Box(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .height(600.dp),
-        contentAlignment =  Alignment.TopCenter,
-    ){
+        contentAlignment = Alignment.TopCenter,
+    ) {
         WebView(
+            captureBackPresses = false,
             state = webViewState,
             modifier = Modifier
                 .fillMaxWidth()
@@ -54,25 +62,31 @@ fun YoutubePlayer(
                         javaScriptCanOpenWindowsAutomatically = false
                     }
                 }
-            }
+            },
         )
 
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
                 .background(color = Color(0xFF2F2F2F))
-        )
+                .pointerInput(Unit) {
+                    detectTapGestures { offset -> }
+                },
+        ) {}
         Box(
             modifier = Modifier
                 .fillMaxSize(),
-            contentAlignment =  Alignment.BottomCenter,
-        ){
+            contentAlignment = Alignment.BottomCenter,
+        ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height((600.dp-(screenWidth/10*7))+10.dp)
+                    .height((600.dp - (screenWidth / 10 * 7)) + 10.dp)
                     .background(color = Color(0xFF2F2F2F))
+                    .pointerInput(Unit) {
+                        detectTapGestures { offset -> }
+                    }
             )
         }
     }
