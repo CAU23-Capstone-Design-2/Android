@@ -7,12 +7,12 @@ plugins {
 
 android {
     namespace = "kangparks.android.vostom"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "kangparks.android.vostom"
         minSdk = 29
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -81,6 +81,7 @@ dependencies {
     implementation("androidx.compose.material3:material3-window-size-class")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
     implementation("androidx.compose.runtime:runtime-livedata:1.5.2")
+    implementation("androidx.compose.material:material-icons-extended-android:1.5.0")
 
     //coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")

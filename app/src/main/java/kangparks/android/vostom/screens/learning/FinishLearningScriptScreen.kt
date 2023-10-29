@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,7 +44,10 @@ fun FinishLearningScriptScreen(navController : NavHostController) {
         iterations = LottieConstants.IterateForever,
     )
 
-    Surface {
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ){
         LearningLayoutTemplate(
             backButtonContent = "녹음 다시하기",
             backButtonAction = {  },

@@ -9,7 +9,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -22,6 +26,8 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import kangparks.android.vostom.components.bottomsheet.OthersContentBottomSheet
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
+import kangparks.android.vostom.navigations.Content
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -33,6 +39,17 @@ fun LoadingScreen(navController : NavHostController){
         composition = loadingAnimation,
         iterations = LottieConstants.IterateForever
     )
+
+    val countValue = remember { mutableIntStateOf(3) }
+
+    LaunchedEffect(null){
+        while (countValue.value > 0){
+            delay(1000)
+            countValue.value--
+        }
+
+        navController.navigate(Content.Welcome.route)
+    }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
