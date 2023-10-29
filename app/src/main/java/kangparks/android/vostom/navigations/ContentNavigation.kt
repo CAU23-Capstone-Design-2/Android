@@ -82,9 +82,9 @@ fun NavGraphBuilder.contentNavigation(
     navigation(
         startDestination =
         if(isLearnUserVoice)Content.Home.route
-        else Content.Home.route,
+//        else Content.Home.route,
 //        else Content.Guide.route,
-//        else Content.GuideSinging.route,
+        else Content.GuideSinging.route,
         route = Nav.CONTENT){
         composable(Content.Home.route,) { HomeScreen(navController = navController ) }
         composable(Content.GroupList.route) { GroupListScreen(navController = navController)}
