@@ -1,5 +1,8 @@
 package kangparks.android.vostom.screens.learning
 
+import android.app.Activity
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -14,6 +17,7 @@ import androidx.navigation.NavHostController
 import kangparks.android.vostom.components.item.CountDownItem
 import kangparks.android.vostom.navigations.Content
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun CountDownScreen(
@@ -22,12 +26,23 @@ fun CountDownScreen(
 ){
     val countValue = remember{ mutableIntStateOf(4) }
 
+    BackHandler(enabled = true) { }
+
     LaunchedEffect(null){
         while(countValue.value > 0){
             countValue.value -= 1
             delay(1000)
         }
-        navController.navigate(destination)
+        navController.navigate(destination){
+            if (destination == Content.LearningScript.route){
+                popUpTo(Content.GuideScript.route){
+                }
+            }
+            else if (destination == Content.LearningSinging.route){
+                popUpTo(Content.GuideScript.route){
+                }
+            }
+        }
     }
 
     Surface(

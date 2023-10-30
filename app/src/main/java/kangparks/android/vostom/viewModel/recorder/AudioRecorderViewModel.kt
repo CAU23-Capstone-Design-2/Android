@@ -22,11 +22,24 @@ class AudioRecorderViewModel constructor(
         audioFile = file
     }
 
+    fun reset(){
+        audioRecorder.clear()
+    }
+
+    fun pause(){
+        audioRecorder.pause()
+    }
+
     fun stop(){
         audioRecorder.stop()
     }
 
     fun getAudioFile() : File? {
         return audioFile
+    }
+
+    fun getOutputFile() : File? {
+        val fileName = getCurrentDate() + ".m4a"
+        return File(filesDir.absolutePath, fileName)?:null
     }
 }

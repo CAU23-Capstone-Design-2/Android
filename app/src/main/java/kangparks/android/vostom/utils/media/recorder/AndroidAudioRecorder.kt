@@ -22,7 +22,6 @@ class AndroidAudioRecorder(private val context: Context) : AudioRecorder {
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-//            setOutputFile(FileOutputStream(outputFile).fd)
             setOutputFile(FileOutputStream(outputFile).fd)
 
             prepare()
@@ -36,5 +35,13 @@ class AndroidAudioRecorder(private val context: Context) : AudioRecorder {
         recorder?.stop()
         recorder?.reset()
         recorder = null
+    }
+
+    fun pause() {
+        recorder?.pause()
+    }
+
+    fun clear() {
+        recorder?.reset()
     }
 }

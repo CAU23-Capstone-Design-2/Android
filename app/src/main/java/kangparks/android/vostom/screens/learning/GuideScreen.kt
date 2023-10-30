@@ -78,8 +78,7 @@ fun GuideScreen(navController: NavHostController) {
         color = MaterialTheme.colorScheme.background
     ) {
         LearningLayoutTemplate(
-            backButtonContent = "첫화면(임시)",
-            backButtonAction = { navController.popBackStack() },
+            backButtonContent = "빌드 10/30 22:40",
             mainContent = "내 목소리에 어울리는 노래를 찾기 위해 목소리 학습을 진행해주세요.",
             subContent = "조용한 환경에서 진행하면 학습 정확도가 높아집니다!\uD83D\uDE06",
             nextButtonContent = "나의 목소리 학습 시작하기",

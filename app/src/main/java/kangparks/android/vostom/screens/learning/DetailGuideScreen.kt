@@ -47,11 +47,11 @@ fun DetailGuideScreen(navController: NavHostController){
             Column {
                 Spacer(modifier = Modifier.height(10.dp))
                 GuideContent(
-                    title = "스크립트 녹음", 
+                    title = "1. 스크립트 녹음",
                     content = "제공되는 스크립트를 따라 읽으면서 녹음하는 과정입니다. 평소 나의 목소리를 학습하는데 도움이 됩니다. \uD83D\uDE01"
                 )
                 GuideContent(
-                    title = "노래 녹음", 
+                    title = "2. 노래 녹음",
                     content = "원하는 노래를 따라 부르면서 녹음하는 과정입니다. 노래 부르는 나의 목소리를 학습하는데 도움이 됩니다. \uD83E\uDD73",
                 )
             }
