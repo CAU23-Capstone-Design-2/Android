@@ -27,9 +27,11 @@ import kangparks.android.vostom.screens.learning.LoadingScreen
 import kangparks.android.vostom.screens.learning.WelcomeScreen
 import kangparks.android.vostom.screens.permission.PermissionGuideScreen
 import kangparks.android.vostom.screens.profile.ProfileScreen
+import kangparks.android.vostom.viewModel.learning.ScriptProviderViewModel
+import kangparks.android.vostom.viewModel.recorder.RecordFileViewModel
 import kangparks.android.vostom.viewModel.learning.SingingViewModel
 
-sealed class Content(val route : String){
+sealed class Content(val route: String) {
     object Home : Content(route = "home")
     object GroupList : Content(route = "group_list")
     object Profile : Content(route = "profile")
@@ -52,20 +54,22 @@ sealed class Content(val route : String){
 }
 
 sealed class BottomBarContent(
-    val route : String,
-    val icon : ImageVector,
-    val title : String
-){
+    val route: String,
+    val icon: ImageVector,
+    val title: String
+) {
     object Home : BottomBarContent(
         route = "home",
         icon = Icons.Filled.Home,
         title = "홈"
     )
+
     object GroupList : BottomBarContent(
         route = "group_list",
         icon = Icons.Rounded.Face,
         title = "그룹"
     )
+
     object Profile : BottomBarContent(
         route = "profile",
         icon = Icons.Rounded.AccountCircle,
@@ -74,51 +78,71 @@ sealed class BottomBarContent(
 }
 
 fun NavGraphBuilder.contentNavigation(
-    navController : NavHostController,
-){
+    navController: NavHostController,
+) {
     val isLearnUserVoice = false
     val singingViewModel = SingingViewModel()
+    val recordFileViewModel = RecordFileViewModel()
+    val scriptProvider = ScriptProviderViewModel()
 
     navigation(
         startDestination =
-        if(isLearnUserVoice)Content.Home.route
+        if (isLearnUserVoice) Content.Home.route
 //        else Content.Home.route,
         else Content.Guide.route,
 //        else Content.GuideSinging.route,
-        route = Nav.CONTENT){
-        composable(Content.Home.route,) { HomeScreen(navController = navController ) }
-        composable(Content.GroupList.route) { GroupListScreen(navController = navController)}
-        composable(Content.Profile.route){ ProfileScreen(navController = navController)}
-        composable(Content.Guide.route,){ GuideScreen(navController = navController ) }
-        composable(Content.DetailGuide.route) { DetailGuideScreen(navController = navController)}
+        route = Nav.CONTENT
+    ) {
+        composable(Content.Home.route) { HomeScreen(navController = navController) }
+        composable(Content.GroupList.route) { GroupListScreen(navController = navController) }
+        composable(Content.Profile.route) { ProfileScreen(navController = navController) }
+        composable(Content.Guide.route) { GuideScreen(navController = navController) }
+        composable(Content.DetailGuide.route) { DetailGuideScreen(navController = navController) }
         composable(Content.PermissionGuide.route) { PermissionGuideScreen(navController = navController) }
-        composable(Content.CountDown.route+"/{destination}"){it->
+        composable(Content.CountDown.route + "/{destination}") { it ->
             val destination = it.arguments?.getString("destination") ?: Content.Home.route
             CountDownScreen(
                 navController = navController,
                 destination = destination
             )
         }
-        composable(Content.GuideScript.route) { GuideScriptScreen(navController = navController) }
-        composable(Content.LearningScript.route) { LearningScriptScreen(navController = navController) }
-        composable(Content.FinishLearningScript.route){ FinishLearningScriptScreen(navController = navController)}
+        composable(Content.GuideScript.route) {
+            GuideScriptScreen(
+                navController = navController,
+                scriptProvider = scriptProvider
+            )
+        }
+        composable(Content.LearningScript.route) {
+            LearningScriptScreen(
+                navController = navController,
+                recordFileViewModel = recordFileViewModel,
+                scriptProvider = scriptProvider
+            )
+        }
+        composable(Content.FinishLearningScript.route) {
+            FinishLearningScriptScreen(
+                navController = navController,
+                scriptProvider = scriptProvider
+            )
+        }
         composable(Content.GuideSinging.route) {
             GuideSingingScreen(
                 navController = navController,
                 singingViewModel = singingViewModel
             )
         }
-        composable(Content.LearningSinging.route){
+        composable(Content.LearningSinging.route) {
             LearningSingingScreen(
                 navController = navController,
-                singingViewModel = singingViewModel
+                singingViewModel = singingViewModel,
+                recordFileViewModel = recordFileViewModel
             )
         }
-        composable(Content.FinishLearningSinging.route){ FinishLearningSingingScreen(navController = navController)}
-        composable(Content.AddFile.route){ AddFileScreen(navController = navController) }
-        composable(Content.GuideFinishLearning.route){ GuideFinishLearningScreen(navController = navController) }
+        composable(Content.FinishLearningSinging.route) { FinishLearningSingingScreen(navController = navController) }
+        composable(Content.AddFile.route) { AddFileScreen(navController = navController) }
+        composable(Content.GuideFinishLearning.route) { GuideFinishLearningScreen(navController = navController) }
         composable(Content.Loading.route) { LoadingScreen(navController = navController) }
-        composable(Content.Welcome.route){ WelcomeScreen(navController = navController) }
-        composable(Content.BuildGroup.route){ BuildGroupScreen(navController = navController) }
+        composable(Content.Welcome.route) { WelcomeScreen(navController = navController) }
+        composable(Content.BuildGroup.route) { BuildGroupScreen(navController = navController) }
     }
 }

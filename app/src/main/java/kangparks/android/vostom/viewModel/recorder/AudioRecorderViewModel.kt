@@ -38,8 +38,8 @@ class AudioRecorderViewModel constructor(
         return audioFile
     }
 
-    fun getOutputFile() : File {
+    fun getOutputFile() : File? {
         val fileName = getCurrentDate() + ".m4a"
-        return File(filesDir.absolutePath, fileName)
+        return File(filesDir.absolutePath, fileName)?:null
     }
 }
