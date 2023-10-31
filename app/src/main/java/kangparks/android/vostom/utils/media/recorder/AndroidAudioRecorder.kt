@@ -1,8 +1,11 @@
 package kangparks.android.vostom.utils.media.recorder
 
 import android.content.Context
+import android.content.Context.AUDIO_SERVICE
+import android.media.AudioManager
 import android.media.MediaRecorder
 import android.os.Build
+import androidx.core.content.ContextCompat.getSystemService
 import java.io.File
 import java.io.FileOutputStream
 
@@ -18,10 +21,15 @@ class AndroidAudioRecorder(private val context: Context) : AudioRecorder {
     }
 
     override fun start(outputFile: File) {
+//        val audioManager = getSystemService(context, AUDIO_SERVICE::Class) as AudioManager
+//        audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
+
+
         createRecorder().apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-            setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+//            setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
             setOutputFile(FileOutputStream(outputFile).fd)
 
             prepare()
