@@ -33,6 +33,7 @@ import kangparks.android.vostom.BuildConfig
 import kangparks.android.vostom.components.player.VideoBackground
 import kangparks.android.vostom.components.button.RoundedButton
 import kangparks.android.vostom.navigations.Nav
+import kangparks.android.vostom.utils.helper.auth.withKakaoLogin
 import kangparks.android.vostom.utils.media.getMediaItem
 import kangparks.android.vostom.viewModel.player.VideoBackgroundViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -125,17 +126,17 @@ fun LoginScreen(navHostController: NavHostController){
                         onClick = {
                             // 임시
                             exoPlayer.release()
-                            navHostController.navigate(route = Nav.CONTENT){
-                                navHostController.popBackStack()
-                            }
 //                            navHostController.navigate(route = Nav.CONTENT){
 //                                navHostController.popBackStack()
 //                            }
-//                            withKakaoLogin(
-//                                appKey = kakaoAppKey,
-//                                context = context,
-//                                navHostController = navHostController
-//                            )
+//                            navHostController.navigate(route = Nav.CONTENT){
+//                                navHostController.popBackStack()
+//                            }
+                            withKakaoLogin(
+                                appKey = kakaoAppKey,
+                                context = context,
+                                navHostController = navHostController
+                            )
                         }
                     )
                 }

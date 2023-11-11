@@ -91,6 +91,7 @@ fun NavGraphBuilder.contentNavigation(
 //        else Content.Home.route,
         else Content.Guide.route,
 //        else Content.GuideSinging.route,
+//                else Content.AddFile.route,
         route = Nav.CONTENT
     ) {
         composable(Content.Home.route) { HomeScreen(navController = navController) }
@@ -139,7 +140,12 @@ fun NavGraphBuilder.contentNavigation(
             )
         }
         composable(Content.FinishLearningSinging.route) { FinishLearningSingingScreen(navController = navController) }
-        composable(Content.AddFile.route) { AddFileScreen(navController = navController) }
+        composable(Content.AddFile.route) {
+            AddFileScreen(
+                navController = navController,
+                recordFileViewModel = recordFileViewModel
+            )
+        }
         composable(Content.GuideFinishLearning.route) { GuideFinishLearningScreen(navController = navController) }
         composable(Content.Loading.route) { LoadingScreen(navController = navController) }
         composable(Content.Welcome.route) { WelcomeScreen(navController = navController) }

@@ -13,6 +13,7 @@ import com.kakao.sdk.user.UserApiClient
 
 
 import kangparks.android.vostom.navigations.Nav
+import kangparks.android.vostom.utils.networks.user.login
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -67,10 +68,13 @@ fun withKakaoLogin(appKey: String, context: Context, navHostController: NavHostC
         UserApiClient.instance.loginWithKakaoAccount(context = context){ token, error->
             Log.d("KAKAO_AUTH", "카카오계정 로그인 시도")
             if(error != null){
-                Log.e("KAKAO-AUTH-ACCOUNT", "Fail get KAKAO token : $error")
+                Log.e("KAKAO-AxUTH-ACCOUNT", "Fail get KAKAO token : $error")
             }else if(token != null){
 //                sendKakaoTokenToServer(token, context, navHostController)\
                 Log.d("KAKAO-AUTH-ACCOUNT", "success : $token")
+                CoroutineScope(Dispatchers.IO).launch {
+                    login(token.accessToken)
+                }
                 navHostController.navigate(route = Nav.CONTENT){
                     navHostController.popBackStack()
                 }
