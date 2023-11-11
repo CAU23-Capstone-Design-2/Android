@@ -124,18 +124,15 @@ dependencies {
     // Jsoup
     implementation("org.jsoup:jsoup:1.13.1")
 
-    // Youtube Player
-    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
-
-    // Youtube Extractor
-    implementation("com.github.HaarigerHarald:android-youtubeExtractor:v1.7.0")
-//    implementation("com.github.HaarigerHarald:android-youtubeExtractor:master-SNAPSHOT")
-
     //json parser
     implementation ("org.json:json:20210307")
 
     // WebView
     implementation("com.google.accompanist:accompanist-webview:0.24.13-rc")
+
+    // retrofit 2
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     // testing dependencies
     testImplementation("junit:junit:4.13.2")

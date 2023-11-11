@@ -15,9 +15,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
 import kangparks.android.vostom.navigations.Content
+import kangparks.android.vostom.viewModel.recorder.RecordFileViewModel
 
 @Composable
-fun AddFileScreen(navController : NavHostController) {
+fun AddFileScreen(
+    navController : NavHostController,
+    recordFileViewModel : RecordFileViewModel
+) {
 
     val pickAudioFile = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetMultipleContents(), onResult = {
         Log.d("AddFileScreen", "onResult: $it")
