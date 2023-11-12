@@ -89,7 +89,8 @@ fun NavGraphBuilder.contentNavigation(
         startDestination =
         if (isLearnUserVoice) Content.Home.route
 //        else Content.Home.route,
-        else Content.Guide.route,
+        else Content.AddFile.route,
+//        else Content.Guide.route,
 //        else Content.GuideSinging.route,
 //                else Content.AddFile.route,
         route = Nav.CONTENT

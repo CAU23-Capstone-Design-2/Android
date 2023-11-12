@@ -30,6 +30,7 @@ import androidx.navigation.NavHostController
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
 import kangparks.android.vostom.BuildConfig
+import kangparks.android.vostom.R
 import kangparks.android.vostom.components.player.VideoBackground
 import kangparks.android.vostom.components.button.RoundedButton
 import kangparks.android.vostom.navigations.Nav
@@ -102,7 +103,7 @@ fun LoginScreen(navHostController: NavHostController){
                     verticalArrangement = Arrangement.Center,
                 ){
                     Image(
-                        painter = painterResource(id = kangparks.android.vostom.R.drawable.screen_title),
+                        painter = painterResource(id = R.drawable.screen_title),
                         contentDescription = "vostom title",
                         modifier = Modifier
                             .height(36.dp),
@@ -110,7 +111,7 @@ fun LoginScreen(navHostController: NavHostController){
                     )
                     Spacer(modifier = Modifier.height(20.dp))
                     Image(
-                        painter = painterResource(id = kangparks.android.vostom.R.drawable.screen_subtitle),
+                        painter = painterResource(id = R.drawable.screen_subtitle),
                         contentDescription = "vostom subtitle",
                         modifier = Modifier
                             .height(16.dp),
