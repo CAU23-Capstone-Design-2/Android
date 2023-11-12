@@ -28,7 +28,7 @@ fun DetailGuideScreen(navController: NavHostController){
             backButtonContent = "이전",
             backButtonAction = { navController.popBackStack()},
             mainContent = "목소리 학습을 위해 다음 단계들을 수행합니다.",
-            subContent = "소요 시간 : 최소 10분 이상",
+            subContent = "소요 시간 : 최소 10분 이상\n이어폰 착용하고 진행하는 것을 권장합니다.",
             nextButtonContent = "학습 시작",
             nextButtonAction = {
                 if (getResultOfCurrentPermissions(context)) {

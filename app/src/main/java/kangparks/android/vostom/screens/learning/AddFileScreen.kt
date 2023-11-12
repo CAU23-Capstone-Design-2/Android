@@ -6,6 +6,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -78,30 +79,36 @@ fun AddFileScreen(
                 AddFileButton(pickAudioFile = pickAudioFile)
                 Spacer(modifier = Modifier.height(20.dp))
 
-                AnimatedVisibility(
-                    visible = sizeOfAddedRecordFiles.value == 0,
-                    enter = fadeIn(),
-                    exit = fadeOut()
-                ) {
-                    Text(
-                        text = "추가된 녹음 파일이 없습니다.",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-                AnimatedVisibility(
-                    visible = sizeOfAddedRecordFiles.value != 0,
-                    enter = fadeIn(),
-                    exit = fadeOut()
-                ) {
+                Box {
                     Column {
-                        Text(
-                            text = "추가된 녹음 파일 : ${sizeOfAddedRecordFiles.value}개",
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Spacer(modifier = Modifier.height(10.dp))
-                        filesNameofAddedList.value.map {AddFileItem(fileName = it)}
+                        AnimatedVisibility(
+                            visible = sizeOfAddedRecordFiles.value == 0,
+                            enter = fadeIn(),
+                            exit = fadeOut()
+                        ) {
+                            Text(
+                                text = "추가된 녹음 파일이 없습니다.",
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+                    Column {
+                        AnimatedVisibility(
+                            visible = sizeOfAddedRecordFiles.value != 0,
+                            enter = fadeIn(),
+                            exit = fadeOut()
+                        ) {
+                            Column {
+                                Text(
+                                    text = "추가된 녹음 파일 : ${sizeOfAddedRecordFiles.value}개",
+                                    fontSize = 14.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Spacer(modifier = Modifier.height(10.dp))
+                                filesNameofAddedList.value.map {AddFileItem(fileName = it)}
+                            }
+                        }
                     }
                 }
             }

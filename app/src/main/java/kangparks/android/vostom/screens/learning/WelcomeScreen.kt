@@ -1,5 +1,6 @@
 package kangparks.android.vostom.screens.learning
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -30,6 +31,8 @@ fun WelcomeScreen(navController : NavHostController) {
         composition = completeAnimation,
         iterations = LottieConstants.IterateForever,
     )
+
+    BackHandler(enabled = true) { } // 뒤로 가기 방지
 
     Surface {
         LearningLayoutTemplate(

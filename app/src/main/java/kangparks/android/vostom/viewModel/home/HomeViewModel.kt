@@ -13,7 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel(token : String) : ViewModel() {
     private val coroutineScope = CoroutineScope(viewModelScope.coroutineContext)
 
     private val _myCoverItemList : MutableLiveData<List<CoverSong>> = MutableLiveData(listOf())
@@ -26,6 +26,9 @@ class HomeViewModel : ViewModel() {
 
     init {
         coroutineScope.launch {
+//            _myCoverItemList.postValue(getUserCoverItems(accessToken))
+//            _myGroupCoverItemList.postValue(getUserGroupCoverItems(accessToken))
+//            _othersItemList.postValue(getStarList(accessToken))
             delay(3000)
             _myCoverItemList.postValue(dummyMyCoverItemList)
             delay(2000)

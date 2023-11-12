@@ -63,7 +63,7 @@ fun ContentAppBar(
             if(contentTitle != null){
                 Text(
                     text = contentTitle,
-                    fontSize = 22.sp,
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.weight(1f)
                 )

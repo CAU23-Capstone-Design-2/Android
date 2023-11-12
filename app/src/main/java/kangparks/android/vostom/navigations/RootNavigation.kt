@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -34,6 +35,7 @@ fun VostomApp() {
 fun RootNavigation(
     navController: NavHostController = rememberNavController(),
 ){
+    val context = LocalContext.current
 //    val token = getAccessToken(context) // 저장된 토큰 불러오기
 
     val curNav = if(true) Nav.AUTH else Nav.CONTENT
@@ -42,6 +44,7 @@ fun RootNavigation(
         authNavigation(navController = navController)
         contentNavigation(
             navController = navController,
+            context = context
         )
     }
 }

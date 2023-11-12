@@ -1,5 +1,6 @@
 package kangparks.android.vostom.screens.learning
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -49,6 +50,8 @@ fun LoadingScreen(navController : NavHostController){
 
         navController.navigate(LearningContent.Welcome.route)
     }
+
+    BackHandler(enabled = true) { } // 뒤로 가기 방지
 
     Surface(
         modifier = Modifier.fillMaxSize(),

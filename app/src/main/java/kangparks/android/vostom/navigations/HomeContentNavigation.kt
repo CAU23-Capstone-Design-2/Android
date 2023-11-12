@@ -1,5 +1,7 @@
 package kangparks.android.vostom.navigations
 
+import android.content.Context
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -9,6 +11,8 @@ import kangparks.android.vostom.screens.group.BuildGroupScreen
 import kangparks.android.vostom.screens.group.GroupListScreen
 import kangparks.android.vostom.screens.home.HomeScreen
 import kangparks.android.vostom.screens.profile.ProfileScreen
+import kangparks.android.vostom.utils.store.getAccessToken
+import kangparks.android.vostom.viewModel.home.HomeViewModelFactory
 
 sealed class HomeContent(val route: String) {
     object Home : HomeContent(route = "home")
@@ -47,8 +51,10 @@ sealed class BottomBarContent(
 }
 fun NavGraphBuilder.homeContentNavigation(
     navController: NavHostController,
+    context: Context
 ) {
-//    val homeViewModel = HomeViewModel()
+//    val accessToken = getAccessToken(context)
+    val accessToken = "access_token"
 
     navigation(
         route = Nav.HOME_CONTENT,
@@ -57,10 +63,17 @@ fun NavGraphBuilder.homeContentNavigation(
         composable(HomeContent.Home.route) {
             HomeScreen(
                 navController = navController,
-//                homeViewModel = homeViewModel
+                token = accessToken,
+//                homeViewModel = viewModel(
+//                    factory = HomeViewModelFactory(accessToken)
+//                    )
             )
         }
-        composable(HomeContent.GroupList.route) { GroupListScreen(navController = navController) }
+        composable(HomeContent.GroupList.route) {
+            GroupListScreen(
+                navController = navController
+            )
+        }
         composable(HomeContent.Profile.route) { ProfileScreen(navController = navController) }
         composable(HomeContent.BuildGroup.route) { BuildGroupScreen(navController = navController) }
     }
