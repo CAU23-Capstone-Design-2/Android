@@ -23,7 +23,7 @@ import kangparks.android.vostom.models.content.CoverSong
 
 @Composable
 fun UserCoverSongItem(
-    content: CoverSong,
+    content: CoverSong? = null,
     onClick: () -> Unit = {},
 ) {
     Column(
@@ -32,7 +32,7 @@ fun UserCoverSongItem(
             .clickable(onClick = onClick)
     ) {
         AsyncImage(
-            model = content.albumArtUri,
+            model = content?.albumArtUri?:null,
             contentDescription = null,
             modifier = Modifier
                 .size(140.dp)
@@ -41,7 +41,7 @@ fun UserCoverSongItem(
         )
         Spacer(modifier = Modifier.height(10.dp))
         Text(
-            text = content.title,
+            text = content?.title ?: "",
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
             maxLines = 1,
@@ -49,7 +49,7 @@ fun UserCoverSongItem(
         )
         Spacer(modifier = Modifier.height(5.dp))
         Text(
-            text = content.singer,
+            text = content?.singer?:"",
             fontSize = 13.sp,
             fontWeight = FontWeight.Normal,
             maxLines = 1,
@@ -58,7 +58,7 @@ fun UserCoverSongItem(
         Spacer(modifier = Modifier.height(5.dp))
         Row {
             AsyncImage(
-                model = content.userImgUri,
+                model = content?.userImgUri?:"",
                 contentDescription = null,
                 modifier = Modifier
                     .size(20.dp)
@@ -67,7 +67,7 @@ fun UserCoverSongItem(
             )
             Spacer(modifier = Modifier.width(5.dp))
             Text(
-                text = content.user + "님의 커버",
+                text = content?.user + "님의 커버" ?: "",
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Normal,
                 maxLines = 1,

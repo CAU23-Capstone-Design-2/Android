@@ -1,5 +1,10 @@
 package kangparks.android.vostom.components.section
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,45 +37,67 @@ fun <T> HorizontalSongSection(
     sideButtonAction: ()->Unit = {},
     contents: List<T>,
     contentPaddingValue : Int = 10,
-    renderItem: @Composable (T) -> Unit = {}
+    renderItem: @Composable (T) -> Unit = {},
+    skeletonItem: @Composable () -> Unit = {}
 ) where T : Any{
     Column{
         Row(
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(start = 20.dp, bottom = 10.dp)
+            modifier = Modifier
+                .padding(start = 20.dp, bottom = 10.dp)
+                .clickable { }
         ){
             Text(
                 text = title,
                 fontWeight = FontWeight.ExtraBold,
-                fontSize = 19.sp,
+                fontSize = 17.sp,
             )
             Box (
-                modifier = Modifier.fillMaxHeight().clickable {  },
+                modifier = Modifier.fillMaxHeight(),
                 contentAlignment = Alignment.Center
             ){
                 Icon(
                     imageVector = Icons.Rounded.KeyboardArrowRight,
                     contentDescription = "Next Button",
                     modifier = Modifier
-                        .width(30.dp)
-                        .height(30.dp)
+                        .width(24.dp)
+                        .height(28.dp)
                 )
             }
         }
 
-        LazyRow(
-            contentPadding = PaddingValues(horizontal = 20.dp)
-        ){
+        Box{
+            Column {
+                AnimatedVisibility(contents.isEmpty(), exit = fadeOut()+ scaleOut()){
+                    LazyRow(
+                        contentPadding = PaddingValues(horizontal = 20.dp)
+                    ){
+                        items(3) {
+                            skeletonItem()
+                            Spacer(modifier = Modifier.width(contentPaddingValue.dp))
+                        }
 
-            items(contents.size){ index ->
-                renderItem(contents[index])
-//                CoverSongItem(
-//                    content = contents[index]
-//                )
-                Spacer(modifier = Modifier.width(contentPaddingValue.dp))
+                    }
+                }
+            }
+
+            Column {
+                AnimatedVisibility(visible = contents.isNotEmpty(), enter = fadeIn()+ scaleIn()) {
+                    LazyRow(
+                        contentPadding = PaddingValues(horizontal = 20.dp)
+                    ){
+
+                        items(contents.size){ index ->
+                            renderItem(contents[index])
+                            Spacer(modifier = Modifier.width(contentPaddingValue.dp))
+                        }
+                    }
+                }
             }
         }
+
+
     }
 
 }

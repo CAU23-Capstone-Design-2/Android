@@ -1,6 +1,5 @@
 package kangparks.android.vostom.screens.learning
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -23,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
@@ -39,7 +37,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
-import kangparks.android.vostom.navigations.Content
+import kangparks.android.vostom.navigations.LearningContent
 import kangparks.android.vostom.viewModel.learning.ScriptProviderViewModel
 
 @Composable
@@ -97,11 +95,11 @@ fun FinishLearningScriptScreen(
                 },
                 nextButtonContent = "추가 스크립트 녹음하기",
                 nextButtonAction = {
-                    navController.navigate(Content.GuideScript.route)
+                    navController.navigate(LearningContent.GuideScript.route)
                 },
                 othersOptionButtonContent = "아니요! 다음 단계 진행 할래요.",
                 othersOptionButtonAction = {
-                    navController.navigate(Content.GuideSinging.route)
+                    navController.navigate(LearningContent.GuideSinging.route)
                 }
             ) {
                 Column(
@@ -131,7 +129,7 @@ fun FinishLearningScriptScreen(
                 subContent = "추가 스크립트가 없습니다. 다음 단계로 진행해주세요.",
                 nextButtonContent = "다음 단계 진행",
                 nextButtonAction = {
-                    navController.navigate(Content.GuideSinging.route)
+                    navController.navigate(LearningContent.GuideSinging.route)
                 }
             ) {
                 Column(

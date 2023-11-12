@@ -15,6 +15,7 @@ import kangparks.android.vostom.components.canvas.VoiceMeasureLine
 import kangparks.android.vostom.components.player.MusicPlayer
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
 import kangparks.android.vostom.navigations.Content
+import kangparks.android.vostom.navigations.LearningContent
 import kangparks.android.vostom.viewModel.player.AudioPlayerViewModel
 import kangparks.android.vostom.viewModel.recorder.AudioRecorderViewModel
 
@@ -33,7 +34,7 @@ fun LearningPitchScreen(navController : NavHostController){
             backButtonAction = { navController.popBackStack()},
             mainContent = "예시처럼 내 목소리의 음역대를 측정해보세요.",
             nextButtonContent = "음역대 측정하기",
-            nextButtonAction = { navController.navigate(Content.LearningScript.route) } // 임시 이동
+            nextButtonAction = { navController.navigate(LearningContent.LearningScript.route) } // 임시 이동
         ){
             MusicPlayer()
 //            VoiceMeasureLine()

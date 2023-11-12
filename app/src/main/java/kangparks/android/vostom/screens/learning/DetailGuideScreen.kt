@@ -4,22 +4,16 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import kangparks.android.vostom.components.content.GuideContent
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
-import kangparks.android.vostom.navigations.Content
+import kangparks.android.vostom.navigations.LearningContent
 import kangparks.android.vostom.utils.helper.permission.getResultOfCurrentPermissions
 
 @Composable
@@ -38,9 +32,9 @@ fun DetailGuideScreen(navController: NavHostController){
             nextButtonContent = "학습 시작",
             nextButtonAction = {
                 if (getResultOfCurrentPermissions(context)) {
-                    navController.navigate(Content.GuideScript.route)
+                    navController.navigate(LearningContent.GuideScript.route)
                 } else {
-                    navController.navigate(Content.PermissionGuide.route)
+                    navController.navigate(LearningContent.PermissionGuide.route)
                 }
             }
         ){

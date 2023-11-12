@@ -12,6 +12,8 @@ import kangparks.android.vostom.components.navigationBar.BottomNavigationBar
 object Nav {
     const val AUTH = "auth_graph"
     const val CONTENT = "content_graph"
+    const val LEARNING_CONTENT = "learning_content_graph"
+    const val HOME_CONTENT = "home_content_graph"
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

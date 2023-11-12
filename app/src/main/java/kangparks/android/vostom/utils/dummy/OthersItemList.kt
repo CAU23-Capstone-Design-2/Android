@@ -2,7 +2,7 @@ package kangparks.android.vostom.utils.dummy
 
 import kangparks.android.vostom.models.content.Singer
 
-var othersItemList = listOf(
+var dummyOthersItemList = listOf(
     Singer(id = 1, name = "박명수", imageUri = "https://image.ytn.co.kr/general/jpg/2013/0910/201309101636387229_h.jpg",),
     Singer(id = 2, name = "볼빨간 사춘기", imageUri = "https://biz.chosun.com/resizer/EuT-Pb1SfBbnpX4jm32Zmyagdic=/616x0/smart/cloudfront-ap-northeast-1.images.arcpublishing.com/chosunbiz/TINSKGS26KOVMCMBIW23D5PLMM.jpg",),
     Singer(id = 3, name = "아이유", imageUri = "https://file.mk.co.kr/meet/neds/2023/10/image_readtop_2023_761686_16965545415651740.jpg",),

@@ -15,7 +15,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -26,8 +25,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
-import kangparks.android.vostom.navigations.Content
-import kangparks.android.vostom.utils.store.getAccessToken
+import kangparks.android.vostom.navigations.LearningContent
 import kangparks.android.vostom.viewModel.recorder.RecordFileViewModel
 
 @Composable
@@ -62,7 +60,7 @@ fun GuideFinishLearningScreen(
             subContent = "목소리 학습 종료 버튼을 누르면 Vostom이 사용자의 목소리를 학습해서 AI 커버곡을 생성할 수 있도록 준비 할게요!☺️",
             nextButtonContent = "목소리 학습 종료",
             nextButtonAction = {
-                navController.navigate(Content.Loading.route)
+                navController.navigate(LearningContent.Loading.route)
             },
         ){
             Column(

@@ -8,7 +8,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import kangparks.android.vostom.navigations.Content
+import kangparks.android.vostom.navigations.LearningContent
 
 @Composable
 fun getPermissionLauncher(context : Context, navController: NavHostController): ManagedActivityResultLauncher<String, Boolean> {
@@ -16,7 +16,7 @@ fun getPermissionLauncher(context : Context, navController: NavHostController): 
         contract = ActivityResultContracts.RequestPermission(),
         onResult = {
             if(it){
-                navController.navigate(Content.GuideScript.route){
+                navController.navigate(LearningContent.GuideScript.route){
                     navController.popBackStack()
                 }
             }else{
@@ -39,7 +39,7 @@ fun getPermissionLauncher(context : Context, navController: NavHostController): 
                     Toast.makeText(context, "필수 권한이 설정 되었습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
-            navController.navigate(Content.GuideScript.route){
+            navController.navigate(LearningContent.GuideScript.route){
                 navController.popBackStack()
             }
         }

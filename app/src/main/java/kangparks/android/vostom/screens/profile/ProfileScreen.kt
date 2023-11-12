@@ -28,10 +28,7 @@ fun ProfileScreen(navController : NavHostController){
         ContentAppBar(
             sideButtonAction = {},
             sideButtonContent = "편집",
-            contentTitleFront = "My",
-            contentFrontColor = Color(0xFF000000),
-            contentTitleBack = " Page",
-            contentBackColor = Color(0xFFc1b7c1),
+            contentTitle = "프로필",
         )
     }
 }

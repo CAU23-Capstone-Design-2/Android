@@ -2,7 +2,6 @@ package kangparks.android.vostom.screens.learning
 
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -39,7 +38,7 @@ import kangparks.android.vostom.components.blur.BlurForList
 import kangparks.android.vostom.components.item.YoutubeContentItem
 import kangparks.android.vostom.components.searchbar.SearchBar
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
-import kangparks.android.vostom.navigations.Content
+import kangparks.android.vostom.navigations.LearningContent
 import kangparks.android.vostom.viewModel.learning.GuideSingingViewModel
 import kangparks.android.vostom.viewModel.learning.SingingViewModel
 
@@ -83,7 +82,7 @@ fun GuideSingingScreen(
                 if(songItem.value == null){
                     Toast.makeText(context, "선택된 노래가 없습니다.", Toast.LENGTH_SHORT).show()
                 }else{
-                    navController.navigate(Content.CountDown.route+"/${Content.LearningSinging.route}")
+                    navController.navigate(LearningContent.CountDown.route+"/${LearningContent.LearningSinging.route}")
                 }
             }
         ){
