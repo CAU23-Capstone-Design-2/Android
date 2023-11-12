@@ -1,12 +1,14 @@
 package kangparks.android.vostom.components.blur
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +22,8 @@ fun BlurForList(
     blurBottomPadding : Int = 10,
     blurColor : Color = Color.White
 ) {
+    val isDarkTheme = isSystemInDarkTheme()
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -35,7 +39,7 @@ fun BlurForList(
                     brush = Brush.verticalGradient(
                         colors = listOf(
                             Color.Transparent,
-                            blurColor
+                            if(isDarkTheme) MaterialTheme.colorScheme.background else Color.White
                         )
                     ),
                     alpha = 1.0f
@@ -45,7 +49,7 @@ fun BlurForList(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(blurBottomPadding.dp)
-                .background(Color.White)
+                .background(if(isDarkTheme) MaterialTheme.colorScheme.background else Color.White)
         ) {}
 
     }

@@ -1,6 +1,7 @@
 package kangparks.android.vostom.components.searchbar
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,6 +25,8 @@ fun SearchBar(
     placeholder : String,
     onSearch : (KeyboardActionScope.() -> Unit)?
 ) {
+    val isDarkTheme = isSystemInDarkTheme()
+
     Column {
         TextField(
             placeholder = {
@@ -52,8 +55,8 @@ fun SearchBar(
                 unfocusedLabelColor = Color.Transparent,
                 disabledLabelColor = Color.Transparent,
                 errorLabelColor = Color.Transparent,
-                focusedContainerColor = Color(0xFFEEEEEE),
-                unfocusedContainerColor = Color(0xFFEEEEEE),
+                focusedContainerColor = if(isDarkTheme) Color(0xFF747474) else Color(0xFFEEEEEE),
+                unfocusedContainerColor = if(isDarkTheme) Color(0xFF747474) else Color(0xFFEEEEEE),
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
             ),

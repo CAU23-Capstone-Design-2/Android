@@ -1,17 +1,23 @@
 package kangparks.android.vostom.viewModel.recorder
 
+import android.util.Log
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import kangparks.android.vostom.utils.constants.getCurrentDate
+import kangparks.android.vostom.utils.networks.learning.uploadLearningData
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import java.io.File
 
 class RecordFileViewModel : ViewModel() {
+    private val coroutineScope = CoroutineScope(viewModelScope.coroutineContext)
+
     private val _recordFileList = mutableListOf<File>()
     private val recordFileList: List<File> = _recordFileList
 
     private val _currentDate = getCurrentDate()
 
-//    private val _currentSize = mutableIntStateOf(0)
     private var _currentRecordFileName: String =
         _currentDate + "-" + recordFileList.size.toString() + ".m4a"
 
@@ -23,21 +29,24 @@ class RecordFileViewModel : ViewModel() {
         return _currentDate + "-" + recordFileList.size.toString() + ".m4a"
     }
 
-//    fun getCurrentSize(): Int {
-//        return _currentSize.value
-//    }
+    fun uploadRecordFileToServer(
+        accessToken : String,
+    ) {
+        coroutineScope.launch {
+            uploadLearningData(accessToken, recordFileList)
+        }
+    }
 
     fun getRecordFileList(): List<File> {
         return recordFileList
     }
 
-    fun sendRecordFileList() {
-        // TODO("서버로 녹음 파일 전송하기")
+    fun testForCurrentList(){
+        Log.d("RecordFileViewModel", "currentList: ${recordFileList}")
     }
 
     fun reset() {
         _recordFileList.clear()
-//        _currentSize.value = 0
         _currentRecordFileName = getCurrentDate() + "-" + recordFileList.size.toString() + ".m4a"
     }
 

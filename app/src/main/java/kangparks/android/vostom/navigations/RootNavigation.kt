@@ -32,8 +32,7 @@ fun VostomApp() {
 fun RootNavigation(
     navController: NavHostController = rememberNavController(),
 ){
-    // 추후 토큰 조회 로직 구현 예정
-//    val token = false
+//    val token = getAccessToken(context) // 저장된 토큰 불러오기
 
     val curNav = if(true) Nav.AUTH else Nav.CONTENT
 

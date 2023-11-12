@@ -89,6 +89,7 @@ fun NavGraphBuilder.contentNavigation(
         startDestination =
         if (isLearnUserVoice) Content.Home.route
 //        else Content.Home.route,
+//        else Content.AddFile.route,
         else Content.Guide.route,
 //        else Content.GuideSinging.route,
 //                else Content.AddFile.route,
@@ -146,7 +147,12 @@ fun NavGraphBuilder.contentNavigation(
                 recordFileViewModel = recordFileViewModel
             )
         }
-        composable(Content.GuideFinishLearning.route) { GuideFinishLearningScreen(navController = navController) }
+        composable(Content.GuideFinishLearning.route) {
+            GuideFinishLearningScreen(
+                navController = navController,
+                recordFileViewModel = recordFileViewModel
+            )
+        }
         composable(Content.Loading.route) { LoadingScreen(navController = navController) }
         composable(Content.Welcome.route) { WelcomeScreen(navController = navController) }
         composable(Content.BuildGroup.route) { BuildGroupScreen(navController = navController) }

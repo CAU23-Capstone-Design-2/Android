@@ -1,5 +1,6 @@
 package kangparks.android.vostom.screens.learning
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,11 +11,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.airbnb.lottie.compose.LottieAnimation
@@ -24,9 +27,16 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
 import kangparks.android.vostom.navigations.Content
+import kangparks.android.vostom.utils.store.getAccessToken
+import kangparks.android.vostom.viewModel.recorder.RecordFileViewModel
 
 @Composable
-fun GuideFinishLearningScreen(navController : NavHostController) {
+fun GuideFinishLearningScreen(
+    navController : NavHostController,
+    recordFileViewModel : RecordFileViewModel
+) {
+    val context = LocalContext.current
+
     val thanksAnimation by rememberLottieComposition(
         spec = LottieCompositionSpec.Asset("thanks.json")
     )
@@ -34,6 +44,14 @@ fun GuideFinishLearningScreen(navController : NavHostController) {
         composition = thanksAnimation,
         iterations = LottieConstants.IterateForever,
     )
+
+    LaunchedEffect(null){
+        // 음성 파일 업로드 부분
+//        val accessToken = getAccessToken(context)
+//        recordFileViewModel.uploadRecordFileToServer(accessToken)
+    }
+
+    BackHandler(enabled = true) { } // 뒤로 가기 방지
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -45,7 +63,7 @@ fun GuideFinishLearningScreen(navController : NavHostController) {
             nextButtonContent = "목소리 학습 종료",
             nextButtonAction = {
                 navController.navigate(Content.Loading.route)
-            }, // 임시 이동
+            },
         ){
             Column(
                 modifier = Modifier.fillMaxSize(),

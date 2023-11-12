@@ -2,6 +2,7 @@ package kangparks.android.vostom.components.content
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,6 +29,8 @@ fun ScriptContent(
     scrollState : ScrollState,
     scriptID : Int
 ) {
+    val isDarkTheme = isSystemInDarkTheme()
+
     Box {
         Box(
             modifier = Modifier
@@ -56,7 +60,8 @@ fun ScriptContent(
                         brush = Brush.verticalGradient(
                             colors = listOf(
                                 Color.Transparent,
-                                Color.White
+                                if(isDarkTheme) MaterialTheme.colorScheme.background else Color.White
+
                             )
                         ),
                         alpha = 1.0f
@@ -66,7 +71,7 @@ fun ScriptContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(10.dp)
-                    .background(Color.White)
+                    .background(if(isDarkTheme) MaterialTheme.colorScheme.background else Color.White)
             ) {}
 
         }
