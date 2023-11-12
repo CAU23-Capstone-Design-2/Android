@@ -1,6 +1,7 @@
 package kangparks.android.vostom.components.item
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -19,6 +20,8 @@ import kangparks.android.vostom.R
 fun AddFileItem(
     fileName : String
 ) {
+    val isDarkTheme = isSystemInDarkTheme()
+
     Row {
         Image(
             painter = painterResource(id = R.drawable.audio_file),
@@ -31,7 +34,7 @@ fun AddFileItem(
         Text(
             text = fileName,
             fontSize = 14.sp,
-            color = Color(0xFF2E2E2E)
+            color = if(isDarkTheme) Color(0xFFC9C9C9) else Color(0xFF2E2E2E)
         )
     }
     Spacer(modifier = Modifier.height(5.dp))

@@ -2,6 +2,7 @@ package kangparks.android.vostom.components.button
 
 import android.net.Uri
 import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,12 +20,14 @@ import androidx.compose.ui.unit.sp
 fun AddFileButton(
     pickAudioFile: ManagedActivityResultLauncher<String, List<@JvmSuppressWildcards Uri>>
 ) {
+    val isDarkTheme = isSystemInDarkTheme()
+
     Button(
         modifier = Modifier
             .fillMaxWidth()
             .height(52.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFFEEEEEE)
+            containerColor = if(isDarkTheme) Color(0xFF747474) else Color(0xFFEEEEEE)
         ),
         onClick = {
             pickAudioFile.launch("audio/*")

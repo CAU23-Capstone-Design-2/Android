@@ -75,7 +75,6 @@ fun AddFileScreen(
     ){
         LearningLayoutTemplate(
             mainContent = "학습에 도움되는 목소리 녹음 파일이 있으면 추가해 주세요!",
-            backButtonContent = "빌드 11-12-11-23",
             nextButtonContent = "녹음 파일 추가 완료",
             nextButtonAction = {
                 val addFileList = addFileViewModel.getRecordFileFromDeviceList()
