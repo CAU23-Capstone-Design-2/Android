@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -30,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,6 +52,7 @@ fun AddFileScreen(
 
     val addFileViewModel = remember { AddFileViewModel() }
     val sizeOfAddedRecordFiles = addFileViewModel.sizeOfAddedRecordFiles.observeAsState(initial = 0)
+    val filesNameofAddedList = addFileViewModel.filesNameofAddedList.observeAsState(initial = mutableListOf())
 
     val context = LocalContext.current
     val pickAudioFile = rememberLauncherForActivityResult(contract = ActivityResultContracts.GetMultipleContents(), onResult = {
@@ -58,7 +61,7 @@ fun AddFileScreen(
             val fileName = getFileNameFromUri(uri, context)
             val copiedFile = copyFileToAppDir(uri, fileName, context)
 
-            addFileViewModel.addRecordFileFromDevice(copiedFile)
+            addFileViewModel.addRecordFileFromDevice(copiedFile, context)
         }
     })
 
@@ -70,7 +73,7 @@ fun AddFileScreen(
     ){
         LearningLayoutTemplate(
             mainContent = "학습에 도움되는 목소리 녹음 파일이 있으면 추가해 주세요!",
-            backButtonContent = "빌드 11-12-10-12",
+            backButtonContent = "빌드 11-12-11-23",
             nextButtonContent = "녹음 파일 추가 완료",
             nextButtonAction = {
                 navController.navigate(Content.GuideFinishLearning.route)
@@ -109,25 +112,43 @@ fun AddFileScreen(
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
-                    Text(text = "추가된 녹음 파일이 없습니다.")
+                    Text(
+                        text = "추가된 녹음 파일이 없습니다.",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
                 AnimatedVisibility(
                     visible = sizeOfAddedRecordFiles.value != 0,
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
-                    Text(text = "추가된 녹음 파일 : ${sizeOfAddedRecordFiles.value}개")
-                }
-                Row {
-                    Image(
-                        painter = painterResource(id = R.drawable.audio_file),
-                        contentDescription = "" ,
-                        modifier = Modifier
-                            .height(20.dp),
-                        contentScale = ContentScale.FillHeight
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(text = "테스트", fontSize = 14.sp, color = Color(0xFFAFAFAF))
+                    Column {
+                        Text(
+                            text = "추가된 녹음 파일 : ${sizeOfAddedRecordFiles.value}개",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
+                        filesNameofAddedList.value.map {
+                            Row {
+                                Image(
+                                    painter = painterResource(id = R.drawable.audio_file),
+                                    contentDescription = "",
+                                    modifier = Modifier
+                                        .height(20.dp),
+                                    contentScale = ContentScale.FillHeight
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(
+                                    text = it,
+                                    fontSize = 14.sp,
+                                    color = Color(0xFF2E2E2E)
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(5.dp))
+                        }
+                    }
                 }
             }
         }
