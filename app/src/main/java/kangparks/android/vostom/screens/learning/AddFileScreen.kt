@@ -37,6 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import kangparks.android.vostom.R
+import kangparks.android.vostom.components.button.AddFileButton
+import kangparks.android.vostom.components.item.AddFileItem
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
 import kangparks.android.vostom.navigations.Content
 import kangparks.android.vostom.utils.helper.file.copyFileToAppDir
@@ -76,6 +78,11 @@ fun AddFileScreen(
             backButtonContent = "빌드 11-12-11-23",
             nextButtonContent = "녹음 파일 추가 완료",
             nextButtonAction = {
+                val addFileList = addFileViewModel.getRecordFileFromDeviceList()
+                for (file in addFileList) {
+                    recordFileViewModel.addRecordFile(file)
+                }
+                recordFileViewModel.testForCurrentList()
                 navController.navigate(Content.GuideFinishLearning.route)
             },
             othersOptionButtonContent = "추가할 파일이 없어요!",
@@ -84,27 +91,7 @@ fun AddFileScreen(
             }
         ){
             Column {
-                Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(52.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFFEEEEEE)
-                    ),
-                    onClick = {
-                        pickAudioFile.launch("audio/*")
-                    },
-                    shape = RoundedCornerShape(10.dp)
-                ) {
-                    Text(
-                        text = "여기를 눌러 파일을 선택해주세요!",
-                        fontSize = 14.sp,
-                        color = Color(0xFFAFAFAF),
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        textAlign = TextAlign.Left
-                    )
-                }
+                AddFileButton(pickAudioFile = pickAudioFile)
                 Spacer(modifier = Modifier.height(20.dp))
 
                 AnimatedVisibility(
@@ -130,24 +117,7 @@ fun AddFileScreen(
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.height(10.dp))
-                        filesNameofAddedList.value.map {
-                            Row {
-                                Image(
-                                    painter = painterResource(id = R.drawable.audio_file),
-                                    contentDescription = "",
-                                    modifier = Modifier
-                                        .height(20.dp),
-                                    contentScale = ContentScale.FillHeight
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(
-                                    text = it,
-                                    fontSize = 14.sp,
-                                    color = Color(0xFF2E2E2E)
-                                )
-                            }
-                            Spacer(modifier = Modifier.height(5.dp))
-                        }
+                        filesNameofAddedList.value.map {AddFileItem(fileName = it)}
                     }
                 }
             }

@@ -16,6 +16,6 @@ suspend fun login(accessToken: String) {
 //        }
     } else {
         // error
-        Log.e("NETWORK-login", "${response}")
+        Log.e("NETWORK-login", "$response")
     }
 }
