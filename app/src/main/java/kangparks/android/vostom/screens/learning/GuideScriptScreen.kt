@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import kangparks.android.vostom.components.content.ScriptContent
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
-import kangparks.android.vostom.navigations.Content
+import kangparks.android.vostom.navigations.LearningContent
 import kangparks.android.vostom.viewModel.learning.ScriptProviderViewModel
 
 @Composable
@@ -30,7 +30,7 @@ fun GuideScriptScreen(
             mainContent = "다음 제공되는 스크립트를 따라 읽어보세요.",
             subContent = "예상 소요시간 : 3분~5분",
             nextButtonContent = "스크립트 녹음하기",
-            nextButtonAction = { navController.navigate(Content.CountDown.route+"/${Content.LearningScript.route}") }
+            nextButtonAction = { navController.navigate(LearningContent.CountDown.route+"/${LearningContent.LearningScript.route}") }
         ) {
             ScriptContent(
                 scrollState = scrollState,

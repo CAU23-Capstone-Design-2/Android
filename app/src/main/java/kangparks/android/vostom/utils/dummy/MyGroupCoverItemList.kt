@@ -2,7 +2,7 @@ package kangparks.android.vostom.utils.dummy
 
 import kangparks.android.vostom.models.content.CoverSong
 
-var myGroupCoverItemList = listOf<CoverSong>(
+var dummyMyGroupCoverItemList = listOf<CoverSong>(
     CoverSong(
         id =1,
         title = "사건의 지평선",

@@ -1,6 +1,5 @@
-package kangparks.android.vostom.viewModel.learning
+package kangparks.android.vostom.viewModel.search
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class GuideSingingViewModel : ViewModel(){
+class YoutubeSearchViewModel : ViewModel(){
     private val _listOfSong = MutableLiveData<List<YoutubePlayItem>?>(listOf())
     private val _selectedSong = MutableLiveData<Int>(-1)
     private val _isSearching = MutableLiveData<Boolean>(false)
@@ -21,12 +20,18 @@ class GuideSingingViewModel : ViewModel(){
     val isSearching : LiveData<Boolean> = _isSearching
     val isNothingResult : LiveData<Boolean> = _isNothingResult
 
-    fun searchSongWithKeyword(keyword : String) {
+    fun searchSongWithKeyword(
+        keyword : String,
+        postWord : String = ""
+    ) {
         _isSearching.value = true
         _isNothingResult.value = false
         _listOfSong.value = listOf()
         GlobalScope.launch(Dispatchers.IO){
-            val result = getSongList(keyword = keyword)
+            val result = getSongList(
+                keyword = keyword,
+                postWord = postWord
+            )
             if(result != null) {
                 _listOfSong.postValue(result)
             }

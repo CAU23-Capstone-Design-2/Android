@@ -15,14 +15,11 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccessAlarm
 import androidx.compose.material.icons.outlined.AccountBalance
-import androidx.compose.material3.Icon
-import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -34,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import kangparks.android.vostom.components.appbar.ContentAppBar
-import kangparks.android.vostom.navigations.Content
+import kangparks.android.vostom.navigations.HomeContent
 
 @OptIn(ExperimentalFoundationApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -73,13 +70,10 @@ fun GroupListScreen(navController: NavHostController) {
         Column {
             ContentAppBar(
                 sideButtonAction = {
-                    navController.navigate(Content.BuildGroup.route)
+                    navController.navigate(HomeContent.BuildGroup.route)
                 },
                 sideButtonContent = "그룹 만들기",
-                contentTitleFront = "Gr",
-                contentFrontColor = Color(0xFF000000),
-                contentTitleBack = "oup",
-                contentBackColor = Color(0xFFc1b7c1),
+                contentTitle = "그룹",
             )
 
             Column(

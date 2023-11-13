@@ -1,5 +1,6 @@
 package kangparks.android.vostom.screens.learning
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -12,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,7 +26,7 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import kangparks.android.vostom.components.bottomsheet.OthersContentBottomSheet
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
-import kangparks.android.vostom.navigations.Content
+import kangparks.android.vostom.navigations.LearningContent
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,8 +48,10 @@ fun LoadingScreen(navController : NavHostController){
             countValue.value--
         }
 
-        navController.navigate(Content.Welcome.route)
+        navController.navigate(LearningContent.Welcome.route)
     }
+
+    BackHandler(enabled = true) { } // 뒤로 가기 방지
 
     Surface(
         modifier = Modifier.fillMaxSize(),

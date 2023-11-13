@@ -5,10 +5,14 @@ import org.json.JSONObject
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
-const val baseUrl = "https://www.youtube.com/results?search_query=tj+%EB%85%B8%EB%9E%98%EB%B0%A9+"
 
 @OptIn(ExperimentalStdlibApi::class)
-suspend fun getSongList(keyword : String) : List<YoutubePlayItem>?{
+suspend fun getSongList(
+    keyword : String,
+    postWord : String = ""
+) : List<YoutubePlayItem>?{
+
+    val baseUrl = "https://www.youtube.com/results?search_query=${postWord}"
     var listOfSong = mutableListOf<YoutubePlayItem>()
     var countItem = 0
 

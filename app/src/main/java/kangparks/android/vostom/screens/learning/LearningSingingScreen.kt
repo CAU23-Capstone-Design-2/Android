@@ -29,7 +29,7 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import kangparks.android.vostom.components.player.YoutubePlayer
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
-import kangparks.android.vostom.navigations.Content
+import kangparks.android.vostom.navigations.LearningContent
 import kangparks.android.vostom.viewModel.recorder.RecordFileViewModel
 import kangparks.android.vostom.viewModel.learning.SingingViewModel
 import kangparks.android.vostom.viewModel.recorder.AudioRecorderViewModel
@@ -82,7 +82,7 @@ fun LearningSingingScreen(
                 val recordFile = recorderViewModel.getOutputFile()
                 if (recordFile != null){
                     recordFileViewModel.addRecordFile(recordFile)
-                    navController.navigate(Content.FinishLearningSinging.route)
+                    navController.navigate(LearningContent.FinishLearningSinging.route)
                 }
                 else{
                     Toast.makeText(context, "녹음 파일에 문제가 있습니다.\n 다시 시도해 주세요.", Toast.LENGTH_SHORT).show()

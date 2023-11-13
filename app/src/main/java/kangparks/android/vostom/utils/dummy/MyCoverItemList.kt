@@ -2,7 +2,7 @@ package kangparks.android.vostom.utils.dummy
 
 import kangparks.android.vostom.models.content.CoverSong
 
-var myCoverItemList = listOf<CoverSong>(
+var dummyMyCoverItemList = listOf<CoverSong>(
     CoverSong(
         id =1,
         title = "Hype Boy",

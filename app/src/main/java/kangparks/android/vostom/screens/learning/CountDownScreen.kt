@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import kangparks.android.vostom.components.item.CountDownItem
 import kangparks.android.vostom.navigations.Content
+import kangparks.android.vostom.navigations.LearningContent
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -34,12 +35,12 @@ fun CountDownScreen(
             delay(1000)
         }
         navController.navigate(destination){
-            if (destination == Content.LearningScript.route){
-                popUpTo(Content.GuideScript.route){
+            if (destination == LearningContent.LearningScript.route){
+                popUpTo(LearningContent.GuideScript.route){
                 }
             }
-            else if (destination == Content.LearningSinging.route){
-                popUpTo(Content.GuideScript.route){
+            else if (destination == LearningContent.LearningSinging.route){
+                popUpTo(LearningContent.GuideScript.route){
                 }
             }
         }

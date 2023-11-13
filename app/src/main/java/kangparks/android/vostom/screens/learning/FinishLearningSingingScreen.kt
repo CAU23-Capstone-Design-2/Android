@@ -29,7 +29,7 @@ import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
-import kangparks.android.vostom.navigations.Content
+import kangparks.android.vostom.navigations.LearningContent
 
 @Composable
 fun FinishLearningSingingScreen(navController : NavHostController){
@@ -72,11 +72,11 @@ fun FinishLearningSingingScreen(navController : NavHostController){
             },
             nextButtonContent = "추가 노래 녹음하기",
             nextButtonAction = {
-                navController.navigate(Content.GuideSinging.route)
+                navController.navigate(LearningContent.GuideSinging.route)
             }, // 임시 이동
             othersOptionButtonContent = "아니요! 목소리 학습 마무리 할게요.",
             othersOptionButtonAction = {
-                navController.navigate(Content.AddFile.route)
+                navController.navigate(LearningContent.AddFile.route)
             } // 임시 이동
         ){
             Column(
