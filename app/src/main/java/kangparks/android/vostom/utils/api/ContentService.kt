@@ -5,6 +5,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
+import retrofit2.http.POST
 
 interface ContentService {
     @Headers("Content-Type: application/json")
@@ -30,5 +31,12 @@ interface ContentService {
     suspend fun getStarCoverItems(
         @Header("Authorization") accessToken: String,
         @Body starId: String,
+    ) : Response<Any>
+
+    @Headers("Content-Type: application/json")
+    @POST("/api/content/createCover")
+    suspend fun createCover(
+        @Header("Authorization") accessToken: String,
+        @Body uri : String,
     ) : Response<Any>
 }

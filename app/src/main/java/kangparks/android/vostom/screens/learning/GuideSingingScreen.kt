@@ -39,8 +39,8 @@ import kangparks.android.vostom.components.item.YoutubeContentItem
 import kangparks.android.vostom.components.searchbar.SearchBar
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
 import kangparks.android.vostom.navigations.LearningContent
-import kangparks.android.vostom.viewModel.learning.GuideSingingViewModel
 import kangparks.android.vostom.viewModel.learning.SingingViewModel
+import kangparks.android.vostom.viewModel.search.YoutubeSearchViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -50,7 +50,7 @@ fun GuideSingingScreen(
 ){
     val context = LocalContext.current
 
-    val guideSingingViewModel : GuideSingingViewModel = remember { GuideSingingViewModel() }
+    val guideSingingViewModel : YoutubeSearchViewModel = remember { YoutubeSearchViewModel() }
     val listOfSong = guideSingingViewModel.listOfSong.observeAsState(initial = listOf())
     val selectedId = guideSingingViewModel.selectedSong.observeAsState(initial = -1)
     val isSearching = guideSingingViewModel.isSearching.observeAsState(initial = false)
@@ -96,7 +96,10 @@ fun GuideSingingScreen(
                     placeholder = "가수와 노래 제목을 입력해 주세요.",
                     onSearch = {
                         keyboardController?.hide()
-                        guideSingingViewModel.searchSongWithKeyword(keyword = searchContent.value)
+                        guideSingingViewModel.searchSongWithKeyword(
+                            keyword = searchContent.value,
+                            postWord = "tj+%EB%85%B8%EB%9E%98%EB%B0%A9+"
+                        )
                     }
                 )
                 Spacer(modifier = Modifier.height(20.dp))

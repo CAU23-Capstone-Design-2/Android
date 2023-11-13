@@ -20,6 +20,7 @@ import kangparks.android.vostom.screens.profile.ProfileScreen
 import kangparks.android.vostom.screens.profile.RequestCoverSongListScreen
 import kangparks.android.vostom.utils.store.getAccessToken
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
+import kangparks.android.vostom.viewModel.content.CreateContentViewModel
 import kangparks.android.vostom.viewModel.content.StarContentViewModel
 import kangparks.android.vostom.viewModel.home.HomeViewModelFactory
 
@@ -71,6 +72,7 @@ fun NavGraphBuilder.homeContentNavigation(
     val accessToken = "access_token"
     val contentStoreViewModel = ContentStoreViewModel()
     val startContentViewModel = StarContentViewModel()
+//    val createContentViewModel = CreateContentViewModel()
 
     navigation(
         route = Nav.HOME_CONTENT,
@@ -82,9 +84,6 @@ fun NavGraphBuilder.homeContentNavigation(
                 token = accessToken,
                 contentStoreViewModel = contentStoreViewModel,
                 startContentViewModel = startContentViewModel,
-//                homeViewModel = viewModel(
-//                    factory = HomeViewModelFactory(accessToken)
-//                    )
             )
         }
         composable(HomeContent.GroupList.route) {
@@ -94,7 +93,13 @@ fun NavGraphBuilder.homeContentNavigation(
         }
         composable(HomeContent.Profile.route) { ProfileScreen(navController = navController) }
         composable(HomeContent.BuildGroup.route) { BuildGroupScreen(navController = navController) }
-        composable(HomeContent.CreateCoverSong.route) { CreateCoverSongScreen(navController = navController) }
+        composable(HomeContent.CreateCoverSong.route) {
+            CreateCoverSongScreen(
+                navController = navController,
+                token = accessToken,
+//                createContentViewModel = createContentViewModel
+            )
+        }
         composable(HomeContent.RequestCoverSongList.route){RequestCoverSongListScreen(navController = navController)}
         composable(HomeContent.DetailMyCoverItem.route){
             DetailMyCoverItemScreen(
@@ -117,14 +122,9 @@ fun NavGraphBuilder.homeContentNavigation(
             )
         }
         composable(HomeContent.DetailStarCoverItem.route){
-//            val startId = it.arguments?.getString("startId")
-//            val startName = it.arguments?.getString("startName")
-
             DetailStarCoverItemScreen(
                 navController = navController,
                 startContentViewModel = startContentViewModel,
-//                startId = startId!!.toInt(),
-//                starName = startName!!
             )
         }
     }

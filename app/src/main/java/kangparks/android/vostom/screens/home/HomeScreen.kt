@@ -110,7 +110,7 @@ fun HomeScreen(
         ) {
             Box {
                 Text(
-                    text = "(빌드 11-13-16-00)",
+                    text = "(빌드 11-13-16-50)",
                     fontSize = 10.sp,
                     modifier = Modifier
                         .windowInsetsPadding(WindowInsets.statusBars)
