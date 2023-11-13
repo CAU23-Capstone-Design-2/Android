@@ -24,18 +24,20 @@ import kangparks.android.vostom.models.content.Singer
 @Composable
 fun OthersItem(
     content: Singer? = null,
+    contentSize: Int = 120,
     onClick: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
-            .width(120.dp)
+            .width(contentSize.dp)
+            .clip(RoundedCornerShape(5.dp))
             .clickable(onClick = onClick)
     ) {
         AsyncImage(
             model = content?.imageUri ?: null,
             contentDescription = null,
             modifier = Modifier
-                .size(120.dp)
+                .size(contentSize.dp)
                 .clip(CircleShape),
             contentScale = ContentScale.Crop
         )

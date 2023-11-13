@@ -47,6 +47,9 @@ import kangparks.android.vostom.components.skeleton.CoverSongItemSkeleton
 import kangparks.android.vostom.components.skeleton.OthersItemSkeleton
 import kangparks.android.vostom.models.content.CoverSong
 import kangparks.android.vostom.models.content.Singer
+import kangparks.android.vostom.navigations.HomeContent
+import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
+import kangparks.android.vostom.viewModel.content.StarContentViewModel
 import kangparks.android.vostom.viewModel.home.HomeViewModel
 import kangparks.android.vostom.viewModel.home.HomeViewModelFactory
 import kotlinx.coroutines.delay
@@ -59,7 +62,9 @@ fun HomeScreen(
     token: String,
     homeViewModel: HomeViewModel = viewModel(
         factory = HomeViewModelFactory(token)
-    )
+    ),
+    contentStoreViewModel: ContentStoreViewModel,
+    startContentViewModel : StarContentViewModel
 ) {
     val myCoverItemList = homeViewModel.myCoverItemList.observeAsState(initial = listOf())
     val myGroupCoverItemList = homeViewModel.myGroupCoverItemList.observeAsState(initial = listOf())
@@ -105,7 +110,7 @@ fun HomeScreen(
         ) {
             Box {
                 Text(
-                    text = "(빌드 11-13-02-40)",
+                    text = "(빌드 11-13-16-00)",
                     fontSize = 10.sp,
                     modifier = Modifier
                         .windowInsetsPadding(WindowInsets.statusBars)
@@ -119,7 +124,7 @@ fun HomeScreen(
                         .verticalScroll(scrollState),
                 ) {
                     ContentAppBar(
-                        sideButtonAction = {},
+                        sideButtonAction = {navController.navigate(HomeContent.CreateCoverSong.route)},
                         sideButtonContent = "커버곡 생성",
                         contentTitleImage = R.drawable.screen_title,
                         containerModifier = Modifier.padding(horizontal = 20.dp)
@@ -128,7 +133,12 @@ fun HomeScreen(
                     HorizontalSongSection(
                         title = "나의 커버곡",
                         contents = myCoverItemList.value as List<CoverSong>,
-//                    contents = listOf(),
+                        sideButtonAction = {
+                            if(myCoverItemList.value.isNotEmpty()){
+                                contentStoreViewModel.updateMyCoverItemList(myCoverItemList.value)
+                                navController.navigate(HomeContent.DetailMyCoverItem.route)
+                            }
+                        },
                         renderItem = { item : CoverSong ->
                             CoverSongItem(content = item)
                         },
@@ -140,6 +150,12 @@ fun HomeScreen(
                     HorizontalSongSection(
                         title = "나의 그룹 커버곡",
                         contents = myGroupCoverItemList.value as List<CoverSong>,
+                        sideButtonAction = {
+                            if(myGroupCoverItemList.value.isNotEmpty()){
+                                contentStoreViewModel.updateMyGroupCoverItemList(myGroupCoverItemList.value)
+                                navController.navigate(HomeContent.DetailMyGroupCoverItem.route)
+                            }
+                        },
                         renderItem = { item: CoverSong ->
                             UserCoverSongItem(content = item)
                         },
@@ -151,9 +167,25 @@ fun HomeScreen(
                     HorizontalSongSection(
                         title = "연예인 AI 커버",
                         contents = othersItemList.value as List<Singer>,
+                        sideButtonAction = {
+                            if(othersItemList.value.isNotEmpty()){
+                                contentStoreViewModel.updateOthersItemList(othersItemList.value)
+                                navController.navigate(HomeContent.DetailStarList.route)
+                            }
+                        },
                         contentPaddingValue = 10,
                         renderItem = { item: Singer ->
-                            OthersItem(content = item)
+                            OthersItem(
+                                content = item,
+                                onClick = {
+                                    startContentViewModel.updateCurrentSinger(
+                                        accessToken = token,
+                                        singer = item
+                                    )
+                                    navController.navigate(HomeContent.DetailStarCoverItem.route)
+//                                    navController.navigate(HomeContent.DetailStarCoverItem.route+"/${item.id}/${item.name}")
+                                }
+                            )
                         },
                         skeletonItem = {
                             OthersItemSkeleton()

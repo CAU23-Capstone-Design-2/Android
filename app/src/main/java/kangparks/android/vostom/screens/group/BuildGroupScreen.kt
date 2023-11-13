@@ -22,10 +22,12 @@ fun BuildGroupScreen(navController: NavHostController) {
             .windowInsetsPadding(WindowInsets.statusBars)
             .padding(horizontal = 20.dp)
             .padding(bottom = 48.dp)
-    ){
+    ) {
         Column {
             ContentAppBar(
-                backButtonAction = {},
+                backButtonAction = {
+                    navController.popBackStack()
+                },
                 backButtonContent = "취소",
             )
         }

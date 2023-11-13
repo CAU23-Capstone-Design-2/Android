@@ -24,18 +24,20 @@ import kangparks.android.vostom.models.content.CoverSong
 @Composable
 fun CoverSongItem(
     content: CoverSong? = null,
+    contentSize : Int = 140,
     onClick: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
-            .width(140.dp)
+            .width(contentSize.dp)
+            .clip(RoundedCornerShape(5.dp))
             .clickable(onClick = onClick)
     ) {
         AsyncImage(
             model = content?.albumArtUri ?: null,
             contentDescription = null,
             modifier = Modifier
-                .size(140.dp)
+                .size(contentSize.dp)
                 .clip(RoundedCornerShape(5.dp)),
             contentScale = ContentScale.Crop
         )
@@ -51,7 +53,7 @@ fun CoverSongItem(
         Text(
             text = content?.singer ?: "",
             fontSize = 13.sp,
-            fontWeight = FontWeight.Normal,
+            fontWeight = FontWeight.Bold,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )

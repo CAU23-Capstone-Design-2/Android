@@ -4,7 +4,7 @@ import android.util.Log
 import kangparks.android.vostom.utils.api.ContentService
 import kangparks.android.vostom.utils.builder.createApiService
 
-suspend fun getStarCoverItems(
+suspend fun getStarItems(
     accessToken: String,
     starId: String,
 ){
