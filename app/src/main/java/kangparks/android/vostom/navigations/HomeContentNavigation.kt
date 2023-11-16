@@ -16,6 +16,7 @@ import kangparks.android.vostom.screens.content.DetailStarListScreen
 import kangparks.android.vostom.screens.group.BuildGroupScreen
 import kangparks.android.vostom.screens.group.GroupListScreen
 import kangparks.android.vostom.screens.home.HomeScreen
+import kangparks.android.vostom.screens.player.MusicPlayerScreen
 import kangparks.android.vostom.screens.profile.ProfileScreen
 import kangparks.android.vostom.screens.profile.RequestCoverSongListScreen
 import kangparks.android.vostom.utils.store.getAccessToken
@@ -23,6 +24,7 @@ import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.content.CreateContentViewModel
 import kangparks.android.vostom.viewModel.content.StarContentViewModel
 import kangparks.android.vostom.viewModel.home.HomeViewModelFactory
+import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
 sealed class HomeContent(val route: String) {
     object Home : HomeContent(route = "home")
@@ -35,6 +37,7 @@ sealed class HomeContent(val route: String) {
     object DetailMyGroupCoverItem : HomeContent(route = "detail_my_group_cover_item")
     object DetailStarList : HomeContent(route = "detail_star_list")
     object DetailStarCoverItem : HomeContent(route = "detail_star_cover_item")
+    object MusicPlayer : HomeContent(route = "music_player")
 }
 
 sealed class BottomBarContent(
@@ -69,9 +72,12 @@ fun NavGraphBuilder.homeContentNavigation(
     context: Context
 ) {
 //    val accessToken = getAccessToken(context)
+
     val accessToken = "access_token"
     val contentStoreViewModel = ContentStoreViewModel()
     val startContentViewModel = StarContentViewModel()
+    val contentPlayerViewModel = ContentPlayerViewModel()
+
 //    val createContentViewModel = CreateContentViewModel()
 
     navigation(
@@ -83,15 +89,22 @@ fun NavGraphBuilder.homeContentNavigation(
                 navController = navController,
                 token = accessToken,
                 contentStoreViewModel = contentStoreViewModel,
-                startContentViewModel = startContentViewModel,
+                starContentViewModel = startContentViewModel,
+                contentPlayerViewModel = contentPlayerViewModel
             )
         }
         composable(HomeContent.GroupList.route) {
             GroupListScreen(
-                navController = navController
+                navController = navController,
+                contentPlayerViewModel = contentPlayerViewModel
             )
         }
-        composable(HomeContent.Profile.route) { ProfileScreen(navController = navController) }
+        composable(HomeContent.Profile.route) {
+            ProfileScreen(
+                navController = navController,
+                contentPlayerViewModel = contentPlayerViewModel
+            )
+        }
         composable(HomeContent.BuildGroup.route) { BuildGroupScreen(navController = navController) }
         composable(HomeContent.CreateCoverSong.route) {
             CreateCoverSongScreen(
@@ -104,13 +117,15 @@ fun NavGraphBuilder.homeContentNavigation(
         composable(HomeContent.DetailMyCoverItem.route){
             DetailMyCoverItemScreen(
                 navController = navController,
-                contentStoreViewModel = contentStoreViewModel
+                contentStoreViewModel = contentStoreViewModel,
+                contentPlayerViewModel = contentPlayerViewModel
             )
         }
         composable(HomeContent.DetailMyGroupCoverItem.route){
             DetailMyGroupCoverItemScreen(
                 navController = navController,
-                contentStoreViewModel = contentStoreViewModel
+                contentStoreViewModel = contentStoreViewModel,
+                contentPlayerViewModel = contentPlayerViewModel
             )
         }
         composable(HomeContent.DetailStarList.route){
@@ -118,14 +133,19 @@ fun NavGraphBuilder.homeContentNavigation(
                 navController = navController,
                 token = accessToken,
                 contentStoreViewModel = contentStoreViewModel,
-                startContentViewModel = startContentViewModel
+                startContentViewModel = startContentViewModel,
+                contentPlayerViewModel = contentPlayerViewModel
             )
         }
         composable(HomeContent.DetailStarCoverItem.route){
             DetailStarCoverItemScreen(
                 navController = navController,
                 startContentViewModel = startContentViewModel,
+                contentPlayerViewModel = contentPlayerViewModel
             )
+        }
+        composable(HomeContent.MusicPlayer.route){
+            MusicPlayerScreen()
         }
     }
 }
