@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import kangparks.android.vostom.screens.error.ErrorScreen
+import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
 sealed class Content(val route: String) {
     object Error : Content(route = "error")
@@ -13,6 +14,7 @@ sealed class Content(val route: String) {
 
 fun NavGraphBuilder.contentNavigation(
     navController: NavHostController,
+    contentPlayerViewModel: ContentPlayerViewModel,
     context: Context
 ) {
     // TODO("로그인 검증 후 사용자 학습 유무 확인 하기")
@@ -27,6 +29,7 @@ fun NavGraphBuilder.contentNavigation(
         learningContentNavigation(navController = navController)
         homeContentNavigation(
             navController = navController,
+            contentPlayerViewModel = contentPlayerViewModel,
             context = context
         )
         composable(route = Content.Error.route) {

@@ -100,6 +100,7 @@ fun GuideSingingScreen(
                             keyword = searchContent.value,
                             postWord = "tj+%EB%85%B8%EB%9E%98%EB%B0%A9+"
                         )
+                        singingViewModel.setSongItem(null)
                     }
                 )
                 Spacer(modifier = Modifier.height(20.dp))

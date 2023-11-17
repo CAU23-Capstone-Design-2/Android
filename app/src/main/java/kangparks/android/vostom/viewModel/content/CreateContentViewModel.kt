@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kangparks.android.vostom.models.item.YoutubePlayItem
-import kangparks.android.vostom.utils.networks.content.createFun
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -19,7 +18,7 @@ class CreateContentViewModel : ViewModel() {
 
     fun createCoverSong(token : String){
         coroutineScope.launch {
-//            songItem.value?.let { createFun(token, it.contentUri) }
+//            songItem.value?.let { createCover(token, it.contentUri) }
         }
     }
 }

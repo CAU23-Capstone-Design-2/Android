@@ -1,5 +1,8 @@
 package kangparks.android.vostom.screens.content
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -11,11 +14,13 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,26 +39,35 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import kangparks.android.vostom.components.appbar.ContentAppBar
 import kangparks.android.vostom.components.item.CoverSongItem
+import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
 import kangparks.android.vostom.models.content.CoverSong
 import kangparks.android.vostom.viewModel.content.StarContentViewModel
+import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailStarCoverItemScreen(
     navController: NavHostController,
-    startContentViewModel: StarContentViewModel
+    startContentViewModel: StarContentViewModel,
+    contentPlayerViewModel : ContentPlayerViewModel
 //    startId : Int,
 //    starName : String
 ) {
+    val isPlaying = contentPlayerViewModel.isPlaying.observeAsState(initial = false)
+
     val currentSinger = startContentViewModel.currentSinger.observeAsState()
     val currentSingerContent = startContentViewModel.currentSingerContent.observeAsState()
 
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-
+    HomeContentLayoutTemplate(
+        contentPlayerViewModel = contentPlayerViewModel,
+        navController = navController,
+        surfaceBottomPadding = 0,
+        playerBottomPadding = 20,
+//        surfaceModifier = Modifier.windowInsetsPadding(WindowInsets.statusBars),
+        isPlaying = isPlaying
     ) {
         AsyncImage(
             model = currentSinger.value?.imageUri ?: "",
@@ -108,7 +122,7 @@ fun DetailStarCoverItemScreen(
                     start = 20.dp,
                     end = 20.dp,
                     top = 10.dp,
-                    bottom = 48.dp
+                    bottom = if(isPlaying.value) 90.dp else 48.dp
                 )
             ) {
                 currentSingerContent.value?.let {
@@ -135,7 +149,7 @@ fun DetailStarCoverItemScreen(
                                         content = coverItem,
                                         contentSize = (screenWidth - 60) / 2,
                                         onClick = {
-
+                                            contentPlayerViewModel.playMusic(coverItem)
                                         }
                                     )
                                 }
@@ -152,7 +166,7 @@ fun DetailStarCoverItemScreen(
                                         content = coverItem,
                                         contentSize = (screenWidth - 60) / 2,
                                         onClick = {
-
+                                            contentPlayerViewModel.playMusic(coverItem)
                                         }
                                     )
                                 }
@@ -184,4 +198,24 @@ fun DetailStarCoverItemScreen(
 //            Spacer(modifier = Modifier.height(10.dp))
         }
     }
+
+//    Box(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .navigationBarsPadding()
+//    ) {
+//
+//
+//        AnimatedVisibility(
+//            visible = isPlaying.value,
+//            enter = fadeIn(),
+//            exit = fadeOut()
+//        ) {
+//            BottomContentPlayer(
+//                navController = navController,
+//                contentPlayerViewModel = contentPlayerViewModel,
+//                bottomPaddingValue = 20
+//            )
+//        }
+//    }
 }

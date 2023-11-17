@@ -5,10 +5,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import kangparks.android.vostom.components.navigationBar.BottomNavigationBar
+import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
 object Nav {
     const val AUTH = "auth_graph"
@@ -35,6 +37,8 @@ fun VostomApp() {
 fun RootNavigation(
     navController: NavHostController = rememberNavController(),
 ){
+    val contentPlayerViewModel : ContentPlayerViewModel = viewModel()
+
     val context = LocalContext.current
 //    val token = getAccessToken(context) // 저장된 토큰 불러오기
 
@@ -44,6 +48,7 @@ fun RootNavigation(
         authNavigation(navController = navController)
         contentNavigation(
             navController = navController,
+            contentPlayerViewModel = contentPlayerViewModel,
             context = context
         )
     }

@@ -5,7 +5,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
@@ -15,11 +14,13 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccessAlarm
 import androidx.compose.material.icons.outlined.AccountBalance
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -31,12 +32,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import kangparks.android.vostom.components.appbar.ContentAppBar
+import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
 import kangparks.android.vostom.navigations.HomeContent
+import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun GroupListScreen(navController: NavHostController) {
+fun GroupListScreen(
+    navController: NavHostController,
+    contentPlayerViewModel : ContentPlayerViewModel
+) {
+    val isPlaying = contentPlayerViewModel.isPlaying.observeAsState(initial = false)
 
     val selectedTabIndex = remember {
         mutableStateOf(0)
@@ -60,14 +67,16 @@ fun GroupListScreen(navController: NavHostController) {
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .windowInsetsPadding(WindowInsets.statusBars)
-            .padding(horizontal = 20.dp)
-            .padding(bottom = 48.dp)
+    HomeContentLayoutTemplate(
+        navController = navController,
+        contentPlayerViewModel = contentPlayerViewModel,
+        isPlaying = isPlaying,
+        surfaceModifier = Modifier.windowInsetsPadding(WindowInsets.statusBars),
+        surfaceBottomPadding = 40
     ) {
-        Column {
+        Column(
+            modifier = Modifier.padding(horizontal = 20.dp)
+        ){
             ContentAppBar(
                 sideButtonAction = {
                     navController.navigate(HomeContent.BuildGroup.route)
@@ -115,7 +124,7 @@ fun GroupListScreen(navController: NavHostController) {
                 Box(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center
-                ){
+                ) {
                     Text(text = "Page $idx")
                 }
 
@@ -123,6 +132,39 @@ fun GroupListScreen(navController: NavHostController) {
 
         }
     }
+
+//    Scaffold(
+////        contentWindowInsets =
+//    ) {
+//        Surface(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .windowInsetsPadding(WindowInsets.statusBars)
+//                .navigationBarsPadding()
+//                .padding(bottom = 40.dp)
+//        ) {
+//            Box {
+////                Box(
+////
+////
+////                ) {
+////
+////                }
+//
+//                AnimatedVisibility(
+//                    visible = isPlaying.value,
+//                    enter = fadeIn(),
+//                    exit = fadeOut()
+//                ) {
+//                    BottomContentPlayer(
+//                        navController = navController,
+//                        contentPlayerViewModel = contentPlayerViewModel,
+//                        bottomPaddingValue = 30
+//                    )
+//                }
+//            }
+//        }
+//    }
 }
 
 data class TabItem(

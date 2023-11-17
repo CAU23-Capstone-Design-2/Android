@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import kangparks.android.vostom.models.content.CoverSong
+import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
 @Composable
 fun UserCoverSongItem(
