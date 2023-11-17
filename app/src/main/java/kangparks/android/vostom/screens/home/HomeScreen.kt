@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -44,10 +45,10 @@ import kangparks.android.vostom.components.appbar.ContentAppBar
 import kangparks.android.vostom.components.item.CoverSongItem
 import kangparks.android.vostom.components.item.OthersItem
 import kangparks.android.vostom.components.item.UserCoverSongItem
-import kangparks.android.vostom.components.player.BottomContentPlayer
 import kangparks.android.vostom.components.section.HorizontalSongSection
 import kangparks.android.vostom.components.skeleton.CoverSongItemSkeleton
 import kangparks.android.vostom.components.skeleton.OthersItemSkeleton
+import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
 import kangparks.android.vostom.models.content.CoverSong
 import kangparks.android.vostom.models.content.Singer
 import kangparks.android.vostom.navigations.HomeContent
@@ -104,126 +105,134 @@ fun HomeScreen(
         }
     }
 
-    Scaffold(
-//        contentWindowInsets =
-    ) {
-        Surface(
+    HomeContentLayoutTemplate(
+        contentPlayerViewModel = contentPlayerViewModel,
+        navController = navController,
+        isPlaying = isPlaying
+    ){
+        Text(
+            text = "(빌드 11-17-09-00)",
+            fontSize = 10.sp,
+            modifier = Modifier
+                .windowInsetsPadding(WindowInsets.statusBars)
+        )
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .navigationBarsPadding()
-                .padding(bottom = 40.dp),
-            color = MaterialTheme.colorScheme.background
+                .windowInsetsPadding(WindowInsets.statusBars)
+                .padding(bottom = 20.dp)
+                .drawVerticalScrollbar(scrollState)
+                .verticalScroll(scrollState),
         ) {
-            Box {
-                Text(
-                    text = "(빌드 11-16-21-20)",
-                    fontSize = 10.sp,
-                    modifier = Modifier
-                        .windowInsetsPadding(WindowInsets.statusBars)
-                )
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .windowInsetsPadding(WindowInsets.statusBars)
-                        .padding(bottom = 20.dp)
-                        .drawVerticalScrollbar(scrollState)
-                        .verticalScroll(scrollState),
-                ) {
-                    ContentAppBar(
-                        sideButtonAction = { navController.navigate(HomeContent.CreateCoverSong.route) },
-                        sideButtonContent = "커버곡 생성",
-                        contentTitleImage = R.drawable.screen_title,
-                        containerModifier = Modifier.padding(horizontal = 20.dp)
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    HorizontalSongSection(
-                        title = "나의 커버곡",
-                        contents = myCoverItemList.value as List<CoverSong>,
-                        sideButtonAction = {
-                            if (myCoverItemList.value.isNotEmpty()) {
-                                contentStoreViewModel.updateMyCoverItemList(myCoverItemList.value)
-                                navController.navigate(HomeContent.DetailMyCoverItem.route)
-                            }
-                        },
-                        renderItem = { item: CoverSong ->
-                            CoverSongItem(
-                                content = item,
-                                onClick = {
-                                    contentPlayerViewModel.playMusic(item)
-                                }
-                            )
-                        },
-                        skeletonItem = {
-                            CoverSongItemSkeleton()
+            ContentAppBar(
+                sideButtonAction = { navController.navigate(HomeContent.CreateCoverSong.route) },
+                sideButtonContent = "커버곡 생성",
+                contentTitleImage = R.drawable.screen_title,
+                containerModifier = Modifier.padding(horizontal = 20.dp)
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            HorizontalSongSection(
+                title = "나의 커버곡",
+                contents = myCoverItemList.value as List<CoverSong>,
+                sideButtonAction = {
+                    if (myCoverItemList.value.isNotEmpty()) {
+                        contentStoreViewModel.updateMyCoverItemList(myCoverItemList.value)
+                        navController.navigate(HomeContent.DetailMyCoverItem.route)
+                    }
+                },
+                renderItem = { item: CoverSong ->
+                    CoverSongItem(
+                        content = item,
+                        onClick = {
+                            contentPlayerViewModel.playMusic(item)
                         }
                     )
-                    Spacer(modifier = Modifier.padding(vertical = 15.dp))
-                    HorizontalSongSection(
-                        title = "나의 그룹 커버곡",
-                        contents = myGroupCoverItemList.value as List<CoverSong>,
-                        sideButtonAction = {
-                            if (myGroupCoverItemList.value.isNotEmpty()) {
-                                contentStoreViewModel.updateMyGroupCoverItemList(
-                                    myGroupCoverItemList.value
-                                )
-                                navController.navigate(HomeContent.DetailMyGroupCoverItem.route)
-                            }
-                        },
-                        renderItem = { item: CoverSong ->
-                            UserCoverSongItem(
-                                content = item,
-                                onClick = {
-                                    contentPlayerViewModel.playMusic(item)
-                                }
-                            )
-                        },
-                        skeletonItem = {
-                            CoverSongItemSkeleton(true)
-                        }
-                    )
-                    Spacer(modifier = Modifier.padding(vertical = 15.dp))
-                    HorizontalSongSection(
-                        title = "연예인 AI 커버",
-                        contents = othersItemList.value as List<Singer>,
-                        sideButtonAction = {
-                            if (othersItemList.value.isNotEmpty()) {
-                                contentStoreViewModel.updateOthersItemList(othersItemList.value)
-                                navController.navigate(HomeContent.DetailStarList.route)
-                            }
-                        },
-                        contentPaddingValue = 10,
-                        renderItem = { item: Singer ->
-                            OthersItem(
-                                content = item,
-                                onClick = {
-                                    starContentViewModel.updateCurrentSinger(
-                                        accessToken = token,
-                                        singer = item
-                                    )
-                                    navController.navigate(HomeContent.DetailStarCoverItem.route)
-                                }
-                            )
-                        },
-                        skeletonItem = {
-                            OthersItemSkeleton()
-                        }
-                    )
-                    Spacer(modifier = Modifier.padding(vertical = if(isPlaying.value) 50.dp else 15.dp))
+                },
+                skeletonItem = {
+                    CoverSongItemSkeleton()
                 }
-                AnimatedVisibility(
-                    visible = isPlaying.value,
-                    enter = fadeIn(),
-                    exit = fadeOut()
-                ) {
-                    BottomContentPlayer(
-                        contentPlayerViewModel = contentPlayerViewModel,
-                        bottomPaddingValue = 30
+            )
+            Spacer(modifier = Modifier.padding(vertical = 15.dp))
+            HorizontalSongSection(
+                title = "나의 그룹 커버곡",
+                contents = myGroupCoverItemList.value as List<CoverSong>,
+                sideButtonAction = {
+                    if (myGroupCoverItemList.value.isNotEmpty()) {
+                        contentStoreViewModel.updateMyGroupCoverItemList(
+                            myGroupCoverItemList.value
+                        )
+                        navController.navigate(HomeContent.DetailMyGroupCoverItem.route)
+                    }
+                },
+                renderItem = { item: CoverSong ->
+                    UserCoverSongItem(
+                        content = item,
+                        onClick = {
+                            contentPlayerViewModel.playMusic(item)
+                        }
                     )
+                },
+                skeletonItem = {
+                    CoverSongItemSkeleton(true)
                 }
-            }
-
-
+            )
+            Spacer(modifier = Modifier.padding(vertical = 15.dp))
+            HorizontalSongSection(
+                title = "연예인 AI 커버",
+                contents = othersItemList.value as List<Singer>,
+                sideButtonAction = {
+                    if (othersItemList.value.isNotEmpty()) {
+                        contentStoreViewModel.updateOthersItemList(othersItemList.value)
+                        navController.navigate(HomeContent.DetailStarList.route)
+                    }
+                },
+                contentPaddingValue = 10,
+                renderItem = { item: Singer ->
+                    OthersItem(
+                        content = item,
+                        onClick = {
+                            starContentViewModel.updateCurrentSinger(
+                                accessToken = token,
+                                singer = item
+                            )
+                            navController.navigate(HomeContent.DetailStarCoverItem.route)
+                        }
+                    )
+                },
+                skeletonItem = {
+                    OthersItemSkeleton()
+                }
+            )
+            Spacer(modifier = Modifier.padding(vertical = if(isPlaying.value) 50.dp else 15.dp))
         }
     }
+
+//    Scaffold(
+////        contentWindowInsets =
+//    ) {
+//        Surface(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .navigationBarsPadding()
+//                .padding(bottom = 40.dp),
+//            color = MaterialTheme.colorScheme.background
+//        ) {
+//            Box {
+//
+//                AnimatedVisibility(
+//                    visible = isPlaying.value,
+//                    enter = fadeIn(),
+//                    exit = fadeOut()
+//                ) {
+//                    BottomContentPlayer(
+//                        contentPlayerViewModel = contentPlayerViewModel,
+//                        bottomPaddingValue = 30
+//                    )
+//                }
+//            }
+//
+//
+//        }
+//    }
 
 }

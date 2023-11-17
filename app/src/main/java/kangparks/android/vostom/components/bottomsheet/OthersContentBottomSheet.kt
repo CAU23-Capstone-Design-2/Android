@@ -1,6 +1,10 @@
 package kangparks.android.vostom.components.bottomsheet
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.FiniteAnimationSpec
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +30,7 @@ import kangparks.android.vostom.components.content.OthersContentList
 import kangparks.android.vostom.viewModel.bottomsheet.OthersContentBottomSheetViewModel
 import kangparks.android.vostom.viewModel.bottomsheet.OthersContentViewType
 
+@SuppressLint("UnusedCrossfadeTargetStateParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OthersContentBottomSheet(
@@ -48,6 +53,17 @@ fun OthersContentBottomSheet(
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Top
             ) {
+//                Crossfade(
+//                    targetState = currentView.value,
+//                    label = "",
+//                    animationSpec = tween(500)
+//                ) {
+//                    when(currentView.value.viewType){
+//                        OthersContentViewType.OthersContentList.viewType-> OthersContentList(bottomSheetViewModel = viewModel)
+//                        OthersContentViewType.OthersContentDetail.viewType -> OthersContentDetail(bottomSheetViewModel = viewModel, singer = currentSinger.value!!)
+//                    }
+//
+//                }
                 AnimatedVisibility(
                     visible = currentView.value.viewType == OthersContentViewType.OthersContentList.viewType,
                     enter = fadeIn(),

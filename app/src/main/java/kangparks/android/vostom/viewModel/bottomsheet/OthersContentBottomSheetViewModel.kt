@@ -1,13 +1,23 @@
 package kangparks.android.vostom.viewModel.bottomsheet
 
+import androidx.compose.runtime.State
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kangparks.android.vostom.models.content.Singer
 
 sealed class OthersContentViewType(val viewType : String){
-    object OthersContentList : OthersContentViewType("OthersContentList")
-    object OthersContentDetail : OthersContentViewType("OthersContentDetail")
+    object OthersContentList : OthersContentViewType("OthersContentList"),
+        State<OthersContentViewType> {
+        override val value: OthersContentViewType
+            get() = this
+    }
+
+    object OthersContentDetail : OthersContentViewType("OthersContentDetail"),
+        State<OthersContentViewType> {
+        override val value: OthersContentViewType
+            get() = this
+    }
 }
 
 class OthersContentBottomSheetViewModel : ViewModel() {

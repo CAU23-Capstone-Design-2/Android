@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -29,12 +30,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import kangparks.android.vostom.components.appbar.ContentAppBar
-import kangparks.android.vostom.components.item.CoverSongItem
 import kangparks.android.vostom.components.item.UserCoverSongItem
-import kangparks.android.vostom.components.player.BottomContentPlayer
+import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun DetailMyGroupCoverItemScreen(
@@ -49,100 +50,111 @@ fun DetailMyGroupCoverItemScreen(
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp
 
-    Scaffold(
-//        contentWindowInsets =
-    ){
-        Surface(
+    HomeContentLayoutTemplate(
+        contentPlayerViewModel = contentPlayerViewModel,
+        navController = navController,
+        surfaceBottomPadding = 0,
+        playerBottomPadding = 20,
+        surfaceModifier = Modifier.windowInsetsPadding(WindowInsets.statusBars),
+        isPlaying = isPlaying
+    ) {
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .windowInsetsPadding(WindowInsets.statusBars)
-                .navigationBarsPadding()
-//                .padding(bottom = 40.dp)
-        ){
-            Box{
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
 //            .windowInsetsPadding(WindowInsets.statusBars)
 //            .padding(bottom = 48.dp)
-                        .padding(horizontal = 20.dp)
+                .padding(horizontal = 20.dp)
 
-                ) {
-                    ContentAppBar(
-                        backButtonAction = {
-                            navController.popBackStack()
-                        },
-                        backButtonContent = "뒤로",
-                    )
-                    Text(
-                        text = "나의 그룹 커버곡",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(2),
-                        contentPadding = PaddingValues(
-                            bottom = if(isPlaying.value) 90.dp else 48.dp
-                        )
-                    ){
-                        myGroupCoverItemList.value?.let {
-                            List(it.size){index ->
-                                item {
-                                    if(index % 2 == 0){
-                                        Box(
-                                            modifier = Modifier
-                                                .padding(
-                                                    top = 10.dp,
-                                                    bottom = 10.dp,
-                                                    end = 10.dp
-                                                )
-                                        ){
-                                            UserCoverSongItem(
-                                                content = it[index],
-                                                contentSize = (screenWidth-60)/2,
-                                                onClick = {
-
-                                                }
-                                            )
+        ) {
+            ContentAppBar(
+                backButtonAction = {
+                    navController.popBackStack()
+                },
+                backButtonContent = "뒤로",
+            )
+            Text(
+                text = "나의 그룹 커버곡",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(
+                    bottom = if(isPlaying.value) 90.dp else 48.dp
+                )
+            ){
+                myGroupCoverItemList.value?.let {
+                    List(it.size){index ->
+                        item {
+                            if(index % 2 == 0){
+                                Box(
+                                    modifier = Modifier
+                                        .padding(
+                                            top = 10.dp,
+                                            bottom = 10.dp,
+                                            end = 10.dp
+                                        )
+                                ){
+                                    UserCoverSongItem(
+                                        content = it[index],
+                                        contentSize = (screenWidth-60)/2,
+                                        onClick = {
+                                            contentPlayerViewModel.playMusic(it[index])
                                         }
-                                    }
-                                    else{
-                                        Box(
-                                            modifier = Modifier
-                                                .padding(
-                                                    top = 10.dp,
-                                                    bottom = 10.dp,
-                                                    start = 10.dp
-                                                )
-                                        ){
-                                            UserCoverSongItem(
-                                                content = it[index],
-                                                contentSize = (screenWidth-60)/2,
-                                                onClick = {
-
-                                                }
-                                            )
+                                    )
+                                }
+                            }
+                            else{
+                                Box(
+                                    modifier = Modifier
+                                        .padding(
+                                            top = 10.dp,
+                                            bottom = 10.dp,
+                                            start = 10.dp
+                                        )
+                                ){
+                                    UserCoverSongItem(
+                                        content = it[index],
+                                        contentSize = (screenWidth-60)/2,
+                                        onClick = {
+                                            contentPlayerViewModel.playMusic(it[index])
                                         }
-                                    }
+                                    )
                                 }
                             }
                         }
                     }
                 }
-                AnimatedVisibility(
-                    visible = isPlaying.value,
-                    enter = fadeIn(),
-                    exit = fadeOut()
-                ) {
-                    BottomContentPlayer(
-                        contentPlayerViewModel = contentPlayerViewModel,
-                        bottomPaddingValue = 20
-                    )
-                }
             }
-
         }
     }
+//    Scaffold(
+////        contentWindowInsets =
+//    ){
+//        Surface(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .windowInsetsPadding(WindowInsets.statusBars)
+//                .navigationBarsPadding()
+////                .padding(bottom = 40.dp)
+//        ){
+//            Box{
+//
+//                AnimatedVisibility(
+//                    visible = isPlaying.value,
+//                    enter = fadeIn(),
+//                    exit = fadeOut()
+//                ) {
+//                    BottomContentPlayer(
+//                        navController = navController,
+//                        contentPlayerViewModel = contentPlayerViewModel,
+//                        bottomPaddingValue = 20
+//                    )
+//                }
+//            }
+//
+//        }
+//    }
 
 }

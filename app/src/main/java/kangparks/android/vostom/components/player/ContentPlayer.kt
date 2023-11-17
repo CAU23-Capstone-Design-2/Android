@@ -22,13 +22,17 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material3.BottomSheetScaffold
+import androidx.compose.material3.BottomSheetScaffoldState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -43,12 +47,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import kangparks.android.vostom.R
+import kangparks.android.vostom.navigations.HomeContent
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomContentPlayer(
+    navController: NavHostController,
+    bottomSheetScaffoldState : BottomSheetScaffoldState = rememberBottomSheetScaffoldState(),
     contentPlayerViewModel: ContentPlayerViewModel,
     bottomPaddingValue : Int = 0
 ) {
@@ -62,14 +71,6 @@ fun BottomContentPlayer(
 
     ) {
         Box(
-//            elevation = CardDefaults.cardElevation(
-//                defaultElevation = 10.dp,
-//                pressedElevation = 10.dp,
-//                        focusedElevation = 10.dp,
-//                hoveredElevation = 10.dp,
-//                draggedElevation = 10.dp,
-//                disabledElevation = 10.dp
-//            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 10.dp)
@@ -82,8 +83,9 @@ fun BottomContentPlayer(
 //                    if (isDarkTheme) Color(0xFF292929) else Color(0xFFF9F9F9)
                     MaterialTheme.colorScheme.background
                 )
-                .clickable { },
-
+                .clickable {
+                           navController.navigate(HomeContent.MusicPlayer.route)
+                },
         ){
             Row(
                 modifier = Modifier
@@ -101,7 +103,7 @@ fun BottomContentPlayer(
                         .clip(RoundedCornerShape(5.dp)),
                     contentScale = ContentScale.Crop
                 )
-                Spacer(modifier = Modifier.width(10.dp))
+                Spacer(modifier = Modifier.width(15.dp))
                 Column {
                     Text(
                         text = currentSong.value?.title ?: "",
@@ -140,7 +142,7 @@ fun BottomContentPlayer(
                             )
                         }
                     }
-                    Spacer(modifier = Modifier.width(20.dp))
+                    Spacer(modifier = Modifier.width(15.dp))
                     Icon(
                         imageVector = Icons.Rounded.Close,
                         contentDescription = null,
@@ -149,26 +151,8 @@ fun BottomContentPlayer(
                             .clip(RoundedCornerShape(5.dp))
                             .clickable { contentPlayerViewModel.stopMusic() }
                     )
-                    Spacer(modifier = Modifier.width(10.dp))
                 }
             }
-//            Box(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//
-////                .shadow(0.5.dp, RoundedCornerShape(10.dp))
-////                .pointerInput(Unit) {
-////                    detectTapGestures { offset ->
-////                        if (offset.y >= 70) {
-////                            offsetValue.value = offset.y.toInt()
-////                        }
-//////                                    navController.navigate(HomeContent.MusicPlayer.route)
-////                    }
-////                },
-//            ) {
-//
-//            }
         }
-
     }
 }

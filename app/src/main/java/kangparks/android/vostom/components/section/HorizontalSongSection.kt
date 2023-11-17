@@ -1,6 +1,7 @@
 package kangparks.android.vostom.components.section
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
@@ -49,7 +50,7 @@ fun <T> HorizontalSongSection(
             modifier = Modifier
                 .padding(start = 20.dp, bottom = 10.dp)
                 .clip(RoundedCornerShape(5.dp))
-                .clickable {sideButtonAction() }
+                .clickable { sideButtonAction() }
         ){
             Text(
                 text = title,
@@ -70,35 +71,58 @@ fun <T> HorizontalSongSection(
             }
         }
 
-        Box{
-            Column {
-                AnimatedVisibility(contents.isEmpty(), exit = fadeOut()+ scaleOut()){
-                    LazyRow(
-                        contentPadding = PaddingValues(horizontal = 20.dp)
-                    ){
-                        items(3) {
-                            skeletonItem()
-                            Spacer(modifier = Modifier.width(contentPaddingValue.dp))
-                        }
-
+        Crossfade(targetState = contents, label = "") {
+            when(it.isEmpty()){
+                true -> LazyRow(
+                    contentPadding = PaddingValues(horizontal = 20.dp)
+                ){
+                    items(3) {
+                        skeletonItem()
+                        Spacer(modifier = Modifier.width(contentPaddingValue.dp))
                     }
+
                 }
-            }
+                false -> LazyRow(
+                    contentPadding = PaddingValues(horizontal = 20.dp)
+                ){
 
-            Column {
-                AnimatedVisibility(visible = contents.isNotEmpty(), enter = fadeIn()+ scaleIn()) {
-                    LazyRow(
-                        contentPadding = PaddingValues(horizontal = 20.dp)
-                    ){
-
-                        items(contents.size){ index ->
-                            renderItem(contents[index])
-                            Spacer(modifier = Modifier.width(contentPaddingValue.dp))
-                        }
+                    items(contents.size){ index ->
+                        renderItem(contents[index])
+                        Spacer(modifier = Modifier.width(contentPaddingValue.dp))
                     }
                 }
             }
         }
+
+//        Box{
+//            Column {
+//                AnimatedVisibility(contents.isEmpty(), exit = fadeOut()+ scaleOut()){
+//                    LazyRow(
+//                        contentPadding = PaddingValues(horizontal = 20.dp)
+//                    ){
+//                        items(3) {
+//                            skeletonItem()
+//                            Spacer(modifier = Modifier.width(contentPaddingValue.dp))
+//                        }
+//
+//                    }
+//                }
+//            }
+//
+//            Column {
+//                AnimatedVisibility(visible = contents.isNotEmpty(), enter = fadeIn()+ scaleIn()) {
+//                    LazyRow(
+//                        contentPadding = PaddingValues(horizontal = 20.dp)
+//                    ){
+//
+//                        items(contents.size){ index ->
+//                            renderItem(contents[index])
+//                            Spacer(modifier = Modifier.width(contentPaddingValue.dp))
+//                        }
+//                    }
+//                }
+//            }
+//        }
 
 
     }

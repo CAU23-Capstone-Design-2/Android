@@ -145,7 +145,10 @@ fun NavGraphBuilder.homeContentNavigation(
             )
         }
         composable(HomeContent.MusicPlayer.route){
-            MusicPlayerScreen()
+            MusicPlayerScreen(
+                navController = navController,
+                contentPlayerViewModel = contentPlayerViewModel
+            )
         }
     }
 }
