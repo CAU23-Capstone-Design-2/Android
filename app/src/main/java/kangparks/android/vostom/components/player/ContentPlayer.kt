@@ -100,11 +100,16 @@ fun BottomContentPlayer(
                     contentDescription = null,
                     modifier = Modifier
                         .size(48.dp)
-                        .clip(RoundedCornerShape(5.dp)),
+                        .shadow(2.dp, RoundedCornerShape(5.dp))
+                        .clip(RoundedCornerShape(5.dp))
+
+                    ,
                     contentScale = ContentScale.Crop
                 )
                 Spacer(modifier = Modifier.width(15.dp))
-                Column {
+                Column(
+                    modifier = Modifier.width(160.dp)
+                ){
                     Text(
                         text = currentSong.value?.title ?: "",
                         fontSize = 14.sp,

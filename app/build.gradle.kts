@@ -120,6 +120,7 @@ dependencies {
 
     // coil
     implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("io.coil-kt:coil:2.4.0")
 
     // Jsoup
     implementation("org.jsoup:jsoup:1.13.1")

@@ -69,6 +69,7 @@ sealed class BottomBarContent(
 }
 fun NavGraphBuilder.homeContentNavigation(
     navController: NavHostController,
+    contentPlayerViewModel: ContentPlayerViewModel,
     context: Context
 ) {
 //    val accessToken = getAccessToken(context)
@@ -76,7 +77,7 @@ fun NavGraphBuilder.homeContentNavigation(
     val accessToken = "access_token"
     val contentStoreViewModel = ContentStoreViewModel()
     val startContentViewModel = StarContentViewModel()
-    val contentPlayerViewModel = ContentPlayerViewModel()
+//    val contentPlayerViewModel : ContentPlayerViewModel = viewModel()
 
 //    val createContentViewModel = CreateContentViewModel()
 
