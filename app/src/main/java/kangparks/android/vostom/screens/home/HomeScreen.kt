@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.android.exoplayer2.ExoPlayer
 import drawVerticalScrollbar
 import kangparks.android.vostom.R
 import kangparks.android.vostom.components.appbar.ContentAppBar
@@ -43,6 +44,7 @@ import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
 import kangparks.android.vostom.models.content.CoverSong
 import kangparks.android.vostom.models.content.Singer
 import kangparks.android.vostom.navigations.HomeContent
+import kangparks.android.vostom.utils.media.getMediaItem
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.content.StarContentViewModel
 import kangparks.android.vostom.viewModel.home.HomeViewModel
@@ -102,7 +104,7 @@ fun HomeScreen(
         isPlaying = isPlaying
     ){
         Text(
-            text = "(빌드 11-17-23-30)",
+            text = "(빌드 11-19-20-00)",
             fontSize = 10.sp,
             modifier = Modifier
                 .windowInsetsPadding(WindowInsets.statusBars)
@@ -135,7 +137,20 @@ fun HomeScreen(
                     CoverSongItem(
                         content = item,
                         onClick = {
+                            val exoPlayer = contentPlayerViewModel.getPlayer()
+                            if(exoPlayer == null){
+                                val newPlayer = ExoPlayer.Builder(context).build().apply {
+                                    setMediaItem(getMediaItem(context, "iu_all_your_moments", "raw"))
+                                    playWhenReady = true
+                                    prepare()
+                                    volume = 1f
+                                }
+                                contentPlayerViewModel.setPlayer(newPlayer)
+                            }else{
+                                exoPlayer.replaceMediaItem(0, getMediaItem(context, "iu_all_your_moments", "raw"))
+                            }
                             contentPlayerViewModel.playMusic(item)
+                            contentPlayerViewModel.showPlayer()
                         }
                     )
                 },
@@ -159,7 +174,20 @@ fun HomeScreen(
                     UserCoverSongItem(
                         content = item,
                         onClick = {
+                            val exoPlayer = contentPlayerViewModel.getPlayer()
+                            if(exoPlayer == null){
+                                val newPlayer = ExoPlayer.Builder(context).build().apply {
+                                    setMediaItem(getMediaItem(context, "rose_eleven", "raw"))
+                                    playWhenReady = true
+                                    prepare()
+                                    volume = 1f
+                                }
+                                contentPlayerViewModel.setPlayer(newPlayer)
+                            }else{
+                                exoPlayer.replaceMediaItem(0, getMediaItem(context, "rose_eleven", "raw"))
+                            }
                             contentPlayerViewModel.playMusic(item)
+                            contentPlayerViewModel.showPlayer()
                         }
                     )
                 },

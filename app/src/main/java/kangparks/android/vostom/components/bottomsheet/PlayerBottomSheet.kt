@@ -25,7 +25,8 @@ fun PlayerCommentBottomSheet(
     bottomSheetScaffoldState : BottomSheetScaffoldState = rememberBottomSheetScaffoldState(),
 ) {
 //    val  bottomSheetScaffoldState: BottomSheetScaffoldState = rememberBottomSheetScaffoldState()
-    val backgroundColor = Color(0x52292929)
+
+    val backgroundColor = Color(0xE6CFCECE)
 
     BottomSheetScaffold(
         containerColor = backgroundColor,

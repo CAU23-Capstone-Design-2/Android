@@ -1,8 +1,12 @@
 package kangparks.android.vostom.screens.player
 
 import android.annotation.SuppressLint
+import android.support.v4.media.MediaBrowserCompat
 import android.widget.Space
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -52,10 +56,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.ui.PlayerView
+import com.google.android.exoplayer2.ui.StyledPlayerControlView
 import kangparks.android.vostom.R
 import kangparks.android.vostom.components.bottomsheet.PlayerCommentBottomSheet
 import kangparks.android.vostom.utils.helper.transform.BlurTransformation
@@ -73,9 +81,12 @@ fun MusicPlayerScreen(
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
 
+    val exoPlayer = contentPlayerViewModel.getPlayer()
+
     val currentSong = contentPlayerViewModel.currentSong.observeAsState(null)
     val isPaused = contentPlayerViewModel.isPaused.observeAsState(false)
     val  bottomSheetScaffoldState: BottomSheetScaffoldState = rememberBottomSheetScaffoldState()
+
 
 //    val isDarkTheme = isSystemInDarkTheme()
     val systemUiController = rememberSystemUiController()
@@ -99,7 +110,9 @@ fun MusicPlayerScreen(
         )
     }
 
-    Scaffold {
+    Scaffold(
+        bottomBar = {}
+    ){
         Surface(
 //            modifier = Modifier
 //                .fillMaxSize()
@@ -125,7 +138,10 @@ fun MusicPlayerScreen(
                     // i want to add blur effect on image
 
                 )
-                Box (modifier = Modifier.matchParentSize().alpha(0.5f).background(Color.Black)){
+                Box (modifier = Modifier
+                    .matchParentSize()
+                    .alpha(0.5f)
+                    .background(Color.Black)){
 
                 }
                 Column(
@@ -155,6 +171,7 @@ fun MusicPlayerScreen(
                                 .clip(RoundedCornerShape(5.dp))
                                 .clickable {
                                     navController.popBackStack()
+
                                 },
                             tint = contentColor
                         )
@@ -216,6 +233,18 @@ fun MusicPlayerScreen(
                     }
                     Spacer(modifier = Modifier.height(20.dp))
                     // TODO 음악 프로그래스 바 구현하기
+//                    AndroidView(factory = { context ->
+//
+//                        StyledPlayerControlView(context).apply {
+//                            player = exoPlayer
+//                        }
+//                    }, modifier = Modifier
+//                        .fillMaxWidth()
+//                        .height(200.dp)
+//                        .clip(RoundedCornerShape(5.dp))
+//                        .background(Color(0x8C5C5C5C))
+//                        .alpha(0.5f)
+//                    )
                     LinearProgressIndicator(
                         progress = 0.5f,
                         trackColor = Color(0x8C5C5C5C),

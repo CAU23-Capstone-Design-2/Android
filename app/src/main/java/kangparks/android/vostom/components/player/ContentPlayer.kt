@@ -84,7 +84,8 @@ fun BottomContentPlayer(
                     MaterialTheme.colorScheme.background
                 )
                 .clickable {
-                           navController.navigate(HomeContent.MusicPlayer.route)
+                           contentPlayerViewModel.showPlayer()
+//                           navController.navigate(HomeContent.MusicPlayer.route)
                 },
         ){
             Row(

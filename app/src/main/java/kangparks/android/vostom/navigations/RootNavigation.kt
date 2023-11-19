@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import kangparks.android.vostom.components.navigationBar.BottomNavigationBar
+import kangparks.android.vostom.screens.player.TestScreenForMusicPlayer
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
 object Nav {
@@ -26,7 +27,7 @@ fun VostomApp() {
     val navController = rememberNavController()
 
     Scaffold(
-        bottomBar = { BottomNavigationBar(navController = navController) }
+//        bottomBar = { BottomNavigationBar(navController = navController) }
     ){
         RootNavigation(navController = navController)
     }
@@ -52,4 +53,8 @@ fun RootNavigation(
             context = context
         )
     }
+    TestScreenForMusicPlayer(
+        navController = navController,
+        contentPlayerViewModel = contentPlayerViewModel,
+    )
 }
