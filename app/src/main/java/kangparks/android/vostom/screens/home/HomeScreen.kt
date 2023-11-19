@@ -17,6 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -69,6 +70,7 @@ fun HomeScreen(
     val myGroupCoverItemList = homeViewModel.myGroupCoverItemList.observeAsState(initial = listOf())
     val othersItemList = homeViewModel.othersItemList.observeAsState(initial = listOf())
     val isPlaying = contentPlayerViewModel.isPlaying.observeAsState(initial = false)
+    val isShowPlayer = contentPlayerViewModel.isShowPlayer.observeAsState(initial = false)
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -85,6 +87,15 @@ fun HomeScreen(
     }
 
     BackHandler(enabled = true) {
+        if(contentPlayerViewModel.isShowPlayer.value == true){
+            systemUiController.setSystemBarsColor(
+                color = Color.Transparent,
+                darkIcons = !isDarkTheme
+            )
+            contentPlayerViewModel.hidePlayer()
+            return@BackHandler
+        }
+
         if (doubleBackToExitPressedOnce.value) {
             (context as Activity).finish()
         } else {
@@ -104,7 +115,7 @@ fun HomeScreen(
         isPlaying = isPlaying
     ){
         Text(
-            text = "(빌드 11-19-20-00)",
+            text = "(빌드 11-20-02-00)",
             fontSize = 10.sp,
             modifier = Modifier
                 .windowInsetsPadding(WindowInsets.statusBars)
@@ -150,7 +161,7 @@ fun HomeScreen(
                                 exoPlayer.replaceMediaItem(0, getMediaItem(context, "iu_all_your_moments", "raw"))
                             }
                             contentPlayerViewModel.playMusic(item)
-                            contentPlayerViewModel.showPlayer()
+//                            contentPlayerViewModel.showPlayer()
                         }
                     )
                 },
@@ -187,7 +198,7 @@ fun HomeScreen(
                                 exoPlayer.replaceMediaItem(0, getMediaItem(context, "rose_eleven", "raw"))
                             }
                             contentPlayerViewModel.playMusic(item)
-                            contentPlayerViewModel.showPlayer()
+//                            contentPlayerViewModel.showPlayer()
                         }
                     )
                 },

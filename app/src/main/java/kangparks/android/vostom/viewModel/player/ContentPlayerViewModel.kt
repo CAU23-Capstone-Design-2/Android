@@ -50,6 +50,14 @@ class ContentPlayerViewModel : ViewModel(){
         _isPaused.value = true
     }
 
+    fun nextMusic(){
+//        _exoPlayer?.next()
+    }
+
+    fun prevMusic(){
+//        _exoPlayer?.prev()
+    }
+
     fun stopMusic(){
         _exoPlayer?.stop()
         _isPlaying.value = false

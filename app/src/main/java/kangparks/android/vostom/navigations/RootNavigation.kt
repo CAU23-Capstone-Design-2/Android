@@ -43,7 +43,7 @@ fun RootNavigation(
     val context = LocalContext.current
 //    val token = getAccessToken(context) // 저장된 토큰 불러오기
 
-    val curNav = if(true) Nav.AUTH else Nav.CONTENT
+    val curNav = if(false) Nav.AUTH else Nav.CONTENT
 
     NavHost(navController = navController, startDestination = curNav){
         authNavigation(navController = navController)
