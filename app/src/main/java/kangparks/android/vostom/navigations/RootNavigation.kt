@@ -9,8 +9,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import kangparks.android.vostom.components.navigationBar.BottomNavigationBar
-import kangparks.android.vostom.screens.player.TestScreenForMusicPlayer
+import kangparks.android.vostom.screens.player.ContentPlayerScreen
+import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
 object Nav {
@@ -39,6 +39,7 @@ fun RootNavigation(
     navController: NavHostController = rememberNavController(),
 ){
     val contentPlayerViewModel : ContentPlayerViewModel = viewModel()
+    val currentGroupViewModel : CurrentGroupViewModel = viewModel()
 
     val context = LocalContext.current
 //    val token = getAccessToken(context) // 저장된 토큰 불러오기
@@ -50,10 +51,11 @@ fun RootNavigation(
         contentNavigation(
             navController = navController,
             contentPlayerViewModel = contentPlayerViewModel,
+            currentGroupViewModel = currentGroupViewModel,
             context = context
         )
     }
-    TestScreenForMusicPlayer(
+    ContentPlayerScreen(
         navController = navController,
         contentPlayerViewModel = contentPlayerViewModel,
     )

@@ -2,9 +2,11 @@ package kangparks.android.vostom.screens.content
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,11 +28,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kangparks.android.vostom.components.appbar.ContentAppBar
 import kangparks.android.vostom.components.item.CoverSongItem
 import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
@@ -49,6 +53,23 @@ fun DetailMyCoverItemScreen(
 
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp
+
+    val isDarkTheme = isSystemInDarkTheme()
+    val systemUiController = rememberSystemUiController()
+
+    BackHandler(enabled = true) {
+        if(contentPlayerViewModel.isShowPlayer.value == true){
+            systemUiController.setSystemBarsColor(
+                color = Color.Transparent,
+                darkIcons = !isDarkTheme
+            )
+            contentPlayerViewModel.hidePlayer()
+            return@BackHandler
+        }else{
+            navController.popBackStack()
+        }
+
+    }
 
     HomeContentLayoutTemplate(
         contentPlayerViewModel = contentPlayerViewModel,

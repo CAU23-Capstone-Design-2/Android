@@ -1,10 +1,12 @@
 package kangparks.android.vostom.screens.content
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -37,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kangparks.android.vostom.components.appbar.ContentAppBar
 import kangparks.android.vostom.components.item.CoverSongItem
 import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
@@ -60,6 +63,23 @@ fun DetailStarCoverItemScreen(
 
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp
+
+    val isDarkTheme = isSystemInDarkTheme()
+    val systemUiController = rememberSystemUiController()
+
+    BackHandler(enabled = true) {
+        if(contentPlayerViewModel.isShowPlayer.value == true){
+            systemUiController.setSystemBarsColor(
+                color = Color.Transparent,
+                darkIcons = !isDarkTheme
+            )
+            contentPlayerViewModel.hidePlayer()
+            return@BackHandler
+        }
+        else{
+            navController.popBackStack()
+        }
+    }
 
     HomeContentLayoutTemplate(
         contentPlayerViewModel = contentPlayerViewModel,

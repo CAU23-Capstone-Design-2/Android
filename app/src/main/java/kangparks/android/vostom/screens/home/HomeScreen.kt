@@ -85,14 +85,23 @@ fun HomeScreen(
             darkIcons = !isDarkTheme
         )
     }
+//
+//    systemUiController.setSystemBarsColor(
+//        color = Color.Transparent,
+//        darkIcons = !isDarkTheme
+//    )
 
     BackHandler(enabled = true) {
         if(contentPlayerViewModel.isShowPlayer.value == true){
+            contentPlayerViewModel.hidePlayer()
+//            systemUiController.setSystemBarsColor(
+//                color = Color.Transparent,
+//                darkIcons = !isDarkTheme
+//            )
             systemUiController.setSystemBarsColor(
                 color = Color.Transparent,
                 darkIcons = !isDarkTheme
             )
-            contentPlayerViewModel.hidePlayer()
             return@BackHandler
         }
 
@@ -115,7 +124,7 @@ fun HomeScreen(
         isPlaying = isPlaying
     ){
         Text(
-            text = "(빌드 11-20-02-00)",
+            text = "(빌드 11-23-17-20)",
             fontSize = 10.sp,
             modifier = Modifier
                 .windowInsetsPadding(WindowInsets.statusBars)

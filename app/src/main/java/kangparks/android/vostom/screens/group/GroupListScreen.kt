@@ -1,10 +1,15 @@
 package kangparks.android.vostom.screens.group
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
@@ -21,32 +26,45 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kangparks.android.vostom.components.appbar.ContentAppBar
 import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
 import kangparks.android.vostom.navigations.HomeContent
+import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
+import kangparks.android.vostom.viewModel.group.GroupListViewModel
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun GroupListScreen(
     navController: NavHostController,
-    contentPlayerViewModel : ContentPlayerViewModel
+    contentPlayerViewModel : ContentPlayerViewModel,
+    groupListViewModel : GroupListViewModel = viewModel(),
+    currentGroupViewModel : CurrentGroupViewModel = viewModel(),
 ) {
     val isPlaying = contentPlayerViewModel.isPlaying.observeAsState(initial = false)
+    val configuration = LocalConfiguration.current
+    val screenWidth = configuration.screenWidthDp
 
-    val selectedTabIndex = remember {
-        mutableStateOf(0)
+    val selectedTabIndex = rememberSaveable() {
+        mutableIntStateOf(0)
     }
     val tabItems = listOf(
         TabItem("탐색", Icons.Outlined.AccountBalance),
@@ -56,6 +74,8 @@ fun GroupListScreen(
         tabItems.size
     }
 
+
+
     LaunchedEffect(key1 = selectedTabIndex.value){
         pagerState.animateScrollToPage(selectedTabIndex.value)
     }
@@ -64,6 +84,23 @@ fun GroupListScreen(
 //        if(selectedTabIndex.value == pagerState.currentPage) return@LaunchedEffect
         if(!pagerState.isScrollInProgress){
             selectedTabIndex.value = pagerState.currentPage
+        }
+    }
+
+    val isDarkTheme = isSystemInDarkTheme()
+    val systemUiController = rememberSystemUiController()
+
+    BackHandler(enabled = true) {
+        if(contentPlayerViewModel.isShowPlayer.value == true){
+            systemUiController.setSystemBarsColor(
+                color = Color.Transparent,
+                darkIcons = !isDarkTheme
+            )
+            contentPlayerViewModel.hidePlayer()
+            return@BackHandler
+        }
+        else{
+            navController.popBackStack()
         }
     }
 
@@ -104,13 +141,6 @@ fun GroupListScreen(
                                     color = Color(0xFF000000)
                                 )
                             },
-//                            icon = {
-//                                Icon(
-//                                    imageVector = tabItem.icon,
-//                                    contentDescription = null,
-//                                    tint = Color(0xFF000000)
-//                                )
-//                            }
                         )
                     }
                 }
@@ -118,53 +148,38 @@ fun GroupListScreen(
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
+                    .fillMaxSize(),
+//                    .weight(1f),
+                verticalAlignment = Alignment.Top,
+                pageSpacing = 20.dp
             ) { idx ->
                 Box(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(text = "Page $idx")
+                    if (idx == 0){
+                        AllGroupListTabScreen(
+                            navController = navController,
+                            isPlaying = isPlaying,
+                            groupListViewModel = groupListViewModel,
+                            currentGroupViewModel = currentGroupViewModel,
+                            screenWidth = screenWidth
+                        )
+                    }else if(idx == 1){
+                        MyGroupListTabScreen(
+                            navController = navController,
+                            isPlaying = isPlaying,
+                            groupListViewModel = groupListViewModel,
+                            currentGroupViewModel = currentGroupViewModel,
+                            screenWidth = screenWidth
+                        )
+                    }
                 }
 
             }
 
         }
     }
-
-//    Scaffold(
-////        contentWindowInsets =
-//    ) {
-//        Surface(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .windowInsetsPadding(WindowInsets.statusBars)
-//                .navigationBarsPadding()
-//                .padding(bottom = 40.dp)
-//        ) {
-//            Box {
-////                Box(
-////
-////
-////                ) {
-////
-////                }
-//
-//                AnimatedVisibility(
-//                    visible = isPlaying.value,
-//                    enter = fadeIn(),
-//                    exit = fadeOut()
-//                ) {
-//                    BottomContentPlayer(
-//                        navController = navController,
-//                        contentPlayerViewModel = contentPlayerViewModel,
-//                        bottomPaddingValue = 30
-//                    )
-//                }
-//            }
-//        }
-//    }
 }
 
 data class TabItem(

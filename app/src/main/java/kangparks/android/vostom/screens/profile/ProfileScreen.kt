@@ -1,6 +1,8 @@
 package kangparks.android.vostom.screens.profile
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,8 +13,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kangparks.android.vostom.components.appbar.ContentAppBar
 import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
 import kangparks.android.vostom.navigations.HomeContent
@@ -27,6 +31,23 @@ fun ProfileScreen(
 ) {
 
     val isPlaying = contentPlayerViewModel.isPlaying.observeAsState(initial = false)
+
+    val isDarkTheme = isSystemInDarkTheme()
+    val systemUiController = rememberSystemUiController()
+
+    BackHandler(enabled = true) {
+        if(contentPlayerViewModel.isShowPlayer.value == true){
+            systemUiController.setSystemBarsColor(
+                color = Color.Transparent,
+                darkIcons = !isDarkTheme
+            )
+            contentPlayerViewModel.hidePlayer()
+            return@BackHandler
+        }
+        else{
+            navController.popBackStack()
+        }
+    }
 
     HomeContentLayoutTemplate(
         contentPlayerViewModel = contentPlayerViewModel,
