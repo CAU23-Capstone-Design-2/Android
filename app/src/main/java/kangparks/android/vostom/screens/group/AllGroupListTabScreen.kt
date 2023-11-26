@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import kangparks.android.vostom.components.item.GroupItem
+import kangparks.android.vostom.models.content.Group
 import kangparks.android.vostom.navigations.HomeContent
 import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
 import kangparks.android.vostom.viewModel.group.GroupListViewModel
@@ -21,11 +22,10 @@ import kangparks.android.vostom.viewModel.group.GroupListViewModel
 fun AllGroupListTabScreen(
     navController: NavHostController,
     isPlaying: State<Boolean>,
-    groupListViewModel : GroupListViewModel,
+    allGroupList : List<Group>,
     currentGroupViewModel: CurrentGroupViewModel,
     screenWidth : Int
 ){
-    val allGroupList = groupListViewModel.allGroupList.observeAsState(initial = null)
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -33,7 +33,7 @@ fun AllGroupListTabScreen(
             bottom = if(isPlaying.value) 90.dp else 48.dp
         )
     ){
-        allGroupList.value?.let {
+        allGroupList?.let {
             List(it.size){index ->
                 item{
                     if(index % 2 == 0){

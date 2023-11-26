@@ -183,7 +183,7 @@ fun CreateCoverSongScreen(
             contentAlignment = Alignment.BottomCenter
         ){
             RoundedButton(
-                text = "선택한 영상으로 AI 커버곡 생성하가",
+                text = "선택한 영상으로 AI 커버곡 생성하기",
                 onClick = {
                     if(songItem.value == null){
                         Toast.makeText(context, "선택된 노래가 없습니다.", Toast.LENGTH_SHORT).show()

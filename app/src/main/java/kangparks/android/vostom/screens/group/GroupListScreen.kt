@@ -1,10 +1,9 @@
 package kangparks.android.vostom.screens.group
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,10 +15,12 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccessAlarm
 import androidx.compose.material.icons.outlined.AccountBalance
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
@@ -27,15 +28,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -46,20 +47,25 @@ import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
 import kangparks.android.vostom.navigations.HomeContent
 import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
 import kangparks.android.vostom.viewModel.group.GroupListViewModel
+import kangparks.android.vostom.viewModel.group.GroupListViewModelFactory
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun GroupListScreen(
     navController: NavHostController,
+    token : String,
     contentPlayerViewModel : ContentPlayerViewModel,
-    groupListViewModel : GroupListViewModel = viewModel(),
-    currentGroupViewModel : CurrentGroupViewModel = viewModel(),
+    groupListViewModel : GroupListViewModel = viewModel(
+        factory = GroupListViewModelFactory(token)
+    ),
+    currentGroupViewModel : CurrentGroupViewModel,
 ) {
     val isPlaying = contentPlayerViewModel.isPlaying.observeAsState(initial = false)
+    val allGroupList = groupListViewModel.allGroupList.observeAsState(initial = listOf())
+    val myGroupList = groupListViewModel.myGroupList.observeAsState(initial = listOf())
+
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp
 
@@ -73,8 +79,6 @@ fun GroupListScreen(
     val pagerState = rememberPagerState {
         tabItems.size
     }
-
-
 
     LaunchedEffect(key1 = selectedTabIndex.value){
         pagerState.animateScrollToPage(selectedTabIndex.value)
@@ -115,10 +119,21 @@ fun GroupListScreen(
             modifier = Modifier.padding(horizontal = 20.dp)
         ){
             ContentAppBar(
-                sideButtonAction = {
-                    navController.navigate(HomeContent.BuildGroup.route)
+                sideButtonContent = {
+                    Text(
+                        text = "그룹 만들기",
+                        textAlign = TextAlign.Center,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(10.dp))
+                            .clickable {
+                                navController.navigate(HomeContent.BuildGroup.route)
+                            }
+                            .padding(5.dp)
+                    )
                 },
-                sideButtonContent = "그룹 만들기",
                 contentTitle = "그룹",
             )
 
@@ -161,7 +176,7 @@ fun GroupListScreen(
                         AllGroupListTabScreen(
                             navController = navController,
                             isPlaying = isPlaying,
-                            groupListViewModel = groupListViewModel,
+                            allGroupList = allGroupList.value,
                             currentGroupViewModel = currentGroupViewModel,
                             screenWidth = screenWidth
                         )
@@ -169,7 +184,7 @@ fun GroupListScreen(
                         MyGroupListTabScreen(
                             navController = navController,
                             isPlaying = isPlaying,
-                            groupListViewModel = groupListViewModel,
+                            myGroupList = myGroupList.value,
                             currentGroupViewModel = currentGroupViewModel,
                             screenWidth = screenWidth
                         )

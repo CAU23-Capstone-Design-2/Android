@@ -2,6 +2,7 @@ package kangparks.android.vostom.screens.profile
 
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -9,12 +10,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kangparks.android.vostom.components.appbar.ContentAppBar
@@ -22,7 +29,6 @@ import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
 import kangparks.android.vostom.navigations.HomeContent
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ProfileScreen(
@@ -63,42 +69,23 @@ fun ProfileScreen(
                 .padding(bottom = 48.dp)
         ) {
             ContentAppBar(
-                sideButtonAction = {
-                    navController.navigate(HomeContent.RequestCoverSongList.route)
+                sideButtonContent = {
+                    Text(
+                        text = "편집",
+                        textAlign = TextAlign.Center,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(10.dp))
+                            .clickable {
+                                navController.navigate(HomeContent.RequestCoverSongList.route)
+                            }
+                            .padding(5.dp)
+                    )
                 },
-                sideButtonContent = "편집",
                 contentTitle = "프로필",
             )
         }
     }
-
-//    Scaffold(
-////        contentWindowInsets =
-//    ){
-//        Surface(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .windowInsetsPadding(WindowInsets.statusBars)
-//                .navigationBarsPadding()
-//                .padding(bottom = 40.dp)
-//        ){
-//            Box{
-//
-//
-//            }
-//            AnimatedVisibility(
-//                visible = isPlaying.value,
-//                enter = fadeIn(),
-//                exit = fadeOut()
-//            ) {
-//                BottomContentPlayer(
-//                    navController = navController,
-//                    contentPlayerViewModel = contentPlayerViewModel,
-//                    bottomPaddingValue = 30
-//                )
-//            }
-//        }
-//
-//    }
-
 }

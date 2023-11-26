@@ -13,6 +13,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import kangparks.android.vostom.components.item.GroupItem
+import kangparks.android.vostom.models.content.Group
 import kangparks.android.vostom.navigations.HomeContent
 import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
 import kangparks.android.vostom.viewModel.group.GroupListViewModel
@@ -21,57 +22,56 @@ import kangparks.android.vostom.viewModel.group.GroupListViewModel
 fun MyGroupListTabScreen(
     navController: NavHostController,
     isPlaying: State<Boolean>,
-    groupListViewModel: GroupListViewModel,
+    myGroupList : List<Group>,
     currentGroupViewModel: CurrentGroupViewModel,
     screenWidth : Int
 ){
-    val myGroupList = groupListViewModel.myGroupList.observeAsState(initial = null)
-
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(
             bottom = if(isPlaying.value) 90.dp else 48.dp
         )
     ){
-        myGroupList.value?.let {
-            List(it.size){index ->
-                item{
-                    if(index % 2 == 0){
-                        Box(
-                            modifier = Modifier
-                                .padding(
-                                    top = 10.dp,
-                                    bottom = 10.dp,
-                                    end = 10.dp
+        myGroupList.let {
+            if (it != null) {
+                List(it.size){index ->
+                    item{
+                        if(index % 2 == 0){
+                            Box(
+                                modifier = Modifier
+                                    .padding(
+                                        top = 10.dp,
+                                        bottom = 10.dp,
+                                        end = 10.dp
+                                    )
+                            ){
+                                GroupItem(
+                                    content = it[index],
+                                    contentSize = (screenWidth-60)/2,
+                                    onClick = {
+                                        currentGroupViewModel.selectGroup(it[index])
+                                        navController.navigate(HomeContent.Group.route)
+                                    }
                                 )
-                        ){
-                            GroupItem(
-                                content = it[index],
-                                contentSize = (screenWidth-60)/2,
-                                onClick = {
-                                    currentGroupViewModel.selectGroup(it[index])
-                                    navController.navigate(HomeContent.Group.route)
-                                }
-                            )
-                        }
-                    }
-                    else{
-                        Box(
-                            modifier = Modifier
-                                .padding(
-                                    top = 10.dp,
-                                    bottom = 10.dp,
-                                    start = 10.dp
+                            }
+                        } else{
+                            Box(
+                                modifier = Modifier
+                                    .padding(
+                                        top = 10.dp,
+                                        bottom = 10.dp,
+                                        start = 10.dp
+                                    )
+                            ){
+                                GroupItem(
+                                    content = it[index],
+                                    contentSize = (screenWidth-60)/2,
+                                    onClick = {
+                                        currentGroupViewModel.selectGroup(it[index])
+                                        navController.navigate(HomeContent.Group.route)
+                                    }
                                 )
-                        ){
-                            GroupItem(
-                                content = it[index],
-                                contentSize = (screenWidth-60)/2,
-                                onClick = {
-                                    currentGroupViewModel.selectGroup(it[index])
-                                    navController.navigate(HomeContent.Group.route)
-                                }
-                            )
+                            }
                         }
                     }
                 }

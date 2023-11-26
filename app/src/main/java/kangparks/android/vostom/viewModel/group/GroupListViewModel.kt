@@ -12,11 +12,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class GroupListViewModel : ViewModel(){
+class GroupListViewModel(token : String) : ViewModel(){
     private val coroutineScope = CoroutineScope(viewModelScope.coroutineContext)
 
-    private val _allGroupList : MutableLiveData<List<Group>> = MutableLiveData(null)
-    private val _myGroupList : MutableLiveData<List<Group>> = MutableLiveData(null)
+    private val _allGroupList : MutableLiveData<List<Group>> = MutableLiveData(listOf())
+    private val _myGroupList : MutableLiveData<List<Group>> = MutableLiveData(listOf())
 
     val allGroupList : LiveData<List<Group>> = _allGroupList
     val myGroupList : LiveData<List<Group>> = _myGroupList
@@ -25,12 +25,13 @@ class GroupListViewModel : ViewModel(){
         coroutineScope.launch {
             delay(500)
             _allGroupList.postValue(dummyGroupList)
-            delay(1000)
+            delay(500)
             _myGroupList.postValue(dummyMyGroupList)
         }
     }
 
-
-
+    fun updateContent(){
+        // TODO("서버 연동")
+    }
 
 }

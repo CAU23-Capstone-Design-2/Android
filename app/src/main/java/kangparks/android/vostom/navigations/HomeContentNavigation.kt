@@ -24,6 +24,7 @@ import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.content.CreateContentViewModel
 import kangparks.android.vostom.viewModel.content.StarContentViewModel
 import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
+import kangparks.android.vostom.viewModel.group.GroupListStoreViewModel
 import kangparks.android.vostom.viewModel.group.GroupListViewModel
 import kangparks.android.vostom.viewModel.home.HomeViewModelFactory
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
@@ -76,10 +77,11 @@ fun NavGraphBuilder.homeContentNavigation(
     context: Context
 ) {
 //    val accessToken = getAccessToken(context)
-
+1
     val accessToken = "access_token"
     val contentStoreViewModel = ContentStoreViewModel()
     val startContentViewModel = StarContentViewModel()
+    val groupListStoreViewModel = GroupListStoreViewModel()
 
 
 //    val contentPlayerViewModel : ContentPlayerViewModel = viewModel()
@@ -102,7 +104,9 @@ fun NavGraphBuilder.homeContentNavigation(
         composable(HomeContent.GroupList.route) {
             GroupListScreen(
                 navController = navController,
+                token = accessToken,
                 contentPlayerViewModel = contentPlayerViewModel,
+//                groupListStoreViewModel = groupListStoreViewModel,
                 currentGroupViewModel = currentGroupViewModel,
             )
         }
