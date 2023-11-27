@@ -13,9 +13,11 @@ import kangparks.android.vostom.screens.content.DetailMyCoverItemScreen
 import kangparks.android.vostom.screens.content.DetailMyGroupCoverItemScreen
 import kangparks.android.vostom.screens.content.DetailStarCoverItemScreen
 import kangparks.android.vostom.screens.content.DetailStarListScreen
+import kangparks.android.vostom.screens.group.AddCoverToGroupScreen
 import kangparks.android.vostom.screens.group.BuildGroupScreen
 import kangparks.android.vostom.screens.group.GroupListScreen
 import kangparks.android.vostom.screens.group.GroupScreen
+import kangparks.android.vostom.screens.group.RemoveCoverFromGroupScreen
 import kangparks.android.vostom.screens.home.HomeScreen
 import kangparks.android.vostom.screens.profile.ProfileScreen
 import kangparks.android.vostom.screens.profile.RequestCoverSongListScreen
@@ -41,6 +43,8 @@ sealed class HomeContent(val route: String) {
     object DetailStarList : HomeContent(route = "detail_star_list")
     object DetailStarCoverItem : HomeContent(route = "detail_star_cover_item")
     object Group : HomeContent(route = "group")
+    object AddCoverToGroup : HomeContent(route = "add_cover_to_group")
+    object RemoveCoverFromGroup : HomeContent(route = "remove_cover_from_group")
 }
 
 sealed class BottomBarContent(
@@ -159,6 +163,20 @@ fun NavGraphBuilder.homeContentNavigation(
             GroupScreen(
                 navController = navController,
                 contentPlayerViewModel = contentPlayerViewModel,
+                currentGroupViewModel = currentGroupViewModel,
+            )
+        }
+        composable(HomeContent.AddCoverToGroup.route){
+            AddCoverToGroupScreen(
+                accessToken = accessToken,
+                navController = navController,
+                contentStoreViewModel = contentStoreViewModel,
+            )
+        }
+        composable(HomeContent.RemoveCoverFromGroup.route){
+            RemoveCoverFromGroupScreen(
+                accessToken = accessToken,
+                navController = navController,
                 currentGroupViewModel = currentGroupViewModel,
             )
         }

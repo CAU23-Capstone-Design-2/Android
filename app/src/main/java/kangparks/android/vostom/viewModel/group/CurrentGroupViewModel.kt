@@ -18,8 +18,8 @@ class CurrentGroupViewModel : ViewModel() {
     private val _currentGroup : MutableLiveData<Group?> = MutableLiveData(null)
     private val _currentGroupCoverItemList : MutableLiveData<List<CoverSong>?> = MutableLiveData(null)
 
-    val currentGroup : MutableLiveData<Group?> = _currentGroup
-    val currentGroupCoverItemList : MutableLiveData<List<CoverSong>?> = _currentGroupCoverItemList
+    val currentGroup : LiveData<Group?> = _currentGroup
+    val currentGroupCoverItemList : LiveData<List<CoverSong>?> = _currentGroupCoverItemList
 
     fun selectGroup(group : Group){
         _currentGroup.postValue(group)

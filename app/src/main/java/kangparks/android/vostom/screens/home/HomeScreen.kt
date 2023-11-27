@@ -20,6 +20,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -96,6 +97,18 @@ fun HomeScreen(
 //        darkIcons = !isDarkTheme
 //    )
 
+    LaunchedEffect(key1 = myCoverItemList.value){
+        contentStoreViewModel.updateMyCoverItemList(myCoverItemList.value)
+    }
+    
+    LaunchedEffect(key1 = myGroupCoverItemList.value){
+        contentStoreViewModel.updateMyGroupCoverItemList(myGroupCoverItemList.value)
+    }
+    
+    LaunchedEffect(key1 = othersItemList.value){
+        contentStoreViewModel.updateOthersItemList(othersItemList.value)
+    }
+
     BackHandler(enabled = true) {
         if(contentPlayerViewModel.isShowPlayer.value == true){
             contentPlayerViewModel.hidePlayer()
@@ -167,7 +180,7 @@ fun HomeScreen(
                 contents = myCoverItemList.value as List<CoverSong>,
                 sideButtonAction = {
                     if (myCoverItemList.value.isNotEmpty()) {
-                        contentStoreViewModel.updateMyCoverItemList(myCoverItemList.value)
+//                        contentStoreViewModel.updateMyCoverItemList(myCoverItemList.value)
                         navController.navigate(HomeContent.DetailMyCoverItem.route)
                     }
                 },
@@ -202,9 +215,9 @@ fun HomeScreen(
                 contents = myGroupCoverItemList.value as List<CoverSong>,
                 sideButtonAction = {
                     if (myGroupCoverItemList.value.isNotEmpty()) {
-                        contentStoreViewModel.updateMyGroupCoverItemList(
-                            myGroupCoverItemList.value
-                        )
+//                        contentStoreViewModel.updateMyGroupCoverItemList(
+//                            myGroupCoverItemList.value
+//                        )
                         navController.navigate(HomeContent.DetailMyGroupCoverItem.route)
                     }
                 },
@@ -239,7 +252,7 @@ fun HomeScreen(
                 contents = othersItemList.value as List<Singer>,
                 sideButtonAction = {
                     if (othersItemList.value.isNotEmpty()) {
-                        contentStoreViewModel.updateOthersItemList(othersItemList.value)
+//                        contentStoreViewModel.updateOthersItemList(othersItemList.value)
                         navController.navigate(HomeContent.DetailStarList.route)
                     }
                 },

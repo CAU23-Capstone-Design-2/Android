@@ -26,7 +26,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
@@ -38,18 +37,18 @@ import coil.compose.AsyncImage
 import kangparks.android.vostom.components.appbar.ContentAppBar
 import kangparks.android.vostom.components.blur.BlurForList
 import kangparks.android.vostom.components.button.RoundedButton
-import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
-import kangparks.android.vostom.viewModel.group.AddCoverToGroupViewModel
+import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
+import kangparks.android.vostom.viewModel.group.RemoveCoverFromGroupViewModel
 
 @Composable
-fun AddCoverToGroupScreen(
+fun RemoveCoverFromGroupScreen(
     accessToken : String,
     navController : NavHostController,
-    contentStoreViewModel: ContentStoreViewModel,
-    addCoverToGroupViewModel: AddCoverToGroupViewModel= viewModel()
+    currentGroupViewModel : CurrentGroupViewModel,
+    removeCoverFromGroupViewModel: RemoveCoverFromGroupViewModel = viewModel()
 ) {
-    val myCoverList = contentStoreViewModel.myCoverItemList.observeAsState(initial = listOf())
-    val selectedSong = addCoverToGroupViewModel.songItem.observeAsState(initial = null)
+    val currentGroupCoverList = currentGroupViewModel.currentGroupCoverItemList.observeAsState(listOf())
+    val selectedSong = removeCoverFromGroupViewModel.songItem.observeAsState(initial = null)
 
     Box(
         modifier = Modifier
@@ -65,18 +64,18 @@ fun AddCoverToGroupScreen(
                 },
                 backButtonContent = "취소",
             )
-
             Text(
-                text = "그룹에 나의 커버 곡 추가",
+                text = "그룹에서 나의 커버 곡 삭제",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(20.dp))
-            Box(){
+            Box {
+                // TODO 그룹 내 커버 곡 중 나의 커버 곡만 보여주기
                 LazyColumn(
                     contentPadding = PaddingValues(bottom = 170.dp)
                 ){
-                    myCoverList.value.forEach{
+                    currentGroupCoverList.value?.forEach {
                         item {
                             Row(
                                 modifier = Modifier
@@ -84,15 +83,15 @@ fun AddCoverToGroupScreen(
                                     .clip(RoundedCornerShape(5.dp))
                                     .selectable(
                                         selected = (selectedSong.value?.id == it.id),
-                                        onClick = { addCoverToGroupViewModel.setSongItem(it) },
+                                        onClick = { removeCoverFromGroupViewModel.setSongItem(it) },
                                         role = Role.RadioButton
                                     ),
                                 verticalAlignment = Alignment.CenterVertically
-                            ){
+                            ) {
                                 Box(
-//                                    modifier = Modifier.height(80.dp),
+                                    //                                    modifier = Modifier.height(80.dp),
                                     contentAlignment = Alignment.Center,
-                                ){
+                                ) {
                                     RadioButton(
                                         selected = (selectedSong.value?.id == it.id),
                                         onClick = null
@@ -120,7 +119,6 @@ fun AddCoverToGroupScreen(
                 BlurForList()
             }
         }
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -137,8 +135,8 @@ fun AddCoverToGroupScreen(
                         Toast.makeText(navController.context, "선택된 노래가 없습니다.", Toast.LENGTH_SHORT).show()
                     }
                     else{
-                        addCoverToGroupViewModel.addCoverToGroup(accessToken)
-                        Toast.makeText(navController.context, "선택한 커버곡을 그룹에 추가했습니다.", Toast.LENGTH_LONG).show()
+                        removeCoverFromGroupViewModel.removeCoverFromGroup(accessToken)
+                        Toast.makeText(navController.context, "선택한 커버곡을 그룹에서 삭제했습니다.", Toast.LENGTH_LONG).show()
                         navController.popBackStack()
                     }
                 }
@@ -146,4 +144,5 @@ fun AddCoverToGroupScreen(
             )
         }
     }
+
 }

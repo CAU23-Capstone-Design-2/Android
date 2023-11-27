@@ -44,6 +44,7 @@ import com.google.android.exoplayer2.ExoPlayer
 import kangparks.android.vostom.components.appbar.ContentAppBar
 import kangparks.android.vostom.components.dropdown.DropDownIconButton
 import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
+import kangparks.android.vostom.navigations.HomeContent
 import kangparks.android.vostom.utils.media.getMediaItem
 import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
@@ -125,6 +126,7 @@ fun GroupScreen(
                                         },
                                         onClick = {
                                             isDropDownOpen.value = false
+                                            navController.navigate(HomeContent.AddCoverToGroup.route)
                                         },
                                     )
                                     DropdownMenuItem(
@@ -137,6 +139,7 @@ fun GroupScreen(
                                         },
                                         onClick = {
                                             isDropDownOpen.value = false
+                                            navController.navigate(HomeContent.RemoveCoverFromGroup.route)
                                         },
                                     )
                                     DropdownMenuItem(
