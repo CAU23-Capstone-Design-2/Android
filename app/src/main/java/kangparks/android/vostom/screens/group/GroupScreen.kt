@@ -1,6 +1,7 @@
 package kangparks.android.vostom.screens.group
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -23,6 +24,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,6 +44,7 @@ import coil.compose.AsyncImage
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.exoplayer2.ExoPlayer
 import kangparks.android.vostom.components.appbar.ContentAppBar
+import kangparks.android.vostom.components.dialog.VostomDialog
 import kangparks.android.vostom.components.dropdown.DropDownIconButton
 import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
 import kangparks.android.vostom.navigations.HomeContent
@@ -67,17 +70,25 @@ fun GroupScreen(
         mutableStateOf(false)
     }
 
+    val isParticipantDialogOpen = remember {
+        mutableStateOf(false)
+    }
+
+    val isLeaveGroupDialogOpen = remember {
+        mutableStateOf(false)
+    }
+
     val context = LocalContext.current
 
     val isDarkTheme = isSystemInDarkTheme()
     val systemUiController = rememberSystemUiController()
 
-//    SideEffect {
-//        systemUiController.setSystemBarsColor(
-//            color = Color.Transparent,
-//            darkIcons = !isDarkTheme
-//        )
-//    }
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            color = Color.Transparent,
+            darkIcons = !isDarkTheme
+        )
+    }
 
     BackHandler(enabled = true) {
         if(contentPlayerViewModel.isShowPlayer.value == true){
@@ -145,13 +156,14 @@ fun GroupScreen(
                                     DropdownMenuItem(
                                         text = {
                                             Text(
-                                                text = "그룹 설정",
+                                                text = "그룹 편집",
                                                 fontWeight = FontWeight.Bold,
                                                 textAlign = TextAlign.Center
                                             )
                                         },
                                         onClick = {
                                             isDropDownOpen.value = false
+                                            navController.navigate(HomeContent.EditGroup.route)
                                         },
                                     )
                                     DropdownMenuItem(
@@ -164,6 +176,7 @@ fun GroupScreen(
                                         },
                                         onClick = {
                                             isDropDownOpen.value = false
+                                            isLeaveGroupDialogOpen.value = true
                                         },
                                     )
                                 }
@@ -180,7 +193,7 @@ fun GroupScreen(
                                 modifier = Modifier
                                     .clip(RoundedCornerShape(10.dp))
                                     .clickable {
-                                        isParticipant.value = !isParticipant.value
+                                        isParticipantDialogOpen.value = true
                                     }
                                     .padding(5.dp)
                             )
@@ -331,5 +344,41 @@ fun GroupScreen(
                 }
             }
         }
+    }
+    AnimatedVisibility(visible = isParticipantDialogOpen.value) {
+        VostomDialog(
+            title = "그룹에 참가하시겠습니까?",
+            content = "그룹에서 커버곡을 공유해봐요!",
+            positiveText = "확인",
+            negativeText = "취소",
+            onPositiveClick = {
+                isParticipant.value = !isParticipant.value
+                isParticipantDialogOpen.value = false
+            },
+            onNegativeClick = {
+                isParticipantDialogOpen.value = false
+            },
+            onDismiss = {
+                isParticipantDialogOpen.value = false
+            }
+        )
+    }
+    AnimatedVisibility(visible = isLeaveGroupDialogOpen.value) {
+        VostomDialog(
+            title = "그룹에서 떠나겠습니까?",
+            content = "그룹에 공유한 커버곡은 삭제됩니다.",
+            positiveText = "확인",
+            negativeText = "취소",
+            onPositiveClick = {
+                isParticipant.value = !isParticipant.value
+                isLeaveGroupDialogOpen.value = false
+            },
+            onNegativeClick = {
+                isLeaveGroupDialogOpen.value = false
+            },
+            onDismiss = {
+                isLeaveGroupDialogOpen.value = false
+            }
+        )
     }
 }

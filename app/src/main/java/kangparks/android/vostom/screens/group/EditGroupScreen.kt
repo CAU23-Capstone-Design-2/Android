@@ -1,6 +1,5 @@
 package kangparks.android.vostom.screens.group
 
-
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -36,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -45,7 +43,6 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
-import coil.request.ImageRequest
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kangparks.android.vostom.R
 import kangparks.android.vostom.components.appbar.ContentAppBar
@@ -58,7 +55,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun BuildGroupScreen(
+fun EditGroupScreen(
     navController: NavHostController,
     groupInfoVIewModel: GroupInfoVIewModel = viewModel()
 ) {
@@ -115,7 +112,7 @@ fun BuildGroupScreen(
                 backButtonContent = "취소",
             )
             Text(
-                text = "그룹 생성",
+                text = "그룹 편집",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -129,10 +126,10 @@ fun BuildGroupScreen(
             Spacer(modifier = Modifier.height(10.dp))
             Box(){
                 Box(
-                  modifier = Modifier
-                      .size(120.dp)
-                      .aspectRatio(1f)
-                      .clip(RoundedCornerShape(10.dp))
+                    modifier = Modifier
+                        .size(120.dp)
+                        .aspectRatio(1f)
+                        .clip(RoundedCornerShape(10.dp))
                 ){
                     if(curImgUri.value != null){
                         Image(
@@ -217,7 +214,7 @@ fun BuildGroupScreen(
             contentAlignment = Alignment.BottomCenter
         ){
             RoundedButton(
-                text = "그룹 생성하기",
+                text = "그룹 편집 완료",
                 onClick = {
 
                 }

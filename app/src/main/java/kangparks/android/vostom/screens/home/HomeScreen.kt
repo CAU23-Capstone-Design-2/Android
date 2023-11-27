@@ -142,7 +142,7 @@ fun HomeScreen(
         isPlaying = isPlaying
     ){
         Text(
-            text = "(빌드 11-26-22-20)",
+            text = "(빌드 11-27-18-20)",
             fontSize = 10.sp,
             modifier = Modifier
                 .windowInsetsPadding(WindowInsets.statusBars)

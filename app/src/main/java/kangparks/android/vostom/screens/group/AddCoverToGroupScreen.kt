@@ -1,6 +1,7 @@
 package kangparks.android.vostom.screens.group
 
 import android.widget.Toast
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,11 +32,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kangparks.android.vostom.components.appbar.ContentAppBar
 import kangparks.android.vostom.components.blur.BlurForList
 import kangparks.android.vostom.components.button.RoundedButton
@@ -50,6 +54,16 @@ fun AddCoverToGroupScreen(
 ) {
     val myCoverList = contentStoreViewModel.myCoverItemList.observeAsState(initial = listOf())
     val selectedSong = addCoverToGroupViewModel.songItem.observeAsState(initial = null)
+
+    val isDarkTheme = isSystemInDarkTheme()
+    val systemUiController = rememberSystemUiController()
+
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            color = Color.Transparent,
+            darkIcons = !isDarkTheme
+        )
+    }
 
     Box(
         modifier = Modifier
@@ -72,6 +86,12 @@ fun AddCoverToGroupScreen(
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(20.dp))
+            Text(
+                text = "그룹에 공유할 커버 곡을 선택해 주세요.",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal
+            )
+            Spacer(modifier = Modifier.height(30.dp))
             Box(){
                 LazyColumn(
                     contentPadding = PaddingValues(bottom = 170.dp)
@@ -86,7 +106,7 @@ fun AddCoverToGroupScreen(
                                         selected = (selectedSong.value?.id == it.id),
                                         onClick = { addCoverToGroupViewModel.setSongItem(it) },
                                         role = Role.RadioButton
-                                    ),
+                                    ).fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically
                             ){
                                 Box(
@@ -111,7 +131,9 @@ fun AddCoverToGroupScreen(
                                 Text(
                                     text = it.title,
                                     fontSize = 14.sp,
-                                    fontWeight = FontWeight.Bold
+                                    fontWeight = FontWeight.Bold,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
                                 )
                             }
                         }

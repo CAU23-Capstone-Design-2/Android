@@ -15,6 +15,7 @@ import kangparks.android.vostom.screens.content.DetailStarCoverItemScreen
 import kangparks.android.vostom.screens.content.DetailStarListScreen
 import kangparks.android.vostom.screens.group.AddCoverToGroupScreen
 import kangparks.android.vostom.screens.group.BuildGroupScreen
+import kangparks.android.vostom.screens.group.EditGroupScreen
 import kangparks.android.vostom.screens.group.GroupListScreen
 import kangparks.android.vostom.screens.group.GroupScreen
 import kangparks.android.vostom.screens.group.RemoveCoverFromGroupScreen
@@ -45,6 +46,7 @@ sealed class HomeContent(val route: String) {
     object Group : HomeContent(route = "group")
     object AddCoverToGroup : HomeContent(route = "add_cover_to_group")
     object RemoveCoverFromGroup : HomeContent(route = "remove_cover_from_group")
+    object EditGroup : HomeContent(route = "edit_group")
 }
 
 sealed class BottomBarContent(
@@ -179,6 +181,9 @@ fun NavGraphBuilder.homeContentNavigation(
                 navController = navController,
                 currentGroupViewModel = currentGroupViewModel,
             )
+        }
+        composable(HomeContent.EditGroup.route){
+            EditGroupScreen(navController = navController)
         }
     }
 }
