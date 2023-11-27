@@ -13,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -30,12 +31,14 @@ fun IconAndTextButton(
     color : Color = MaterialTheme.colorScheme.onSurface
 ){
     Row (
+        verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
         modifier = containerModifier.clip(RoundedCornerShape(10.dp)).clickable {
             if (backButtonAction != null) {
                 backButtonAction()
             }
-        }.padding(vertical = 5.dp)
+        }
+            .padding(5.dp)
     ){
         Icon(
             imageVector,

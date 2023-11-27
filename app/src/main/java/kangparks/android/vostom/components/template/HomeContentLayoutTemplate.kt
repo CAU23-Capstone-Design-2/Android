@@ -17,6 +17,7 @@ import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import kangparks.android.vostom.components.navigationBar.BottomNavigationBar
 import kangparks.android.vostom.components.player.BottomContentPlayer
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
@@ -33,7 +34,9 @@ fun HomeContentLayoutTemplate(
     content : @Composable () -> Unit,
 ) {
 
-    Scaffold {
+    Scaffold(
+        bottomBar = { BottomNavigationBar(navController = navController) }
+    ){
         Surface(
             modifier = surfaceModifier
                 .fillMaxSize()

@@ -9,7 +9,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import kangparks.android.vostom.components.navigationBar.BottomNavigationBar
+import kangparks.android.vostom.screens.player.ContentPlayerScreen
+import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
 object Nav {
@@ -26,7 +27,7 @@ fun VostomApp() {
     val navController = rememberNavController()
 
     Scaffold(
-        bottomBar = { BottomNavigationBar(navController = navController) }
+//        bottomBar = { BottomNavigationBar(navController = navController) }
     ){
         RootNavigation(navController = navController)
     }
@@ -38,18 +39,24 @@ fun RootNavigation(
     navController: NavHostController = rememberNavController(),
 ){
     val contentPlayerViewModel : ContentPlayerViewModel = viewModel()
+    val currentGroupViewModel : CurrentGroupViewModel = viewModel()
 
     val context = LocalContext.current
 //    val token = getAccessToken(context) // 저장된 토큰 불러오기
 
-    val curNav = if(true) Nav.AUTH else Nav.CONTENT
+    val curNav = if(false) Nav.AUTH else Nav.CONTENT
 
     NavHost(navController = navController, startDestination = curNav){
         authNavigation(navController = navController)
         contentNavigation(
             navController = navController,
             contentPlayerViewModel = contentPlayerViewModel,
+            currentGroupViewModel = currentGroupViewModel,
             context = context
         )
     }
+    ContentPlayerScreen(
+        navController = navController,
+        contentPlayerViewModel = contentPlayerViewModel,
+    )
 }

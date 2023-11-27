@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,22 +15,29 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.android.exoplayer2.ExoPlayer
 import drawVerticalScrollbar
 import kangparks.android.vostom.R
 import kangparks.android.vostom.components.appbar.ContentAppBar
@@ -43,6 +51,7 @@ import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
 import kangparks.android.vostom.models.content.CoverSong
 import kangparks.android.vostom.models.content.Singer
 import kangparks.android.vostom.navigations.HomeContent
+import kangparks.android.vostom.utils.media.getMediaItem
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.content.StarContentViewModel
 import kangparks.android.vostom.viewModel.home.HomeViewModel
@@ -67,6 +76,7 @@ fun HomeScreen(
     val myGroupCoverItemList = homeViewModel.myGroupCoverItemList.observeAsState(initial = listOf())
     val othersItemList = homeViewModel.othersItemList.observeAsState(initial = listOf())
     val isPlaying = contentPlayerViewModel.isPlaying.observeAsState(initial = false)
+    val isShowPlayer = contentPlayerViewModel.isShowPlayer.observeAsState(initial = false)
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -81,8 +91,38 @@ fun HomeScreen(
             darkIcons = !isDarkTheme
         )
     }
+//
+//    systemUiController.setSystemBarsColor(
+//        color = Color.Transparent,
+//        darkIcons = !isDarkTheme
+//    )
+
+    LaunchedEffect(key1 = myCoverItemList.value){
+        contentStoreViewModel.updateMyCoverItemList(myCoverItemList.value)
+    }
+    
+    LaunchedEffect(key1 = myGroupCoverItemList.value){
+        contentStoreViewModel.updateMyGroupCoverItemList(myGroupCoverItemList.value)
+    }
+    
+    LaunchedEffect(key1 = othersItemList.value){
+        contentStoreViewModel.updateOthersItemList(othersItemList.value)
+    }
 
     BackHandler(enabled = true) {
+        if(contentPlayerViewModel.isShowPlayer.value == true){
+            contentPlayerViewModel.hidePlayer()
+//            systemUiController.setSystemBarsColor(
+//                color = Color.Transparent,
+//                darkIcons = !isDarkTheme
+//            )
+            systemUiController.setSystemBarsColor(
+                color = Color.Transparent,
+                darkIcons = !isDarkTheme
+            )
+            return@BackHandler
+        }
+
         if (doubleBackToExitPressedOnce.value) {
             (context as Activity).finish()
         } else {
@@ -102,7 +142,7 @@ fun HomeScreen(
         isPlaying = isPlaying
     ){
         Text(
-            text = "(빌드 11-17-23-30)",
+            text = "(빌드 11-27-18-20)",
             fontSize = 10.sp,
             modifier = Modifier
                 .windowInsetsPadding(WindowInsets.statusBars)
@@ -116,8 +156,21 @@ fun HomeScreen(
                 .verticalScroll(scrollState),
         ) {
             ContentAppBar(
-                sideButtonAction = { navController.navigate(HomeContent.CreateCoverSong.route) },
-                sideButtonContent = "커버곡 생성",
+                sideButtonContent = {
+                    Text(
+                        text = "커버곡 생성",
+                        textAlign = TextAlign.Center,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(10.dp))
+                            .clickable {
+                                navController.navigate(HomeContent.CreateCoverSong.route)
+                            }
+                            .padding(5.dp)
+                    )
+                },
                 contentTitleImage = R.drawable.screen_title,
                 containerModifier = Modifier.padding(horizontal = 20.dp)
             )
@@ -127,7 +180,7 @@ fun HomeScreen(
                 contents = myCoverItemList.value as List<CoverSong>,
                 sideButtonAction = {
                     if (myCoverItemList.value.isNotEmpty()) {
-                        contentStoreViewModel.updateMyCoverItemList(myCoverItemList.value)
+//                        contentStoreViewModel.updateMyCoverItemList(myCoverItemList.value)
                         navController.navigate(HomeContent.DetailMyCoverItem.route)
                     }
                 },
@@ -135,7 +188,20 @@ fun HomeScreen(
                     CoverSongItem(
                         content = item,
                         onClick = {
+                            val exoPlayer = contentPlayerViewModel.getPlayer()
+                            if(exoPlayer == null){
+                                val newPlayer = ExoPlayer.Builder(context).build().apply {
+                                    setMediaItem(getMediaItem(context, "iu_all_your_moments", "raw"))
+                                    playWhenReady = true
+                                    prepare()
+                                    volume = 1f
+                                }
+                                contentPlayerViewModel.setPlayer(newPlayer)
+                            }else{
+                                exoPlayer.replaceMediaItem(0, getMediaItem(context, "iu_all_your_moments", "raw"))
+                            }
                             contentPlayerViewModel.playMusic(item)
+//                            contentPlayerViewModel.showPlayer()
                         }
                     )
                 },
@@ -149,9 +215,9 @@ fun HomeScreen(
                 contents = myGroupCoverItemList.value as List<CoverSong>,
                 sideButtonAction = {
                     if (myGroupCoverItemList.value.isNotEmpty()) {
-                        contentStoreViewModel.updateMyGroupCoverItemList(
-                            myGroupCoverItemList.value
-                        )
+//                        contentStoreViewModel.updateMyGroupCoverItemList(
+//                            myGroupCoverItemList.value
+//                        )
                         navController.navigate(HomeContent.DetailMyGroupCoverItem.route)
                     }
                 },
@@ -159,7 +225,20 @@ fun HomeScreen(
                     UserCoverSongItem(
                         content = item,
                         onClick = {
+                            val exoPlayer = contentPlayerViewModel.getPlayer()
+                            if(exoPlayer == null){
+                                val newPlayer = ExoPlayer.Builder(context).build().apply {
+                                    setMediaItem(getMediaItem(context, "rose_eleven", "raw"))
+                                    playWhenReady = true
+                                    prepare()
+                                    volume = 1f
+                                }
+                                contentPlayerViewModel.setPlayer(newPlayer)
+                            }else{
+                                exoPlayer.replaceMediaItem(0, getMediaItem(context, "rose_eleven", "raw"))
+                            }
                             contentPlayerViewModel.playMusic(item)
+//                            contentPlayerViewModel.showPlayer()
                         }
                     )
                 },
@@ -173,7 +252,7 @@ fun HomeScreen(
                 contents = othersItemList.value as List<Singer>,
                 sideButtonAction = {
                     if (othersItemList.value.isNotEmpty()) {
-                        contentStoreViewModel.updateOthersItemList(othersItemList.value)
+//                        contentStoreViewModel.updateOthersItemList(othersItemList.value)
                         navController.navigate(HomeContent.DetailStarList.route)
                     }
                 },

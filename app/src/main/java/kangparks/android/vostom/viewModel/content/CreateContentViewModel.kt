@@ -1,5 +1,6 @@
 package kangparks.android.vostom.viewModel.content
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,7 +12,7 @@ class CreateContentViewModel : ViewModel() {
     private val _songItem = MutableLiveData<YoutubePlayItem?>(null)
     private val coroutineScope = CoroutineScope(viewModelScope.coroutineContext)
 
-    val songItem : MutableLiveData<YoutubePlayItem?> = _songItem
+    val songItem : LiveData<YoutubePlayItem?> = _songItem
     fun setSongItem(item : YoutubePlayItem?){
         _songItem.value = item
     }

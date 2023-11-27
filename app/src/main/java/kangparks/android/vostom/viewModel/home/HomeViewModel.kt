@@ -31,9 +31,9 @@ class HomeViewModel(token : String) : ViewModel() {
 //            _othersItemList.postValue(getStarList(accessToken))
             delay(1000)
             _myCoverItemList.postValue(dummyMyCoverItemList)
-            delay(1000)
+            delay(500)
             _myGroupCoverItemList.postValue(dummyMyGroupCoverItemList)
-            delay(1000)
+            delay(500)
             _othersItemList.postValue(dummyOthersItemList)
         }
     }

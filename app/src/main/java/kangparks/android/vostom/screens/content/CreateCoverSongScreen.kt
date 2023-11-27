@@ -2,6 +2,7 @@ package kangparks.android.vostom.screens.content
 
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +41,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kangparks.android.vostom.components.appbar.ContentAppBar
 import kangparks.android.vostom.components.blur.BlurForList
 import kangparks.android.vostom.components.button.RoundedButton
@@ -74,6 +77,16 @@ fun CreateCoverSongScreen(
     val context = LocalContext.current
     val searchContent = remember{ mutableStateOf("") }
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    val isDarkTheme = isSystemInDarkTheme()
+    val systemUiController = rememberSystemUiController()
+
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            color = Color.Transparent,
+            darkIcons = !isDarkTheme
+        )
+    }
 
     Box(
         modifier = Modifier
@@ -183,7 +196,7 @@ fun CreateCoverSongScreen(
             contentAlignment = Alignment.BottomCenter
         ){
             RoundedButton(
-                text = "선택한 영상으로 AI 커버곡 생성하가",
+                text = "선택한 영상으로 AI 커버곡 생성하기",
                 onClick = {
                     if(songItem.value == null){
                         Toast.makeText(context, "선택된 노래가 없습니다.", Toast.LENGTH_SHORT).show()
