@@ -33,7 +33,6 @@ import kangparks.android.vostom.components.button.IconAndTextButton
 fun ContentAppBar(
     backButtonAction: () -> Unit = {},
     backButtonContent: String? = null,
-//    sideButtonAction: () -> Unit = {},
     sideButtonContent: @Composable() (() -> Unit?)? = null,
     contentTitle: String? = null,
     contentTitleImage: Int? = null,
@@ -68,7 +67,6 @@ fun ContentAppBar(
                         text = contentTitle,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-//                        modifier = Modifier.weight(1f)
                     )
                 }
                 if (contentTitleImage != null) {
@@ -84,7 +82,6 @@ fun ContentAppBar(
 
             if (sideButtonContent != null) {
                 sideButtonContent()
-
             }
         }
     }

@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,6 +42,7 @@ import coil.compose.AsyncImage
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.exoplayer2.ExoPlayer
 import kangparks.android.vostom.components.appbar.ContentAppBar
+import kangparks.android.vostom.components.dropdown.DropDownIconButton
 import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
 import kangparks.android.vostom.utils.media.getMediaItem
 import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
@@ -57,6 +59,10 @@ fun GroupScreen(
     val currentGroupItemList = currentGroupViewModel.currentGroupCoverItemList.observeAsState(initial = null)
 
     val isParticipant = remember {
+        mutableStateOf(false)
+    }
+
+    val isDropDownOpen = remember {
         mutableStateOf(false)
     }
 
@@ -106,19 +112,60 @@ fun GroupScreen(
                 sideButtonContent = {
                     when(isParticipant.value){
                         true -> {
-                            Text(
-                                text = "테스트",
-                                textAlign = TextAlign.End,
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(10.dp))
-                                    .clickable {
-                                        isParticipant.value = !isParticipant.value
-                                    }
-                                    .padding(5.dp)
+                            DropDownIconButton(
+                                dropDownState = isDropDownOpen.value,
+                                dropDownContent = {
+                                    DropdownMenuItem(
+                                        text = {
+                                            Text(
+                                                text = "커버곡 추가",
+                                                fontWeight = FontWeight.Bold,
+                                                textAlign = TextAlign.Center
+                                            )
+                                        },
+                                        onClick = {
+                                            isDropDownOpen.value = false
+                                        },
+                                    )
+                                    DropdownMenuItem(
+                                        text = {
+                                            Text(
+                                                text = "커버곡 삭제",
+                                                fontWeight = FontWeight.Bold,
+                                                textAlign = TextAlign.Center
+                                            )
+                                        },
+                                        onClick = {
+                                            isDropDownOpen.value = false
+                                        },
+                                    )
+                                    DropdownMenuItem(
+                                        text = {
+                                            Text(
+                                                text = "그룹 설정",
+                                                fontWeight = FontWeight.Bold,
+                                                textAlign = TextAlign.Center
+                                            )
+                                        },
+                                        onClick = {
+                                            isDropDownOpen.value = false
+                                        },
+                                    )
+                                    DropdownMenuItem(
+                                        text = {
+                                            Text(
+                                                text = "그룹 나가기",
+                                                fontWeight = FontWeight.Bold,
+                                                textAlign = TextAlign.Center
+                                            )
+                                        },
+                                        onClick = {
+                                            isDropDownOpen.value = false
+                                        },
+                                    )
+                                }
                             )
+
                         }
                         false -> {
                             Text(
