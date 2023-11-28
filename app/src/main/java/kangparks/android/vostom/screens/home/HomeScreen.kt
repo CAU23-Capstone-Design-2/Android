@@ -72,11 +72,12 @@ fun HomeScreen(
     starContentViewModel: StarContentViewModel,
     contentPlayerViewModel : ContentPlayerViewModel
 ) {
+    val testBuildString = remember { mutableStateOf("빌드 11-28-10-00") }
+
     val myCoverItemList = homeViewModel.myCoverItemList.observeAsState(initial = listOf())
     val myGroupCoverItemList = homeViewModel.myGroupCoverItemList.observeAsState(initial = listOf())
     val othersItemList = homeViewModel.othersItemList.observeAsState(initial = listOf())
     val isPlaying = contentPlayerViewModel.isPlaying.observeAsState(initial = false)
-    val isShowPlayer = contentPlayerViewModel.isShowPlayer.observeAsState(initial = false)
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -84,18 +85,6 @@ fun HomeScreen(
     val systemUiController = rememberSystemUiController()
     val scrollState = rememberScrollState()
     val doubleBackToExitPressedOnce = remember { mutableStateOf(false) }
-
-    SideEffect {
-        systemUiController.setSystemBarsColor(
-            color = Color.Transparent,
-            darkIcons = !isDarkTheme
-        )
-    }
-//
-//    systemUiController.setSystemBarsColor(
-//        color = Color.Transparent,
-//        darkIcons = !isDarkTheme
-//    )
 
     LaunchedEffect(key1 = myCoverItemList.value){
         contentStoreViewModel.updateMyCoverItemList(myCoverItemList.value)
@@ -109,13 +98,16 @@ fun HomeScreen(
         contentStoreViewModel.updateOthersItemList(othersItemList.value)
     }
 
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            color = Color.Transparent,
+            darkIcons = !isDarkTheme
+        )
+    }
+
     BackHandler(enabled = true) {
         if(contentPlayerViewModel.isShowPlayer.value == true){
             contentPlayerViewModel.hidePlayer()
-//            systemUiController.setSystemBarsColor(
-//                color = Color.Transparent,
-//                darkIcons = !isDarkTheme
-//            )
             systemUiController.setSystemBarsColor(
                 color = Color.Transparent,
                 darkIcons = !isDarkTheme
@@ -142,7 +134,7 @@ fun HomeScreen(
         isPlaying = isPlaying
     ){
         Text(
-            text = "(빌드 11-27-18-20)",
+            text = testBuildString.value,
             fontSize = 10.sp,
             modifier = Modifier
                 .windowInsetsPadding(WindowInsets.statusBars)
@@ -180,7 +172,6 @@ fun HomeScreen(
                 contents = myCoverItemList.value as List<CoverSong>,
                 sideButtonAction = {
                     if (myCoverItemList.value.isNotEmpty()) {
-//                        contentStoreViewModel.updateMyCoverItemList(myCoverItemList.value)
                         navController.navigate(HomeContent.DetailMyCoverItem.route)
                     }
                 },
@@ -201,7 +192,6 @@ fun HomeScreen(
                                 exoPlayer.replaceMediaItem(0, getMediaItem(context, "iu_all_your_moments", "raw"))
                             }
                             contentPlayerViewModel.playMusic(item)
-//                            contentPlayerViewModel.showPlayer()
                         }
                     )
                 },
@@ -215,9 +205,6 @@ fun HomeScreen(
                 contents = myGroupCoverItemList.value as List<CoverSong>,
                 sideButtonAction = {
                     if (myGroupCoverItemList.value.isNotEmpty()) {
-//                        contentStoreViewModel.updateMyGroupCoverItemList(
-//                            myGroupCoverItemList.value
-//                        )
                         navController.navigate(HomeContent.DetailMyGroupCoverItem.route)
                     }
                 },
@@ -238,7 +225,6 @@ fun HomeScreen(
                                 exoPlayer.replaceMediaItem(0, getMediaItem(context, "rose_eleven", "raw"))
                             }
                             contentPlayerViewModel.playMusic(item)
-//                            contentPlayerViewModel.showPlayer()
                         }
                     )
                 },
@@ -252,7 +238,6 @@ fun HomeScreen(
                 contents = othersItemList.value as List<Singer>,
                 sideButtonAction = {
                     if (othersItemList.value.isNotEmpty()) {
-//                        contentStoreViewModel.updateOthersItemList(othersItemList.value)
                         navController.navigate(HomeContent.DetailStarList.route)
                     }
                 },
@@ -276,33 +261,4 @@ fun HomeScreen(
             Spacer(modifier = Modifier.padding(vertical = if(isPlaying.value) 50.dp else 15.dp))
         }
     }
-
-//    Scaffold(
-////        contentWindowInsets =
-//    ) {
-//        Surface(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .navigationBarsPadding()
-//                .padding(bottom = 40.dp),
-//            color = MaterialTheme.colorScheme.background
-//        ) {
-//            Box {
-//
-//                AnimatedVisibility(
-//                    visible = isPlaying.value,
-//                    enter = fadeIn(),
-//                    exit = fadeOut()
-//                ) {
-//                    BottomContentPlayer(
-//                        contentPlayerViewModel = contentPlayerViewModel,
-//                        bottomPaddingValue = 30
-//                    )
-//                }
-//            }
-//
-//
-//        }
-//    }
-
 }

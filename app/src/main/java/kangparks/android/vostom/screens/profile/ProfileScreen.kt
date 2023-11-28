@@ -2,45 +2,102 @@ package kangparks.android.vostom.screens.profile
 
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.android.exoplayer2.ExoPlayer
+import drawVerticalScrollbar
 import kangparks.android.vostom.components.appbar.ContentAppBar
+import kangparks.android.vostom.components.button.RoundedButton
+import kangparks.android.vostom.components.item.CoverSongItem
+import kangparks.android.vostom.components.item.UserCoverSongItem
+import kangparks.android.vostom.components.section.HorizontalSongSection
+import kangparks.android.vostom.components.skeleton.CoverSongItemSkeleton
 import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
+import kangparks.android.vostom.models.content.CoverSong
 import kangparks.android.vostom.navigations.HomeContent
+import kangparks.android.vostom.utils.media.getMediaItem
+import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
+import kangparks.android.vostom.viewModel.profile.ProfileViewModel
+import kangparks.android.vostom.viewModel.profile.ProfileViewModelFactory
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ProfileScreen(
     navController: NavHostController,
-    contentPlayerViewModel : ContentPlayerViewModel
+    contentPlayerViewModel : ContentPlayerViewModel,
+    contentStoreViewModel : ContentStoreViewModel,
+    token : String,
+    userImgUrl : String,
+    userName : String,
+    likedCoverItemList : List<CoverSong>
 ) {
+    val profileViewModel : ProfileViewModel= viewModel(factory = ProfileViewModelFactory(
+        token = token,
+        userImgUrl = userImgUrl,
+        userName = userName,
+        likedCoverItemList = likedCoverItemList
+    ))
+
+    val myCoverItemList = contentStoreViewModel.myCoverItemList.observeAsState(initial = listOf())
+    val _userName = profileViewModel.userName.observeAsState(initial = "")
+    val _userImgUrl = profileViewModel.userImgUrl.observeAsState(initial = "")
+    val _myGroupCoverItemList = profileViewModel.likedCoverItemList.observeAsState(initial = listOf())
 
     val isPlaying = contentPlayerViewModel.isPlaying.observeAsState(initial = false)
 
     val isDarkTheme = isSystemInDarkTheme()
     val systemUiController = rememberSystemUiController()
+    val context = LocalContext.current
+    val scrollState = rememberScrollState()
+
+    LaunchedEffect(key1 = _userName.value){
+        contentStoreViewModel.updateUserName(_userName.value)
+    }
+
+    LaunchedEffect(key1 = _userImgUrl.value){
+        contentStoreViewModel.updateUserImgUrl(_userImgUrl.value)
+    }
+
+    LaunchedEffect(key1 = _myGroupCoverItemList.value){
+        contentStoreViewModel.updateLikeItemList(_myGroupCoverItemList.value)
+    }
 
     SideEffect {
         systemUiController.setSystemBarsColor(
@@ -73,9 +130,10 @@ fun ProfileScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .windowInsetsPadding(WindowInsets.statusBars)
-                .padding(horizontal = 20.dp)
-                .padding(bottom = 48.dp)
-        ) {
+                .padding(bottom = 20.dp)
+                .drawVerticalScrollbar(scrollState)
+                .verticalScroll(scrollState),
+        )  {
             ContentAppBar(
                 sideButtonContent = {
                     Text(
@@ -93,7 +151,156 @@ fun ProfileScreen(
                     )
                 },
                 contentTitle = "프로필",
+                containerModifier = Modifier.padding(horizontal = 20.dp)
             )
+//            Text(text = "dsfsdfsdfds")
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        horizontal = 20.dp,
+                        vertical = 10.dp
+                    )
+            ){
+                AsyncImage(
+                    model = _userImgUrl.value,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(100.dp)
+                        .clip(CircleShape)
+                        .background(Color(0xFF8B62FF))
+                )
+                Spacer(modifier = Modifier.width(20.dp))
+                Column {
+                    Text(
+                        text = _userName.value,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(
+                        text = "생성한 AI 커버 곡 :",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(10.dp))
+            RoundedButton(
+                modifier = Modifier.padding(horizontal = 20.dp),
+                text = "요청 중인 커버 곡 보기",
+                onClick = {
+                    navController.navigate(HomeContent.RequestCoverSongList.route)
+                }
+            )
+            Spacer(modifier = Modifier.height(30.dp))
+            HorizontalSongSection(
+                title = "나의 커버곡",
+                contents = myCoverItemList.value as List<CoverSong>,
+                sideButtonAction = {
+                    if (myCoverItemList.value.isNotEmpty()) {
+                        navController.navigate(HomeContent.DetailMyCoverItem.route)
+                    }
+                },
+                renderItem = { item: CoverSong ->
+                    CoverSongItem(
+                        content = item,
+                        onClick = {
+                            val exoPlayer = contentPlayerViewModel.getPlayer()
+                            if(exoPlayer == null){
+                                val newPlayer = ExoPlayer.Builder(context).build().apply {
+                                    setMediaItem(getMediaItem(context, "iu_all_your_moments", "raw"))
+                                    playWhenReady = true
+                                    prepare()
+                                    volume = 1f
+                                }
+                                contentPlayerViewModel.setPlayer(newPlayer)
+                            }else{
+                                exoPlayer.replaceMediaItem(0, getMediaItem(context, "iu_all_your_moments", "raw"))
+                            }
+                            contentPlayerViewModel.playMusic(item)
+                        }
+                    )
+                },
+                skeletonItem = {
+                    CoverSongItemSkeleton()
+                }
+            )
+            Spacer(modifier = Modifier.padding(vertical = 15.dp))
+            HorizontalSongSection(
+                title = "좋아요 한 커버곡",
+                contents = _myGroupCoverItemList.value as List<CoverSong>,
+                sideButtonAction = {
+                    if (_myGroupCoverItemList.value.isNotEmpty()) {
+                        navController.navigate(HomeContent.DetailLikeCoverItem.route)
+                    }
+                },
+                renderItem = { item: CoverSong ->
+                    UserCoverSongItem(
+                        content = item,
+                        onClick = {
+                            val exoPlayer = contentPlayerViewModel.getPlayer()
+                            if(exoPlayer == null){
+                                val newPlayer = ExoPlayer.Builder(context).build().apply {
+                                    setMediaItem(getMediaItem(context, "rose_eleven", "raw"))
+                                    playWhenReady = true
+                                    prepare()
+                                    volume = 1f
+                                }
+                                contentPlayerViewModel.setPlayer(newPlayer)
+                            }else{
+                                exoPlayer.replaceMediaItem(0, getMediaItem(context, "rose_eleven", "raw"))
+                            }
+                            contentPlayerViewModel.playMusic(item)
+                        }
+                    )
+                },
+                skeletonItem = {
+                    CoverSongItemSkeleton(true)
+                }
+            )
+            Spacer(modifier = Modifier.padding(vertical = 20.dp))
+            Column(
+                modifier = Modifier.padding(horizontal = 10.dp)
+            ){
+                TextButton(
+                    onClick = { /*TODO*/ },
+                    modifier = Modifier.padding(bottom = 0.dp)
+                ) {
+                    Text(
+                        text = "목소리 다시 학습하기",
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
+                TextButton(
+                    onClick = { /*TODO*/ },
+                    modifier = Modifier.padding(bottom = 0.dp)
+                ) {
+                    Text(
+                        text = "로그아웃",
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
+
+                TextButton(
+                    onClick = { /*TODO*/ },
+                    modifier = Modifier.padding(bottom = 0.dp)
+                ) {
+                    Text(
+                        text = "탈퇴하기",
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.padding(vertical = if(isPlaying.value) 48.dp else 10.dp))
         }
     }
 }
