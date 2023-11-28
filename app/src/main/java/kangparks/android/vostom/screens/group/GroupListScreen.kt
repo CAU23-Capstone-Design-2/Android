@@ -2,6 +2,7 @@ package kangparks.android.vostom.screens.group
 
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -14,6 +15,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -44,6 +47,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kangparks.android.vostom.components.appbar.ContentAppBar
+import kangparks.android.vostom.components.skeleton.CoverSongItemSkeleton
 import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
 import kangparks.android.vostom.navigations.HomeContent
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
@@ -81,14 +85,6 @@ fun GroupListScreen(
     LaunchedEffect(key1 = null){
         contentStoreViewModel.initGroupContent()
     }
-
-//    LaunchedEffect(key1 = allGroupList.value){
-//        contentStoreViewModel.updateAllGroupList(allGroupList.value)
-//    }
-//
-//    LaunchedEffect(key1 = myGroupList.value){
-//        contentStoreViewModel.updateMyGroupList(myGroupList.value)
-//    }
 
     LaunchedEffect(key1 = selectedTabIndex.value){
         pagerState.animateScrollToPage(selectedTabIndex.value)
@@ -193,24 +189,61 @@ fun GroupListScreen(
                 ) {
                     Column {
                         if (idx == 0){
-                            AllGroupListTabScreen(
-                                navController = navController,
-                                isPlaying = isPlaying,
-                                allGroupList = allGroupList.value,
-                                currentGroupViewModel = currentGroupViewModel,
-                                screenWidth = screenWidth
-                            )
+                            Crossfade(targetState = allGroupList.value, label = "") {
+                                when(it.isEmpty()){
+                                    true -> {
+                                        LazyVerticalGrid(
+                                            columns = GridCells.Fixed(2),
+                                            contentPadding = PaddingValues(
+                                                bottom = if(isPlaying.value) 90.dp else 48.dp
+                                            )
+                                        ){
+                                            items(6){
+                                                CoverSongItemSkeleton()
+                                            }
+                                        }
+                                    }
+                                    false -> {
+                                        AllGroupListTabScreen(
+                                            navController = navController,
+                                            isPlaying = isPlaying,
+                                            allGroupList = allGroupList.value,
+                                            currentGroupViewModel = currentGroupViewModel,
+                                            screenWidth = screenWidth
+                                        )
+                                    }
+                                }
+                            }
+
                         }else if(idx == 1){
-                            MyGroupListTabScreen(
-                                navController = navController,
-                                isPlaying = isPlaying,
-                                myGroupList = myGroupList.value,
-                                currentGroupViewModel = currentGroupViewModel,
-                                screenWidth = screenWidth
-                            )
+                            Crossfade(targetState = myGroupList.value, label = "") {
+                                when(it.isEmpty()){
+                                    true -> {
+                                        LazyVerticalGrid(
+                                            columns = GridCells.Fixed(2),
+                                            contentPadding = PaddingValues(
+                                                bottom = if(isPlaying.value) 90.dp else 48.dp
+                                            )
+                                        ){
+                                            items(6){
+                                                CoverSongItemSkeleton()
+                                            }
+                                        }
+                                    }
+                                    false -> {
+                                        MyGroupListTabScreen(
+                                            navController = navController,
+                                            isPlaying = isPlaying,
+                                            myGroupList = myGroupList.value,
+                                            currentGroupViewModel = currentGroupViewModel,
+                                            screenWidth = screenWidth
+                                        )
+                                    }
+                                }
+                            }
+
                         }
                     }
-
                 }
             }
         }

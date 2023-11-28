@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -22,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -34,6 +37,7 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kangparks.android.vostom.components.appbar.ContentAppBar
+import kangparks.android.vostom.components.button.RoundedButton
 import kangparks.android.vostom.components.searchbar.SearchBar
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 
@@ -109,6 +113,24 @@ fun EditProfileScreen(
                 placeholder = "닉네임을 입력해주세요",
                 onSearch = {},
                 imeActions = ImeAction.Done,
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .padding(
+                    bottom = 58.dp,
+                ),
+            contentAlignment = Alignment.BottomCenter
+        ){
+            RoundedButton(
+                text = "프로필 수정하기",
+                onClick = {
+
+                }
+
             )
         }
     }
