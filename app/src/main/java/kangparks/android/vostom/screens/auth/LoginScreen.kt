@@ -127,14 +127,14 @@ fun LoginScreen(navHostController: NavHostController){
                         onClick = {
                             // 임시
                             exoPlayer.release()
-                            navHostController.navigate(route = Nav.CONTENT){
-                                navHostController.popBackStack()
-                            }
-//                            withKakaoLogin(
-//                                appKey = kakaoAppKey,
-//                                context = context,
-//                                navHostController = navHostController
-//                            )
+//                            navHostController.navigate(route = Nav.CONTENT){
+//                                navHostController.popBackStack()
+//                            }
+                            withKakaoLogin(
+                                appKey = kakaoAppKey,
+                                context = context,
+                                navHostController = navHostController
+                            )
                         }
                     )
                 }

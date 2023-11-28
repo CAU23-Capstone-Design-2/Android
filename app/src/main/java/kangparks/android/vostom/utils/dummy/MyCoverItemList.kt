@@ -9,7 +9,7 @@ var dummyMyCoverItemList = listOf<CoverSong>(
         singer = "뉴진스",
         user = "나",
         albumArtUri = "https://images.genius.com/0cc17757cbe6c7934352f1d2ce021a34.1000x1000x1.jpg",
-        userImgUri = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+        userImgUri = "https://avatars.githubusercontent.com/u/29995267?s=70&v=4"
     ),
     CoverSong(
         id =2,
@@ -17,7 +17,7 @@ var dummyMyCoverItemList = listOf<CoverSong>(
         singer = "데이식스",
         user = "나",
         albumArtUri = "https://image.bugsm.co.kr/album/images/500/202657/20265759.jpg",
-        userImgUri = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+        userImgUri = "https://avatars.githubusercontent.com/u/29995267?s=70&v=4"
     ),
     CoverSong(
         id =3,
@@ -25,7 +25,7 @@ var dummyMyCoverItemList = listOf<CoverSong>(
         singer = "볼빨간 사춘가",
         user = "나",
         albumArtUri = "https://image.bugsm.co.kr/album/images/500/201687/20168753.jpg",
-        userImgUri = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+        userImgUri = "https://avatars.githubusercontent.com/u/29995267?s=70&v=4"
     ),
     CoverSong(
         id =4,
@@ -33,7 +33,7 @@ var dummyMyCoverItemList = listOf<CoverSong>(
         singer = "소녀시대",
         user = "나",
         albumArtUri = "https://image.bugsm.co.kr/album/images/500/1745/174521.jpg",
-        userImgUri = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+        userImgUri = "https://avatars.githubusercontent.com/u/29995267?s=70&v=4"
     ),
     CoverSong(
         id =5,
@@ -41,6 +41,6 @@ var dummyMyCoverItemList = listOf<CoverSong>(
         singer = "비투비",
         user = "니",
         albumArtUri = "https://image.bugsm.co.kr/album/images/500/201722/20172261.jpg",
-        userImgUri = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+        userImgUri = "https://avatars.githubusercontent.com/u/29995267?s=70&v=4"
     )
 )

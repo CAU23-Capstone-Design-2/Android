@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import kangparks.android.vostom.R
 import kangparks.android.vostom.screens.content.CreateCoverSongScreen
+import kangparks.android.vostom.screens.content.DetailLikeCoverItemScreen
 import kangparks.android.vostom.screens.content.DetailMyCoverItemScreen
 import kangparks.android.vostom.screens.content.DetailMyGroupCoverItemScreen
 import kangparks.android.vostom.screens.content.DetailStarCoverItemScreen
@@ -43,6 +44,7 @@ sealed class HomeContent(val route: String) {
     object DetailMyGroupCoverItem : HomeContent(route = "detail_my_group_cover_item")
     object DetailStarList : HomeContent(route = "detail_star_list")
     object DetailStarCoverItem : HomeContent(route = "detail_star_cover_item")
+    object DetailLikeCoverItem : HomeContent(route = "detail_like_cover_item")
     object Group : HomeContent(route = "group")
     object AddCoverToGroup : HomeContent(route = "add_cover_to_group")
     object RemoveCoverFromGroup : HomeContent(route = "remove_cover_from_group")
@@ -119,7 +121,12 @@ fun NavGraphBuilder.homeContentNavigation(
         composable(HomeContent.Profile.route) {
             ProfileScreen(
                 navController = navController,
-                contentPlayerViewModel = contentPlayerViewModel
+                contentPlayerViewModel = contentPlayerViewModel,
+                contentStoreViewModel = contentStoreViewModel,
+                token = accessToken,
+                userImgUrl = contentStoreViewModel.userImgUrl.value!!,
+                userName = contentStoreViewModel.userName.value!!,
+                likedCoverItemList = contentStoreViewModel.likeItemList.value!!
             )
         }
         composable(HomeContent.BuildGroup.route) { BuildGroupScreen(navController = navController) }
@@ -130,7 +137,12 @@ fun NavGraphBuilder.homeContentNavigation(
 //                createContentViewModel = createContentViewModel
             )
         }
-        composable(HomeContent.RequestCoverSongList.route){RequestCoverSongListScreen(navController = navController)}
+        composable(HomeContent.RequestCoverSongList.route){
+            RequestCoverSongListScreen(
+                token = accessToken,
+                navController = navController
+            )
+        }
         composable(HomeContent.DetailMyCoverItem.route){
             DetailMyCoverItemScreen(
                 navController = navController,
@@ -158,6 +170,13 @@ fun NavGraphBuilder.homeContentNavigation(
             DetailStarCoverItemScreen(
                 navController = navController,
                 startContentViewModel = startContentViewModel,
+                contentPlayerViewModel = contentPlayerViewModel
+            )
+        }
+        composable(HomeContent.DetailLikeCoverItem.route){
+            DetailLikeCoverItemScreen(
+                navController = navController,
+                contentStoreViewModel = contentStoreViewModel,
                 contentPlayerViewModel = contentPlayerViewModel
             )
         }
