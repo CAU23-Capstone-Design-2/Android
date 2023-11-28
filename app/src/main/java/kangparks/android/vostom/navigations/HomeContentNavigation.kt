@@ -1,8 +1,5 @@
 package kangparks.android.vostom.navigations
 
-import android.content.Context
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -21,16 +18,12 @@ import kangparks.android.vostom.screens.group.GroupListScreen
 import kangparks.android.vostom.screens.group.GroupScreen
 import kangparks.android.vostom.screens.group.RemoveCoverFromGroupScreen
 import kangparks.android.vostom.screens.home.HomeScreen
+import kangparks.android.vostom.screens.profile.EditProfileScreen
 import kangparks.android.vostom.screens.profile.ProfileScreen
 import kangparks.android.vostom.screens.profile.RequestCoverSongListScreen
-import kangparks.android.vostom.utils.store.getAccessToken
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
-import kangparks.android.vostom.viewModel.content.CreateContentViewModel
 import kangparks.android.vostom.viewModel.content.StarContentViewModel
 import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
-import kangparks.android.vostom.viewModel.group.GroupListStoreViewModel
-import kangparks.android.vostom.viewModel.group.GroupListViewModel
-import kangparks.android.vostom.viewModel.home.HomeViewModelFactory
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
 sealed class HomeContent(val route: String) {
@@ -49,6 +42,7 @@ sealed class HomeContent(val route: String) {
     object AddCoverToGroup : HomeContent(route = "add_cover_to_group")
     object RemoveCoverFromGroup : HomeContent(route = "remove_cover_from_group")
     object EditGroup : HomeContent(route = "edit_group")
+    object EditProfile : HomeContent(route = "edit_profile")
 }
 
 sealed class BottomBarContent(
@@ -81,20 +75,12 @@ sealed class BottomBarContent(
 fun NavGraphBuilder.homeContentNavigation(
     navController: NavHostController,
     contentPlayerViewModel: ContentPlayerViewModel,
+    contentStoreViewModel: ContentStoreViewModel,
     currentGroupViewModel: CurrentGroupViewModel,
-    context: Context
 ) {
-//    val accessToken = getAccessToken(context)
-1
+
     val accessToken = "access_token"
-    val contentStoreViewModel = ContentStoreViewModel()
     val startContentViewModel = StarContentViewModel()
-    val groupListStoreViewModel = GroupListStoreViewModel()
-
-
-//    val contentPlayerViewModel : ContentPlayerViewModel = viewModel()
-
-//    val createContentViewModel = CreateContentViewModel()
 
     navigation(
         route = Nav.HOME_CONTENT,
@@ -112,9 +98,8 @@ fun NavGraphBuilder.homeContentNavigation(
         composable(HomeContent.GroupList.route) {
             GroupListScreen(
                 navController = navController,
-                token = accessToken,
                 contentPlayerViewModel = contentPlayerViewModel,
-//                groupListStoreViewModel = groupListStoreViewModel,
+                contentStoreViewModel = contentStoreViewModel,
                 currentGroupViewModel = currentGroupViewModel,
             )
         }
@@ -123,13 +108,11 @@ fun NavGraphBuilder.homeContentNavigation(
                 navController = navController,
                 contentPlayerViewModel = contentPlayerViewModel,
                 contentStoreViewModel = contentStoreViewModel,
-                token = accessToken,
-                userImgUrl = contentStoreViewModel.userImgUrl.value!!,
-                userName = contentStoreViewModel.userName.value!!,
-                likedCoverItemList = contentStoreViewModel.likeItemList.value!!
             )
         }
-        composable(HomeContent.BuildGroup.route) { BuildGroupScreen(navController = navController) }
+        composable(HomeContent.BuildGroup.route) {
+            BuildGroupScreen(navController = navController)
+        }
         composable(HomeContent.CreateCoverSong.route) {
             CreateCoverSongScreen(
                 navController = navController,
@@ -203,6 +186,14 @@ fun NavGraphBuilder.homeContentNavigation(
         }
         composable(HomeContent.EditGroup.route){
             EditGroupScreen(navController = navController)
+        }
+
+        composable(HomeContent.EditProfile.route){
+            EditProfileScreen(
+                navController = navController,
+                userName = contentStoreViewModel.userName.value!!,
+                userImgUrl = contentStoreViewModel.userImgUrl.value!!,
+            )
         }
     }
 }

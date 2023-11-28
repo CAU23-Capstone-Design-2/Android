@@ -90,6 +90,9 @@ dependencies {
     // accompanist - status bar
     implementation("com.google.accompanist:accompanist-systemuicontroller:0.28.0")
 
+    // accompanist - indicate
+//    implementation("com.google.accompanist:accompanist-pager-indicators:0.28.0")
+
     // android Navigation dependencies
     val nav_version = "2.5.3"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version") // Kotlin

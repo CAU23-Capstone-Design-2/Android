@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import kangparks.android.vostom.screens.error.ErrorScreen
+import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
@@ -16,8 +17,8 @@ sealed class Content(val route: String) {
 fun NavGraphBuilder.contentNavigation(
     navController: NavHostController,
     contentPlayerViewModel: ContentPlayerViewModel,
+    contentStoreViewModel : ContentStoreViewModel,
     currentGroupViewModel: CurrentGroupViewModel,
-    context: Context
 ) {
     // TODO("로그인 검증 후 사용자 학습 유무 확인 하기")
     val isLearnUserVoice = true
@@ -32,8 +33,8 @@ fun NavGraphBuilder.contentNavigation(
         homeContentNavigation(
             navController = navController,
             contentPlayerViewModel = contentPlayerViewModel,
+            contentStoreViewModel = contentStoreViewModel,
             currentGroupViewModel = currentGroupViewModel,
-            context = context
         )
         composable(route = Content.Error.route) {
             ErrorScreen(navController = navController)

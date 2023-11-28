@@ -2,11 +2,12 @@ package kangparks.android.vostom.viewModel.content
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import kangparks.android.vostom.models.content.Singer
 import kangparks.android.vostom.models.content.Song
 import kangparks.android.vostom.utils.dummy.othersContentItemList
 
-class StarContentViewModel {
+class StarContentViewModel : ViewModel(){
     private val _currentSinger : MutableLiveData<Singer> = MutableLiveData(Singer())
     private val _currentSingerContent : MutableLiveData<List<Song>> = MutableLiveData(listOf())
 

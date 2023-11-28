@@ -10,6 +10,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import kangparks.android.vostom.screens.player.ContentPlayerScreen
+import kangparks.android.vostom.utils.store.getAccessToken
+import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
+import kangparks.android.vostom.viewModel.content.ContentStoreViewModelFactory
 import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
@@ -25,24 +28,30 @@ object Nav {
 @Composable
 fun VostomApp() {
     val navController = rememberNavController()
+//    val accessToken = getAccessToken(LocalContext.current)
 
     Scaffold(
 //        bottomBar = { BottomNavigationBar(navController = navController) }
     ){
-        RootNavigation(navController = navController)
+        RootNavigation(
+            navController = navController,
+//            token = accessToken
+        )
     }
 
 }
 
 @Composable
 fun RootNavigation(
-    navController: NavHostController = rememberNavController(),
+    navController: NavHostController,
+    token: String? = null
 ){
     val contentPlayerViewModel : ContentPlayerViewModel = viewModel()
     val currentGroupViewModel : CurrentGroupViewModel = viewModel()
 
-    val context = LocalContext.current
-//    val token = getAccessToken(context) // 저장된 토큰 불러오기
+    val contentStoreViewModel : ContentStoreViewModel = viewModel(
+        factory = ContentStoreViewModelFactory(LocalContext.current)
+    )
 
     val curNav = if(false) Nav.AUTH else Nav.CONTENT
 
@@ -51,8 +60,8 @@ fun RootNavigation(
         contentNavigation(
             navController = navController,
             contentPlayerViewModel = contentPlayerViewModel,
+            contentStoreViewModel = contentStoreViewModel,
             currentGroupViewModel = currentGroupViewModel,
-            context = context
         )
     }
     ContentPlayerScreen(
