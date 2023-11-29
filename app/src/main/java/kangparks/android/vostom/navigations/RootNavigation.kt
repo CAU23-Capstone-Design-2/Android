@@ -28,14 +28,14 @@ object Nav {
 @Composable
 fun VostomApp() {
     val navController = rememberNavController()
-//    val accessToken = getAccessToken(LocalContext.current)
+    val accessToken = getAccessToken(LocalContext.current)
 
     Scaffold(
 //        bottomBar = { BottomNavigationBar(navController = navController) }
     ){
         RootNavigation(
             navController = navController,
-//            token = accessToken
+            token = accessToken
         )
     }
 
@@ -44,7 +44,7 @@ fun VostomApp() {
 @Composable
 fun RootNavigation(
     navController: NavHostController,
-    token: String? = null
+    token: String?
 ){
     val contentPlayerViewModel : ContentPlayerViewModel = viewModel()
     val currentGroupViewModel : CurrentGroupViewModel = viewModel()
@@ -53,7 +53,7 @@ fun RootNavigation(
         factory = ContentStoreViewModelFactory(LocalContext.current)
     )
 
-    val curNav = if(true) Nav.AUTH else Nav.CONTENT
+    val curNav = if(token == null) Nav.AUTH else Nav.CONTENT
 
     NavHost(navController = navController, startDestination = curNav){
         authNavigation(navController = navController)

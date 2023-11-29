@@ -12,5 +12,5 @@ interface UserService {
     @POST("/api/auth/login")
     suspend fun login(
         @Header("accessToken") accessToken: String
-    ) : Response<Any>
+    ) : Response<TokenResponse>
 }

@@ -128,12 +128,12 @@ fun LoginScreen(navHostController: NavHostController){
                     RoundedButton(
                         text = "Vostom 시작하기",
                         onClick = {
-                            // 임시
-                            exoPlayer.release()
                             withKakaoLogin(
                                 appKey = kakaoAppKey,
                                 context = applicationContext,
-                                navHostController = navHostController
+                                navController = navHostController,
+                                coroutineScope = coroutineScope,
+                                exoPlayer = exoPlayer
                             )
                         }
                     )

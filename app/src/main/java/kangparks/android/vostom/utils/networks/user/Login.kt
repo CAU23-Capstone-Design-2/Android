@@ -15,50 +15,46 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import retrofit2.Response
 
+data class KakaoLoginResponse(
+    val isSuccess : Boolean,
+    val token: String?,
+    val errorCode : Int?,
+    val errorMessage : String?
+)
+
 suspend fun login(
     accessToken: String,
-    context : Context,
-    navController: NavHostController
-) {
+    context: Context,
+): KakaoLoginResponse {
     val userService: UserService = createApiService()
 
-    CoroutineScope(Dispatchers.Main).launch{
-        try{
-            val response : Response<Any> = userService.login(accessToken)
-            if (response.isSuccessful) {
-                Log.d("NETWORK-login", "success : ${response.body()}")
-                Toast.makeText(context, "로그인에 성공했습니다.", Toast.LENGTH_SHORT).show()
-//                navController.navigate(route = Nav.CONTENT){
-//                    navController.popBackStack()
-//                }
-//                val token = response.body()?.accessToken
-//                if (token != null) {
-//                    saveAccessToken(context, token)
-//                    Log.d("NETWORK-login", "success : $token")
-//                    navController.navigate(route = Nav.CONTENT){
-//                        navController.popBackStack()
-//                    }
-//                }else{
-//                    Log.e("NETWORK-login", "token is null")
-//                    Toast.makeText(context, "토큰 값이 올바르지 않습니다.", Toast.LENGTH_SHORT).show()
-//                    navController.popBackStack()
-//                }
+    return try {
+        val response: Response<TokenResponse> = userService.login(accessToken)
+        if (response.isSuccessful) {
+            val token = response.body()?.data?.accessToken
+            if (token != null) {
+//                saveAccessToken(context, token)
+                Log.d("NETWORK-login", "success : $token")
+
+                KakaoLoginResponse(true, token, null, null)
             } else {
-                Log.e("NETWORK-login", "server error - ${response.errorBody()}")
-//                Toast.makeText(context, "서버 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-                navController.popBackStack()
+                Log.e("NETWORK-login", "token is null")
+
+                KakaoLoginResponse(false, null, 400, "token is null")
             }
+        } else {
+            Log.e("NETWORK-login", "server error - ${response.errorBody()}")
+
+            KakaoLoginResponse(false, null, response.code(), response.errorBody().toString())
         }
-        catch (e : HttpException){
-            Log.e("NETWORK-login", "unknown server error - ${e.message()}")
-//            Toast.makeText(context, "서버 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-            navController.popBackStack()
-        }
-        catch (e : Exception){
-            Log.e("NETWORK-login", "unknown error - ${e.message}")
-//            Toast.makeText(context, "알 수 없는 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-            navController.popBackStack()
-        }
+    } catch (e: HttpException) {
+        Log.e("NETWORK-login", "unknown server error - ${e.message()}")
+
+        KakaoLoginResponse(false, null, e.code(), e.message())
+    } catch (e: Exception) {
+        Log.e("NETWORK-login", "unknown error - ${e.message}")
+
+        KakaoLoginResponse(false, null, 500, e.message)
     }
 
 
