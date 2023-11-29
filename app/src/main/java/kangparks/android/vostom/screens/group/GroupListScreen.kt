@@ -198,8 +198,40 @@ fun GroupListScreen(
                                                 bottom = if(isPlaying.value) 90.dp else 48.dp
                                             )
                                         ){
-                                            items(6){
-                                                CoverSongItemSkeleton()
+                                            items(6){idx ->
+                                                if (idx % 2 == 0){
+                                                    Box(
+                                                        modifier = Modifier
+                                                            .padding(
+                                                                top = 10.dp,
+                                                                bottom = 10.dp,
+                                                                end = 10.dp
+                                                            )
+                                                    ){
+                                                        CoverSongItemSkeleton(
+                                                            skeletonSize = (screenWidth-60)/2,
+                                                            titleBoxWidth = 100,
+                                                            descriptionWidth = 140
+                                                        )
+                                                    }
+                                                }
+                                                else{
+                                                    Box(
+                                                        modifier = Modifier
+                                                            .padding(
+                                                                top = 10.dp,
+                                                                bottom = 10.dp,
+                                                                start = 10.dp
+                                                            )
+                                                    ){
+                                                        CoverSongItemSkeleton(
+                                                            skeletonSize = (screenWidth-60)/2,
+                                                            titleBoxWidth = 100,
+                                                            descriptionWidth = 140
+                                                        )
+                                                    }
+
+                                                }
                                             }
                                         }
                                     }
@@ -216,7 +248,7 @@ fun GroupListScreen(
                             }
 
                         }else if(idx == 1){
-                            Crossfade(targetState = myGroupList.value, label = "") {
+                            Crossfade(targetState = myGroupList.value, label = "") { it ->
                                 when(it.isEmpty()){
                                     true -> {
                                         LazyVerticalGrid(
@@ -225,8 +257,40 @@ fun GroupListScreen(
                                                 bottom = if(isPlaying.value) 90.dp else 48.dp
                                             )
                                         ){
-                                            items(6){
-                                                CoverSongItemSkeleton()
+                                            items(6){idx ->
+                                                if (idx % 2 == 0){
+                                                    Box(
+                                                        modifier = Modifier
+                                                            .padding(
+                                                                top = 10.dp,
+                                                                bottom = 10.dp,
+                                                                end = 10.dp
+                                                            )
+                                                    ){
+                                                        CoverSongItemSkeleton(
+                                                            skeletonSize = (screenWidth-60)/2,
+                                                            titleBoxWidth = 100,
+                                                            descriptionWidth = 140
+                                                        )
+                                                    }
+                                                }
+                                                else{
+                                                    Box(
+                                                        modifier = Modifier
+                                                            .padding(
+                                                                top = 10.dp,
+                                                                bottom = 10.dp,
+                                                                start = 10.dp
+                                                            )
+                                                    ){
+                                                        CoverSongItemSkeleton(
+                                                            skeletonSize = (screenWidth-60)/2,
+                                                            titleBoxWidth = 100,
+                                                            descriptionWidth = 140
+                                                        )
+                                                    }
+
+                                                }
                                             }
                                         }
                                     }
