@@ -21,7 +21,7 @@ fun NavGraphBuilder.contentNavigation(
     currentGroupViewModel: CurrentGroupViewModel,
 ) {
     // TODO("로그인 검증 후 사용자 학습 유무 확인 하기")
-    val isLearnUserVoice = true
+    val isLearnUserVoice = false
 
     navigation(
         route = Nav.CONTENT,

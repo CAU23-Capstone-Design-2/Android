@@ -2,7 +2,7 @@ package kangparks.android.vostom.models.user
 
 import com.google.gson.annotations.SerializedName
 
-data class user(
+data class User(
     @SerializedName("_id")
     val id : Long,
 

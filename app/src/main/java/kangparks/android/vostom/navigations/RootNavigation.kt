@@ -53,7 +53,7 @@ fun RootNavigation(
         factory = ContentStoreViewModelFactory(LocalContext.current)
     )
 
-    val curNav = if(false) Nav.AUTH else Nav.CONTENT
+    val curNav = if(true) Nav.AUTH else Nav.CONTENT
 
     NavHost(navController = navController, startDestination = curNav){
         authNavigation(navController = navController)
