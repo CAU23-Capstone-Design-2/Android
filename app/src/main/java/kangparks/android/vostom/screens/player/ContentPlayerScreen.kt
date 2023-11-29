@@ -23,6 +23,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -56,7 +57,7 @@ import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 fun ContentPlayerScreen(
     navController: NavHostController,
     contentPlayerViewModel: ContentPlayerViewModel,
-    contentColor: Color = Color(0xFFEBEBEB)
+    contentColor: Color = Color(0xFFEBEBEB),
 ) {
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
@@ -76,6 +77,10 @@ fun ContentPlayerScreen(
     val isDarkTheme = isSystemInDarkTheme()
     val systemUiController = rememberSystemUiController()
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    LaunchedEffect(key1 = currentSong.value){
+        contentPlayerViewModel.updateCommentList()
+    }
 
     SideEffect {
         systemUiController.setSystemBarsColor(
@@ -155,7 +160,11 @@ fun ContentPlayerScreen(
                             contentColor = contentColor
                         )
                     }
-                    PlayerCommentBottomSheet(bottomSheetScaffoldState = bottomSheetScaffoldState)
+                    PlayerCommentBottomSheet(
+                        bottomSheetScaffoldState = bottomSheetScaffoldState,
+                        contentPlayerViewModel = contentPlayerViewModel,
+                        screenWidth = screenWidth,
+                    )
                 }
             }
         }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
@@ -34,7 +35,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.exoplayer2.ExoPlayer
@@ -54,8 +54,6 @@ import kangparks.android.vostom.navigations.HomeContent
 import kangparks.android.vostom.utils.media.getMediaItem
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.content.StarContentViewModel
-import kangparks.android.vostom.viewModel.home.HomeViewModel
-import kangparks.android.vostom.viewModel.home.HomeViewModelFactory
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -65,18 +63,15 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     navController: NavHostController,
     token: String,
-    homeViewModel: HomeViewModel = viewModel(
-        factory = HomeViewModelFactory(token)
-    ),
     contentStoreViewModel: ContentStoreViewModel,
     starContentViewModel: StarContentViewModel,
     contentPlayerViewModel : ContentPlayerViewModel
 ) {
-    val testBuildString = remember { mutableStateOf("빌드 11-28-10-00") }
+    val testBuildString = remember { mutableStateOf("빌드 11-29-15-00") }
 
-    val myCoverItemList = homeViewModel.myCoverItemList.observeAsState(initial = listOf())
-    val myGroupCoverItemList = homeViewModel.myGroupCoverItemList.observeAsState(initial = listOf())
-    val othersItemList = homeViewModel.othersItemList.observeAsState(initial = listOf())
+    val myCoverItemList = contentStoreViewModel.myCoverItemList.observeAsState(initial = listOf())
+    val myGroupCoverItemList = contentStoreViewModel.myGroupCoverItemList.observeAsState(initial = listOf())
+    val othersItemList = contentStoreViewModel.othersItemList.observeAsState(initial = listOf())
     val isPlaying = contentPlayerViewModel.isPlaying.observeAsState(initial = false)
 
     val context = LocalContext.current
@@ -86,16 +81,8 @@ fun HomeScreen(
     val scrollState = rememberScrollState()
     val doubleBackToExitPressedOnce = remember { mutableStateOf(false) }
 
-    LaunchedEffect(key1 = myCoverItemList.value){
-        contentStoreViewModel.updateMyCoverItemList(myCoverItemList.value)
-    }
-    
-    LaunchedEffect(key1 = myGroupCoverItemList.value){
-        contentStoreViewModel.updateMyGroupCoverItemList(myGroupCoverItemList.value)
-    }
-    
-    LaunchedEffect(key1 = othersItemList.value){
-        contentStoreViewModel.updateOthersItemList(othersItemList.value)
+    LaunchedEffect(key1 = null){
+        contentStoreViewModel.initHomeContent()
     }
 
     SideEffect {
@@ -258,7 +245,11 @@ fun HomeScreen(
                     OthersItemSkeleton()
                 }
             )
-            Spacer(modifier = Modifier.padding(vertical = if(isPlaying.value) 50.dp else 15.dp))
+            Spacer(
+                modifier = Modifier
+                    .animateContentSize()
+                    .padding(vertical = if (isPlaying.value) 50.dp else 15.dp)
+            )
         }
     }
 }

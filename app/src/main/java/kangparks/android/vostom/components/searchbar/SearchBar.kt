@@ -17,13 +17,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.material3.TextField
+import androidx.compose.ui.text.input.ImeAction
 
 @Composable
 fun SearchBar(
     value : String,
     onValueChange : (String) -> Unit,
     placeholder : String,
-    onSearch : (KeyboardActionScope.() -> Unit)?
+    onSearch : (KeyboardActionScope.() -> Unit)?,
+    imeActions: ImeAction = ImeAction.Search,
+    keyboardActions: KeyboardActions = KeyboardActions(
+        onSearch = onSearch,
+    ) ,
 ) {
     val isDarkTheme = isSystemInDarkTheme()
 
@@ -43,11 +48,9 @@ fun SearchBar(
             singleLine = true,
             maxLines = 1,
             keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = androidx.compose.ui.text.input.ImeAction.Search
+                imeAction = imeActions
             ),
-            keyboardActions = KeyboardActions(
-                onSearch = onSearch,
-            ) ,
+            keyboardActions = keyboardActions ,
             shape = RoundedCornerShape(10.dp),
             colors = TextFieldDefaults.colors(
                 cursorColor = Color.Black,

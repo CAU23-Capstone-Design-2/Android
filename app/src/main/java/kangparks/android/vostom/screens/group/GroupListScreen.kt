@@ -2,17 +2,21 @@ package kangparks.android.vostom.screens.group
 
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,15 +44,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kangparks.android.vostom.components.appbar.ContentAppBar
+import kangparks.android.vostom.components.skeleton.CoverSongItemSkeleton
 import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
 import kangparks.android.vostom.navigations.HomeContent
+import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
-import kangparks.android.vostom.viewModel.group.GroupListViewModel
-import kangparks.android.vostom.viewModel.group.GroupListViewModelFactory
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
@@ -56,16 +59,14 @@ import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 @Composable
 fun GroupListScreen(
     navController: NavHostController,
-    token : String,
     contentPlayerViewModel : ContentPlayerViewModel,
-    groupListViewModel : GroupListViewModel = viewModel(
-        factory = GroupListViewModelFactory(token)
-    ),
+    contentStoreViewModel: ContentStoreViewModel,
     currentGroupViewModel : CurrentGroupViewModel,
+
 ) {
     val isPlaying = contentPlayerViewModel.isPlaying.observeAsState(initial = false)
-    val allGroupList = groupListViewModel.allGroupList.observeAsState(initial = listOf())
-    val myGroupList = groupListViewModel.myGroupList.observeAsState(initial = listOf())
+    val allGroupList = contentStoreViewModel.allGroupList.observeAsState(initial = listOf())
+    val myGroupList = contentStoreViewModel.myGroupList.observeAsState(initial = listOf())
 
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp
@@ -81,12 +82,16 @@ fun GroupListScreen(
         tabItems.size
     }
 
+    LaunchedEffect(key1 = null){
+        contentStoreViewModel.initGroupContent()
+    }
+
     LaunchedEffect(key1 = selectedTabIndex.value){
         pagerState.animateScrollToPage(selectedTabIndex.value)
     }
 
-    LaunchedEffect(key1 = pagerState.currentPage, pagerState.isScrollInProgress){
-//        if(selectedTabIndex.value == pagerState.currentPage) return@LaunchedEffect
+    LaunchedEffect(key1 = pagerState.isScrollInProgress){
+        if(selectedTabIndex.value == pagerState.currentPage) return@LaunchedEffect
         if(!pagerState.isScrollInProgress){
             selectedTabIndex.value = pagerState.currentPage
         }
@@ -123,9 +128,7 @@ fun GroupListScreen(
         surfaceModifier = Modifier.windowInsetsPadding(WindowInsets.statusBars),
         surfaceBottomPadding = 40
     ) {
-        Column(
-            modifier = Modifier.padding(horizontal = 20.dp)
-        ){
+        Column{
             ContentAppBar(
                 sideButtonContent = {
                     Text(
@@ -143,12 +146,16 @@ fun GroupListScreen(
                     )
                 },
                 contentTitle = "그룹",
+                containerModifier = Modifier.padding(horizontal = 20.dp)
             )
 
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
-                TabRow(selectedTabIndex = selectedTabIndex.value) {
+                TabRow(
+                    selectedTabIndex = selectedTabIndex.value,
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                ) {
                     tabItems.forEachIndexed { index, tabItem ->
                         Tab(
                             selected = selectedTabIndex.value == index,
@@ -172,35 +179,137 @@ fun GroupListScreen(
                 state = pagerState,
                 modifier = Modifier
                     .fillMaxSize(),
-//                    .weight(1f),
                 verticalAlignment = Alignment.Top,
-                pageSpacing = 20.dp
+                pageSpacing = 20.dp,
+                contentPadding = PaddingValues(horizontal = 20.dp),
             ) { idx ->
                 Box(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
-                    if (idx == 0){
-                        AllGroupListTabScreen(
-                            navController = navController,
-                            isPlaying = isPlaying,
-                            allGroupList = allGroupList.value,
-                            currentGroupViewModel = currentGroupViewModel,
-                            screenWidth = screenWidth
-                        )
-                    }else if(idx == 1){
-                        MyGroupListTabScreen(
-                            navController = navController,
-                            isPlaying = isPlaying,
-                            myGroupList = myGroupList.value,
-                            currentGroupViewModel = currentGroupViewModel,
-                            screenWidth = screenWidth
-                        )
+                    Column {
+                        if (idx == 0){
+                            Crossfade(targetState = allGroupList.value, label = "") {
+                                when(it.isEmpty()){
+                                    true -> {
+                                        LazyVerticalGrid(
+                                            columns = GridCells.Fixed(2),
+                                            contentPadding = PaddingValues(
+                                                bottom = if(isPlaying.value) 90.dp else 48.dp
+                                            )
+                                        ){
+                                            items(6){idx ->
+                                                if (idx % 2 == 0){
+                                                    Box(
+                                                        modifier = Modifier
+                                                            .padding(
+                                                                top = 10.dp,
+                                                                bottom = 10.dp,
+                                                                end = 10.dp
+                                                            )
+                                                    ){
+                                                        CoverSongItemSkeleton(
+                                                            skeletonSize = (screenWidth-60)/2,
+                                                            titleBoxWidth = 100,
+                                                            descriptionWidth = 140
+                                                        )
+                                                    }
+                                                }
+                                                else{
+                                                    Box(
+                                                        modifier = Modifier
+                                                            .padding(
+                                                                top = 10.dp,
+                                                                bottom = 10.dp,
+                                                                start = 10.dp
+                                                            )
+                                                    ){
+                                                        CoverSongItemSkeleton(
+                                                            skeletonSize = (screenWidth-60)/2,
+                                                            titleBoxWidth = 100,
+                                                            descriptionWidth = 140
+                                                        )
+                                                    }
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                    false -> {
+                                        AllGroupListTabScreen(
+                                            navController = navController,
+                                            isPlaying = isPlaying,
+                                            allGroupList = allGroupList.value,
+                                            currentGroupViewModel = currentGroupViewModel,
+                                            screenWidth = screenWidth
+                                        )
+                                    }
+                                }
+                            }
+
+                        }else if(idx == 1){
+                            Crossfade(targetState = myGroupList.value, label = "") { it ->
+                                when(it.isEmpty()){
+                                    true -> {
+                                        LazyVerticalGrid(
+                                            columns = GridCells.Fixed(2),
+                                            contentPadding = PaddingValues(
+                                                bottom = if(isPlaying.value) 90.dp else 48.dp
+                                            )
+                                        ){
+                                            items(6){idx ->
+                                                if (idx % 2 == 0){
+                                                    Box(
+                                                        modifier = Modifier
+                                                            .padding(
+                                                                top = 10.dp,
+                                                                bottom = 10.dp,
+                                                                end = 10.dp
+                                                            )
+                                                    ){
+                                                        CoverSongItemSkeleton(
+                                                            skeletonSize = (screenWidth-60)/2,
+                                                            titleBoxWidth = 100,
+                                                            descriptionWidth = 140
+                                                        )
+                                                    }
+                                                }
+                                                else{
+                                                    Box(
+                                                        modifier = Modifier
+                                                            .padding(
+                                                                top = 10.dp,
+                                                                bottom = 10.dp,
+                                                                start = 10.dp
+                                                            )
+                                                    ){
+                                                        CoverSongItemSkeleton(
+                                                            skeletonSize = (screenWidth-60)/2,
+                                                            titleBoxWidth = 100,
+                                                            descriptionWidth = 140
+                                                        )
+                                                    }
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                    false -> {
+                                        MyGroupListTabScreen(
+                                            navController = navController,
+                                            isPlaying = isPlaying,
+                                            myGroupList = myGroupList.value,
+                                            currentGroupViewModel = currentGroupViewModel,
+                                            screenWidth = screenWidth
+                                        )
+                                    }
+                                }
+                            }
+
+                        }
                     }
                 }
-
             }
-
         }
     }
 }

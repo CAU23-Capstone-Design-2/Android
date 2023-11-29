@@ -5,18 +5,16 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import kangparks.android.vostom.components.item.GroupItem
 import kangparks.android.vostom.models.content.Group
 import kangparks.android.vostom.navigations.HomeContent
 import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
-import kangparks.android.vostom.viewModel.group.GroupListViewModel
 
 @Composable
 fun AllGroupListTabScreen(
@@ -26,8 +24,10 @@ fun AllGroupListTabScreen(
     currentGroupViewModel: CurrentGroupViewModel,
     screenWidth : Int
 ){
+    val lazyVerticalGridState = rememberLazyGridState()
 
     LazyVerticalGrid(
+        state = lazyVerticalGridState,
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(
             bottom = if(isPlaying.value) 90.dp else 48.dp
@@ -77,5 +77,6 @@ fun AllGroupListTabScreen(
                 }
             }
         }
+
     }
 }

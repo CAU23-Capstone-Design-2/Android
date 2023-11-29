@@ -3,6 +3,7 @@ package kangparks.android.vostom.components.dropdown
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.DropdownMenu
@@ -28,6 +29,7 @@ fun DropDownIconButton(
 //    icon: @Composable () -> Unit,
 //    content: @Composable () -> Unit,
     dropDownState : Boolean,
+    dropDownIconSize : Int = 38,
     dropDownContent: @Composable ()->Unit,
 ) {
     val isDropDownOpen = remember {
@@ -39,10 +41,10 @@ fun DropDownIconButton(
             painter = painterResource(id = R.drawable.ri_more_2_fill),
             contentDescription = null,
             modifier = Modifier
+                .size(dropDownIconSize.dp)
                 .clip(shape = CircleShape)
                 .clickable { isDropDownOpen.value = true }
                 .padding(10.dp),
-            tint = Color.Black
         )
         DropdownMenu(
             expanded = isDropDownOpen.value,
@@ -50,16 +52,6 @@ fun DropDownIconButton(
             modifier = Modifier.wrapContentSize()
         ) {
             dropDownContent()
-
-//        {
-//            Box(
-//                contentAlignment = Alignment.Center,
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//            ) {
-//                Text(text = "사진  삭제" ,textAlign = TextAlign.Center)
-//            }
-//        }
         }
     }
 

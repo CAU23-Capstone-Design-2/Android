@@ -1,11 +1,19 @@
 package kangparks.android.vostom.viewModel.player
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.android.exoplayer2.ExoPlayer
+import kangparks.android.vostom.models.content.Comment
 import kangparks.android.vostom.models.content.CoverSong
+import kangparks.android.vostom.utils.dummy.dummyCommentList
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class ContentPlayerViewModel : ViewModel(){
+    private val coroutineScope = CoroutineScope(viewModelScope.coroutineContext)
+
     private var _exoPlayer : ExoPlayer? = null
 
     private val _isPlaying : MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
@@ -13,10 +21,14 @@ class ContentPlayerViewModel : ViewModel(){
     private val _currentSong : MutableLiveData<CoverSong?> = MutableLiveData<CoverSong?>(null)
     private val _isShowPlayer : MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
 
-    val isPlaying : MutableLiveData<Boolean> = _isPlaying
-    val isPaused : MutableLiveData<Boolean> = _isPaused
-    val currentSong : MutableLiveData<CoverSong?> = _currentSong
-    val isShowPlayer : MutableLiveData<Boolean> = _isShowPlayer
+    private val _currentSongCommentList : MutableLiveData<List<Comment>> = MutableLiveData<List<Comment>>(listOf())
+
+    val isPlaying : LiveData<Boolean> = _isPlaying
+    val isPaused : LiveData<Boolean> = _isPaused
+    val currentSong : LiveData<CoverSong?> = _currentSong
+    val isShowPlayer : LiveData<Boolean> = _isShowPlayer
+
+    val currentSongCommentList : LiveData<List<Comment>> = _currentSongCommentList
 
     fun setPlayer(player: ExoPlayer){
         _exoPlayer = player
@@ -63,5 +75,11 @@ class ContentPlayerViewModel : ViewModel(){
         _isPlaying.value = false
         _isPaused.value = false
         _currentSong.value = null
+    }
+
+    fun updateCommentList(){
+        coroutineScope.launch {
+            _currentSongCommentList.postValue(dummyCommentList)
+        }
     }
 }

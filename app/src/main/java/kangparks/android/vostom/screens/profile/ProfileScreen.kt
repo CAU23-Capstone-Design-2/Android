@@ -36,7 +36,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -54,8 +53,6 @@ import kangparks.android.vostom.navigations.HomeContent
 import kangparks.android.vostom.utils.media.getMediaItem
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
-import kangparks.android.vostom.viewModel.profile.ProfileViewModel
-import kangparks.android.vostom.viewModel.profile.ProfileViewModelFactory
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -63,22 +60,11 @@ fun ProfileScreen(
     navController: NavHostController,
     contentPlayerViewModel : ContentPlayerViewModel,
     contentStoreViewModel : ContentStoreViewModel,
-    token : String,
-    userImgUrl : String,
-    userName : String,
-    likedCoverItemList : List<CoverSong>
 ) {
-    val profileViewModel : ProfileViewModel= viewModel(factory = ProfileViewModelFactory(
-        token = token,
-        userImgUrl = userImgUrl,
-        userName = userName,
-        likedCoverItemList = likedCoverItemList
-    ))
-
     val myCoverItemList = contentStoreViewModel.myCoverItemList.observeAsState(initial = listOf())
-    val _userName = profileViewModel.userName.observeAsState(initial = "")
-    val _userImgUrl = profileViewModel.userImgUrl.observeAsState(initial = "")
-    val _myGroupCoverItemList = profileViewModel.likedCoverItemList.observeAsState(initial = listOf())
+    val userName = contentStoreViewModel.userName.observeAsState(initial = "")
+    val userImgUrl = contentStoreViewModel.userImgUrl.observeAsState(initial = "")
+    val likedCoverItemList = contentStoreViewModel.likeItemList.observeAsState(initial = listOf())
 
     val isPlaying = contentPlayerViewModel.isPlaying.observeAsState(initial = false)
 
@@ -87,16 +73,20 @@ fun ProfileScreen(
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
-    LaunchedEffect(key1 = _userName.value){
-        contentStoreViewModel.updateUserName(_userName.value)
+    LaunchedEffect(key1 = null){
+        contentStoreViewModel.initProfileContent()
     }
 
-    LaunchedEffect(key1 = _userImgUrl.value){
-        contentStoreViewModel.updateUserImgUrl(_userImgUrl.value)
+    LaunchedEffect(key1 = userName.value){
+        contentStoreViewModel.updateUserName(userName.value)
     }
 
-    LaunchedEffect(key1 = _myGroupCoverItemList.value){
-        contentStoreViewModel.updateLikeItemList(_myGroupCoverItemList.value)
+    LaunchedEffect(key1 = userImgUrl.value){
+        contentStoreViewModel.updateUserImgUrl(userImgUrl.value)
+    }
+
+    LaunchedEffect(key1 = likedCoverItemList.value){
+        contentStoreViewModel.updateLikeItemList(likedCoverItemList.value)
     }
 
     SideEffect {
@@ -145,7 +135,7 @@ fun ProfileScreen(
                         modifier = Modifier
                             .clip(RoundedCornerShape(10.dp))
                             .clickable {
-                                navController.navigate(HomeContent.RequestCoverSongList.route)
+                                navController.navigate(HomeContent.EditProfile.route)
                             }
                             .padding(5.dp)
                     )
@@ -163,7 +153,7 @@ fun ProfileScreen(
                     )
             ){
                 AsyncImage(
-                    model = _userImgUrl.value,
+                    model = userImgUrl.value,
                     contentDescription = null,
                     modifier = Modifier
                         .size(100.dp)
@@ -173,7 +163,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.width(20.dp))
                 Column {
                     Text(
-                        text = _userName.value,
+                        text = userName.value,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface,
@@ -231,9 +221,9 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.padding(vertical = 15.dp))
             HorizontalSongSection(
                 title = "좋아요 한 커버곡",
-                contents = _myGroupCoverItemList.value as List<CoverSong>,
+                contents =likedCoverItemList.value as List<CoverSong>,
                 sideButtonAction = {
-                    if (_myGroupCoverItemList.value.isNotEmpty()) {
+                    if (likedCoverItemList.value.isNotEmpty()) {
                         navController.navigate(HomeContent.DetailLikeCoverItem.route)
                     }
                 },
