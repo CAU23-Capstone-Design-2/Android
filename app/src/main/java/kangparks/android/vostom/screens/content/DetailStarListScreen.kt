@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kangparks.android.vostom.components.appbar.ContentAppBar
-import kangparks.android.vostom.components.item.OthersItem
+import kangparks.android.vostom.components.item.CelebrityItem
 import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
 import kangparks.android.vostom.navigations.HomeContent
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
@@ -122,7 +122,7 @@ fun DetailStarListScreen(
                                             end = 5.dp
                                         )
                                 ) {
-                                    OthersItem(
+                                    CelebrityItem(
                                         content = it[index],
                                         contentSize = (screenWidth - 60) / 3,
                                         onClick = {
@@ -144,7 +144,7 @@ fun DetailStarListScreen(
                                             end = 5.dp
                                         )
                                 ) {
-                                    OthersItem(
+                                    CelebrityItem(
                                         content = it[index],
                                         contentSize = (screenWidth - 60) / 3,
                                         onClick = {
@@ -165,7 +165,7 @@ fun DetailStarListScreen(
                                             start = 5.dp
                                         )
                                 ) {
-                                    OthersItem(
+                                    CelebrityItem(
                                         content = it[index],
                                         contentSize = (screenWidth - 60) / 3,
                                         onClick = {

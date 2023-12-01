@@ -33,7 +33,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
-import kangparks.android.vostom.components.bottomsheet.OthersContentBottomSheet
+import kangparks.android.vostom.components.bottomsheet.CelebrityContentBottomSheet
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
 import kangparks.android.vostom.navigations.LearningContent
 import kangparks.android.vostom.viewModel.bottomsheet.CelebrityContentViewModel
@@ -46,7 +46,7 @@ fun GuideScreen(
     navController: NavHostController,
     celebrityContentViewModel : CelebrityContentViewModel
 ) {
-    val testBuildString = remember { mutableStateOf("빌드 12-01-20-00") }
+    val testBuildString = remember { mutableStateOf("빌드 12-01-20-30") }
 
     val singingAnimation by rememberLottieComposition(
         spec = LottieCompositionSpec.Asset("singing.json")
@@ -60,6 +60,11 @@ fun GuideScreen(
     val doubleBackToExitPressedOnce = remember { mutableStateOf(false) }
     val context = LocalContext.current
 
+    LaunchedEffect(key1 = null){
+        celebrityContentViewModel.updateCelebrityList(
+            context = context
+        )
+    }
 
     LaunchedEffect(key1 = bottomSheetScaffoldState.bottomSheetState.currentValue ){
         if(bottomSheetScaffoldState.bottomSheetState.currentValue == SheetValue.Hidden){
@@ -68,7 +73,6 @@ fun GuideScreen(
             }
         }
     }
-
 
     BackHandler(enabled = true) {
         if (doubleBackToExitPressedOnce.value) {
@@ -99,6 +103,7 @@ fun GuideScreen(
             subContent = "조용한 환경에서 진행하면 학습 정확도가 높아집니다!\uD83D\uDE06",
             nextButtonContent = "나의 목소리 학습 시작하기",
             nextButtonAction = {
+                celebrityContentViewModel.resetToCurrentView()
                 navController.navigate(LearningContent.DetailGuide.route)
             },
             nextButtonBottomPaddingValue = 60,
@@ -115,7 +120,7 @@ fun GuideScreen(
                 )
             }
         }
-        OthersContentBottomSheet(
+        CelebrityContentBottomSheet(
             bottomSheetScaffoldState = bottomSheetScaffoldState,
             celebrityContentViewModel = celebrityContentViewModel
         )

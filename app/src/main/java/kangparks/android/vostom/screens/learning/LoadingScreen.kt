@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.airbnb.lottie.compose.LottieAnimation
@@ -24,7 +25,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
-import kangparks.android.vostom.components.bottomsheet.OthersContentBottomSheet
+import kangparks.android.vostom.components.bottomsheet.CelebrityContentBottomSheet
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
 import kangparks.android.vostom.navigations.LearningContent
 import kangparks.android.vostom.viewModel.bottomsheet.CelebrityContentViewModel
@@ -36,6 +37,7 @@ fun LoadingScreen(
     navController : NavHostController,
     celebrityContentViewModel : CelebrityContentViewModel
 ){
+    val context = LocalContext.current
     val loadingAnimation by rememberLottieComposition(
         spec = LottieCompositionSpec.Asset("loading.json")
     )
@@ -44,7 +46,13 @@ fun LoadingScreen(
         iterations = LottieConstants.IterateForever
     )
 
-    val countValue = remember { mutableIntStateOf(11) }
+    val countValue = remember { mutableIntStateOf(5) }
+
+    LaunchedEffect(key1 = null){
+        celebrityContentViewModel.updateCelebrityList(
+            context = context
+        )
+    }
 
     LaunchedEffect(null){
         while (countValue.value > 0){
@@ -77,7 +85,9 @@ fun LoadingScreen(
                 )
             }
         }
-        OthersContentBottomSheet(celebrityContentViewModel = celebrityContentViewModel)
+        CelebrityContentBottomSheet(
+            celebrityContentViewModel = celebrityContentViewModel
+        )
     }
 
 }

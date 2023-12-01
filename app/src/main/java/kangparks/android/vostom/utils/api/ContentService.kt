@@ -23,7 +23,7 @@ interface ContentService {
     @GET("/api/user/celebrity/musicList")
     suspend fun getCelebrityMusicList(
         @Header("Authorization") accessToken: String,
-        @Query("id") celebrityId: String,
+        @Query("id") celebrityId: Int,
     ) : Response<VostomResponse<List<Music>>>
 
 

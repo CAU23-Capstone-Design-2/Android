@@ -48,9 +48,17 @@ fun NavGraphBuilder.learningContentNavigation(
     val scriptProvider = ScriptProviderViewModel()
     val celebrityContentViewModel = CelebrityContentViewModel()
 
+    val isLearning = false
+
+    val destination = if (isLearning) {
+        LearningContent.Loading.route
+    } else {
+        LearningContent.Guide.route
+    }
+
     navigation(
         route = Nav.LEARNING_CONTENT,
-        startDestination = LearningContent.Guide.route
+        startDestination = destination
     ) {
         composable(LearningContent.Guide.route) {
             GuideScreen(

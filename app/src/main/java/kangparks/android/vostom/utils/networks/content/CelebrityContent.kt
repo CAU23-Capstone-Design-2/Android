@@ -45,7 +45,7 @@ suspend fun getCelebrityList(
 
 suspend fun getCelebrityMusicList(
     accessToken: String,
-    celebrityId: String,
+    celebrityId: Int,
     context : Context
 ):List<Music>? {
     val contentService: ContentService = createApiService()

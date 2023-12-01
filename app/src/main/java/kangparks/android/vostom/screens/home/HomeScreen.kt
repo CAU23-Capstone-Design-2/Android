@@ -41,8 +41,8 @@ import com.google.android.exoplayer2.ExoPlayer
 import drawVerticalScrollbar
 import kangparks.android.vostom.R
 import kangparks.android.vostom.components.appbar.ContentAppBar
+import kangparks.android.vostom.components.item.CelebrityItem
 import kangparks.android.vostom.components.item.CoverSongItem
-import kangparks.android.vostom.components.item.OthersItem
 import kangparks.android.vostom.components.item.UserCoverSongItem
 import kangparks.android.vostom.components.section.HorizontalSongSection
 import kangparks.android.vostom.components.skeleton.CoverSongItemSkeleton
@@ -67,7 +67,7 @@ fun HomeScreen(
     starContentViewModel: StarContentViewModel,
     contentPlayerViewModel : ContentPlayerViewModel
 ) {
-    val testBuildString = remember { mutableStateOf("빌드 12-01-20-00") }
+    val testBuildString = remember { mutableStateOf("빌드 12-01-20-30") }
 
     val myCoverItemList = contentStoreViewModel.myCoverItemList.observeAsState(initial = listOf())
     val myGroupCoverItemList = contentStoreViewModel.myGroupCoverItemList.observeAsState(initial = listOf())
@@ -230,7 +230,7 @@ fun HomeScreen(
                 },
                 contentPaddingValue = 10,
                 renderItem = { item: Celebrity ->
-                    OthersItem(
+                    CelebrityItem(
                         content = item,
                         onClick = {
                             starContentViewModel.updateCurrentSinger(
