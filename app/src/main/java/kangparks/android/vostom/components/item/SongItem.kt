@@ -18,11 +18,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import kangparks.android.vostom.models.content.Song
+import kangparks.android.vostom.models.content.Music
 
 @Composable
 fun SongItem(
-    song: Song,
+    music: Music,
     containerModifier: Modifier = Modifier,
     size: Int = 48,
     onClick: (() -> Unit)? = null
@@ -37,14 +37,14 @@ fun SongItem(
         verticalAlignment = Alignment.CenterVertically
     ){
         AsyncImage(
-            model = song.imageUri,
+            model = music.albumArtUri,
             contentDescription = null,
             modifier = Modifier.size(size.dp).clip(RoundedCornerShape(10.dp)),
             contentScale = ContentScale.Crop
         )
         Spacer(modifier = Modifier.width(20.dp))
         Text(
-            text = song.title+" - "+song.singer,
+            text = music.title,
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
             maxLines = 1,

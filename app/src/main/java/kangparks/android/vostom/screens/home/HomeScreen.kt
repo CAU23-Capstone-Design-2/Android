@@ -48,8 +48,8 @@ import kangparks.android.vostom.components.section.HorizontalSongSection
 import kangparks.android.vostom.components.skeleton.CoverSongItemSkeleton
 import kangparks.android.vostom.components.skeleton.OthersItemSkeleton
 import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
-import kangparks.android.vostom.models.content.CoverSong
-import kangparks.android.vostom.models.content.Singer
+import kangparks.android.vostom.models.content.Celebrity
+import kangparks.android.vostom.models.content.Music
 import kangparks.android.vostom.navigations.HomeContent
 import kangparks.android.vostom.utils.media.getMediaItem
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
@@ -67,7 +67,7 @@ fun HomeScreen(
     starContentViewModel: StarContentViewModel,
     contentPlayerViewModel : ContentPlayerViewModel
 ) {
-    val testBuildString = remember { mutableStateOf("빌드 11-29-15-00") }
+    val testBuildString = remember { mutableStateOf("빌드 12-01-20-00") }
 
     val myCoverItemList = contentStoreViewModel.myCoverItemList.observeAsState(initial = listOf())
     val myGroupCoverItemList = contentStoreViewModel.myGroupCoverItemList.observeAsState(initial = listOf())
@@ -156,13 +156,13 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(10.dp))
             HorizontalSongSection(
                 title = "나의 커버곡",
-                contents = myCoverItemList.value as List<CoverSong>,
+                contents = myCoverItemList.value as List<Music>,
                 sideButtonAction = {
                     if (myCoverItemList.value.isNotEmpty()) {
                         navController.navigate(HomeContent.DetailMyCoverItem.route)
                     }
                 },
-                renderItem = { item: CoverSong ->
+                renderItem = { item: Music ->
                     CoverSongItem(
                         content = item,
                         onClick = {
@@ -189,13 +189,13 @@ fun HomeScreen(
             Spacer(modifier = Modifier.padding(vertical = 15.dp))
             HorizontalSongSection(
                 title = "나의 그룹 커버곡",
-                contents = myGroupCoverItemList.value as List<CoverSong>,
+                contents = myGroupCoverItemList.value as List<Music>,
                 sideButtonAction = {
                     if (myGroupCoverItemList.value.isNotEmpty()) {
                         navController.navigate(HomeContent.DetailMyGroupCoverItem.route)
                     }
                 },
-                renderItem = { item: CoverSong ->
+                renderItem = { item: Music ->
                     UserCoverSongItem(
                         content = item,
                         onClick = {
@@ -222,14 +222,14 @@ fun HomeScreen(
             Spacer(modifier = Modifier.padding(vertical = 15.dp))
             HorizontalSongSection(
                 title = "연예인 AI 커버",
-                contents = othersItemList.value as List<Singer>,
+                contents = othersItemList.value as List<Celebrity>,
                 sideButtonAction = {
                     if (othersItemList.value.isNotEmpty()) {
                         navController.navigate(HomeContent.DetailStarList.route)
                     }
                 },
                 contentPaddingValue = 10,
-                renderItem = { item: Singer ->
+                renderItem = { item: Celebrity ->
                     OthersItem(
                         content = item,
                         onClick = {

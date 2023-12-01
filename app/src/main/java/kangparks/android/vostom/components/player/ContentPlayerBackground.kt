@@ -12,12 +12,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import kangparks.android.vostom.models.content.CoverSong
+import kangparks.android.vostom.models.content.Music
 import kangparks.android.vostom.utils.helper.transform.BlurTransformation
 
 @Composable
 fun ContentPlayerBackground(
-    currentSong : State<CoverSong?>,
+    currentSong : State<Music?>,
 ){
     val context = LocalContext.current
 

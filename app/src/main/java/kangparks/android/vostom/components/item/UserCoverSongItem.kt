@@ -19,12 +19,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import kangparks.android.vostom.models.content.CoverSong
-import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
+import kangparks.android.vostom.models.content.Music
 
 @Composable
 fun UserCoverSongItem(
-    content: CoverSong? = null,
+    content: Music? = null,
     contentSize : Int = 140,
     onClick: () -> Unit = {},
 ) {
@@ -50,14 +49,14 @@ fun UserCoverSongItem(
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
-        Spacer(modifier = Modifier.height(5.dp))
-        Text(
-            text = content?.singer?:"",
-            fontSize = 13.sp,
-            fontWeight = FontWeight.Normal,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
+//        Spacer(modifier = Modifier.height(5.dp))
+//        Text(
+//            text = content?.userName?:"",
+//            fontSize = 13.sp,
+//            fontWeight = FontWeight.Normal,
+//            maxLines = 1,
+//            overflow = TextOverflow.Ellipsis
+//        )
         Spacer(modifier = Modifier.height(5.dp))
         Row {
             AsyncImage(
@@ -70,7 +69,7 @@ fun UserCoverSongItem(
             )
             Spacer(modifier = Modifier.width(5.dp))
             Text(
-                text = content?.user + "님의 커버" ?: "",
+                text = content?.userName + "님의 커버" ?: "",
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Normal,
                 maxLines = 1,

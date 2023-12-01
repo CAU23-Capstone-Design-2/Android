@@ -48,7 +48,7 @@ import kangparks.android.vostom.components.item.UserCoverSongItem
 import kangparks.android.vostom.components.section.HorizontalSongSection
 import kangparks.android.vostom.components.skeleton.CoverSongItemSkeleton
 import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
-import kangparks.android.vostom.models.content.CoverSong
+import kangparks.android.vostom.models.content.Music
 import kangparks.android.vostom.navigations.HomeContent
 import kangparks.android.vostom.utils.media.getMediaItem
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
@@ -188,13 +188,13 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(30.dp))
             HorizontalSongSection(
                 title = "나의 커버곡",
-                contents = myCoverItemList.value as List<CoverSong>,
+                contents = myCoverItemList.value as List<Music>,
                 sideButtonAction = {
                     if (myCoverItemList.value.isNotEmpty()) {
                         navController.navigate(HomeContent.DetailMyCoverItem.route)
                     }
                 },
-                renderItem = { item: CoverSong ->
+                renderItem = { item: Music ->
                     CoverSongItem(
                         content = item,
                         onClick = {
@@ -221,13 +221,13 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.padding(vertical = 15.dp))
             HorizontalSongSection(
                 title = "좋아요 한 커버곡",
-                contents =likedCoverItemList.value as List<CoverSong>,
+                contents =likedCoverItemList.value as List<Music>,
                 sideButtonAction = {
                     if (likedCoverItemList.value.isNotEmpty()) {
                         navController.navigate(HomeContent.DetailLikeCoverItem.route)
                     }
                 },
-                renderItem = { item: CoverSong ->
+                renderItem = { item: Music ->
                     UserCoverSongItem(
                         content = item,
                         onClick = {

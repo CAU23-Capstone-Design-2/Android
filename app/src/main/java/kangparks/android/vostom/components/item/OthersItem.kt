@@ -19,11 +19,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import kangparks.android.vostom.models.content.Singer
+import kangparks.android.vostom.models.content.Celebrity
 
 @Composable
 fun OthersItem(
-    content: Singer? = null,
+    content: Celebrity? = null,
     contentSize: Int = 120,
     onClick: () -> Unit = {},
 ) {
@@ -34,7 +34,7 @@ fun OthersItem(
             .clickable(onClick = onClick)
     ) {
         AsyncImage(
-            model = content?.imageUri ?: null,
+            model = content?.imgUrl ?: null,
             contentDescription = null,
             modifier = Modifier
                 .size(contentSize.dp)
@@ -43,7 +43,7 @@ fun OthersItem(
         )
         Spacer(modifier = Modifier.height(10.dp))
         Text(
-            text = content?.name ?: "",
+            text = content?.celebrityName ?: "",
             fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
             maxLines = 1,

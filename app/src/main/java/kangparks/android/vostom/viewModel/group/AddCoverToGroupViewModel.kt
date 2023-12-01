@@ -4,17 +4,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kangparks.android.vostom.models.content.CoverSong
+import kangparks.android.vostom.models.content.Music
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 class AddCoverToGroupViewModel : ViewModel(){
-    private val _songItem = MutableLiveData<CoverSong?>(null)
+    private val _songItem = MutableLiveData<Music?>(null)
     private val coroutineScope = CoroutineScope(viewModelScope.coroutineContext)
 
-    val songItem : LiveData<CoverSong?> = _songItem
+    val songItem : LiveData<Music?> = _songItem
 
-    fun setSongItem(item : CoverSong?){
+    fun setSongItem(item : Music?){
         _songItem.value = item
     }
 

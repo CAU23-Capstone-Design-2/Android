@@ -1,14 +1,13 @@
 package kangparks.android.vostom.viewModel.content
 
 import android.content.Context
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kangparks.android.vostom.models.content.CoverSong
+import kangparks.android.vostom.models.content.Celebrity
 import kangparks.android.vostom.models.content.Group
-import kangparks.android.vostom.models.content.Singer
+import kangparks.android.vostom.models.content.Music
 import kangparks.android.vostom.utils.dummy.dummyGroupList
 import kangparks.android.vostom.utils.dummy.dummyMyCoverItemList
 import kangparks.android.vostom.utils.dummy.dummyMyGroupCoverItemList
@@ -27,12 +26,12 @@ class ContentStoreViewModel(
     private val _isInitProfileContent : MutableLiveData<Boolean> = MutableLiveData(false)
     private val _userImgUrl : MutableLiveData<String> = MutableLiveData("")
     private val _userName : MutableLiveData<String> = MutableLiveData("")
-    private val _likeItemList : MutableLiveData<List<CoverSong>> = MutableLiveData(listOf())
+    private val _likeItemList : MutableLiveData<List<Music>> = MutableLiveData(listOf())
 
     private val _isInitHomeContent : MutableLiveData<Boolean> = MutableLiveData(false)
-    private val _myCoverItemList : MutableLiveData<List<CoverSong>> = MutableLiveData(listOf())
-    private val _myGroupCoverItemList : MutableLiveData<List<CoverSong>> = MutableLiveData(listOf())
-    private val _othersItemList : MutableLiveData<List<Singer>> = MutableLiveData(listOf())
+    private val _myCoverItemList : MutableLiveData<List<Music>> = MutableLiveData(listOf())
+    private val _myGroupCoverItemList : MutableLiveData<List<Music>> = MutableLiveData(listOf())
+    private val _othersItemList : MutableLiveData<List<Celebrity>> = MutableLiveData(listOf())
 
     private val _isInitGroupContent : MutableLiveData<Boolean> = MutableLiveData(false)
     private val _allGroupList : MutableLiveData<List<Group>> = MutableLiveData(listOf())
@@ -42,10 +41,10 @@ class ContentStoreViewModel(
     val userImgUrl : LiveData<String> = _userImgUrl
     val userName : LiveData<String> = _userName
 
-    val myCoverItemList : LiveData<List<CoverSong>> = _myCoverItemList
-    val myGroupCoverItemList : LiveData<List<CoverSong>> = _myGroupCoverItemList
-    val othersItemList : LiveData<List<Singer>> = _othersItemList
-    val likeItemList : LiveData<List<CoverSong>> = _likeItemList
+    val myCoverItemList : LiveData<List<Music>> = _myCoverItemList
+    val myGroupCoverItemList : LiveData<List<Music>> = _myGroupCoverItemList
+    val othersItemList : LiveData<List<Celebrity>> = _othersItemList
+    val likeItemList : LiveData<List<Music>> = _likeItemList
 
     val allGroupList : LiveData<List<Group>> = _allGroupList
     val myGroupList : LiveData<List<Group>> = _myGroupList
@@ -101,19 +100,19 @@ class ContentStoreViewModel(
         _userName.postValue(name)
     }
 
-    fun updateMyCoverItemList(itemList: List<CoverSong>){
+    fun updateMyCoverItemList(itemList: List<Music>){
         _myCoverItemList.postValue(itemList)
     }
 
-    fun updateMyGroupCoverItemList(itemList: List<CoverSong>){
+    fun updateMyGroupCoverItemList(itemList: List<Music>){
         _myGroupCoverItemList.postValue(itemList)
     }
 
-    fun updateOthersItemList(itemList: List<Singer>){
+    fun updateOthersItemList(itemList: List<Celebrity>){
         _othersItemList.postValue(itemList)
     }
 
-    fun updateLikeItemList(itemList: List<CoverSong>){
+    fun updateLikeItemList(itemList: List<Music>){
         _likeItemList.postValue(itemList)
     }
 

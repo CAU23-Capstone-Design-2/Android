@@ -27,11 +27,15 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import kangparks.android.vostom.components.bottomsheet.OthersContentBottomSheet
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
 import kangparks.android.vostom.navigations.LearningContent
+import kangparks.android.vostom.viewModel.bottomsheet.CelebrityContentViewModel
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoadingScreen(navController : NavHostController){
+fun LoadingScreen(
+    navController : NavHostController,
+    celebrityContentViewModel : CelebrityContentViewModel
+){
     val loadingAnimation by rememberLottieComposition(
         spec = LottieCompositionSpec.Asset("loading.json")
     )
@@ -40,7 +44,7 @@ fun LoadingScreen(navController : NavHostController){
         iterations = LottieConstants.IterateForever
     )
 
-    val countValue = remember { mutableIntStateOf(3) }
+    val countValue = remember { mutableIntStateOf(11) }
 
     LaunchedEffect(null){
         while (countValue.value > 0){
@@ -73,7 +77,7 @@ fun LoadingScreen(navController : NavHostController){
                 )
             }
         }
-        OthersContentBottomSheet()
+        OthersContentBottomSheet(celebrityContentViewModel = celebrityContentViewModel)
     }
 
 }

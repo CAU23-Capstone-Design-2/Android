@@ -19,11 +19,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import kangparks.android.vostom.models.content.CoverSong
+import kangparks.android.vostom.models.content.Music
 
 @Composable
 fun CoverSongItem(
-    content: CoverSong? = null,
+    content: Music? = null,
     contentSize : Int = 140,
     onClick: () -> Unit = {},
 ) {
@@ -50,12 +50,12 @@ fun CoverSongItem(
             overflow = TextOverflow.Ellipsis
         )
         Spacer(modifier = Modifier.height(5.dp))
-        Text(
-            text = content?.singer ?: "",
-            fontSize = 13.sp,
-            fontWeight = FontWeight.Bold,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
+//        Text(
+//            text = content?.singer ?: "",
+//            fontSize = 13.sp,
+//            fontWeight = FontWeight.Bold,
+//            maxLines = 1,
+//            overflow = TextOverflow.Ellipsis
+//        )
     }
 }

@@ -18,6 +18,7 @@ import kangparks.android.vostom.screens.learning.LearningSingingScreen
 import kangparks.android.vostom.screens.learning.LoadingScreen
 import kangparks.android.vostom.screens.learning.WelcomeScreen
 import kangparks.android.vostom.screens.permission.PermissionGuideScreen
+import kangparks.android.vostom.viewModel.bottomsheet.CelebrityContentViewModel
 import kangparks.android.vostom.viewModel.learning.ScriptProviderViewModel
 import kangparks.android.vostom.viewModel.learning.SingingViewModel
 import kangparks.android.vostom.viewModel.recorder.RecordFileViewModel
@@ -37,7 +38,6 @@ sealed class LearningContent(val route: String) {
     object CountDown : LearningContent(route = "count_down")
     object Loading : LearningContent(route = "loading")
     object Welcome : LearningContent(route = "welcome")
-
 }
 
 fun NavGraphBuilder.learningContentNavigation(
@@ -46,12 +46,18 @@ fun NavGraphBuilder.learningContentNavigation(
     val singingViewModel = SingingViewModel()
     val recordFileViewModel = RecordFileViewModel()
     val scriptProvider = ScriptProviderViewModel()
+    val celebrityContentViewModel = CelebrityContentViewModel()
 
     navigation(
         route = Nav.LEARNING_CONTENT,
         startDestination = LearningContent.Guide.route
     ) {
-        composable(LearningContent.Guide.route) { GuideScreen(navController = navController) }
+        composable(LearningContent.Guide.route) {
+            GuideScreen(
+                navController = navController,
+                celebrityContentViewModel = celebrityContentViewModel
+            )
+        }
         composable(LearningContent.DetailGuide.route) { DetailGuideScreen(navController = navController) }
         composable(LearningContent.PermissionGuide.route) { PermissionGuideScreen(navController = navController) }
         composable(LearningContent.CountDown.route + "/{destination}") { it ->
@@ -106,7 +112,12 @@ fun NavGraphBuilder.learningContentNavigation(
                 recordFileViewModel = recordFileViewModel
             )
         }
-        composable(LearningContent.Loading.route) { LoadingScreen(navController = navController) }
+        composable(LearningContent.Loading.route) {
+            LoadingScreen(
+                navController = navController,
+                celebrityContentViewModel = celebrityContentViewModel
+            )
+        }
         composable(LearningContent.Welcome.route) { WelcomeScreen(navController = navController) }
     }
 }
