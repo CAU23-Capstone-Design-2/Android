@@ -1,28 +1,21 @@
 package kangparks.android.vostom.utils.helper.auth
 
-import kotlinx.coroutines.*
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import androidx.navigation.NavHostController
 import com.google.android.exoplayer2.ExoPlayer
-import com.google.gson.Gson
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
-import kangparks.android.vostom.models.user.TokenResponse
 import kangparks.android.vostom.navigations.Nav
 import kangparks.android.vostom.utils.networks.user.login
 import kangparks.android.vostom.utils.store.saveAccessToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import java.util.Base64
 
 fun withKakaoLogin(
     appKey: String,
@@ -101,10 +94,7 @@ fun loginWithKakaoToken(
 ){
 
     CoroutineScope(Dispatchers.IO).launch {
-        val result = login(
-            token.accessToken,
-            context = context,
-        )
+        val result = login(token.accessToken)
 
         if(result.isSuccess){
             coroutineScope.launch {
@@ -135,39 +125,6 @@ fun errorWithKakaoLogin(
     }
 }
 
-fun checkLoginToken(token: String) {
-
-    val chunks: List<String> = token.split(".")
-    val decoder: Base64.Decoder = Base64.getUrlDecoder()
-
-    val payload = String(decoder.decode(chunks[1]))
-
-    val payloadJSON: JsonObject = JsonParser.parseString(payload).asJsonObject
-
-    val data = Gson().fromJson(payloadJSON, TokenResponse::class.java)
-
-    Log.d("Route to CoupleSync", "route to coupleSync : $data")
-
-//    if(data.couple != null){
-//        CoroutineScope(Dispatchers.IO).launch {
-////            checkExistNeedPhotoForSync(context)
-//        }
-////        navHostController.navigate(route = Graph.MAIN){
-////            val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
-////            navHostController.popBackStack()
-////            intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-////            context.startActivity(intent)
-////        }
-//    }else{
-////        Log.d("Route to CoupleSync", "route to coupleSync : $data")
-////        navHostController.navigate(route = AuthScreen.CoupleSync.route+"/${data.user.code}&${data.user.name}&${data.user.gender}"){
-////            popUpTo(AuthScreen.Login.route)
-////        }
-//    }
-}
-
-
-/**For Only Dev*/
 fun kakaoLogout(appKey: String, context: Context) {
     KakaoSdk.init(context, appKey)
     UserApiClient.instance.logout { error ->
@@ -180,7 +137,6 @@ fun kakaoLogout(appKey: String, context: Context) {
     }
 }
 
-/**For Only Dev*/
 fun kakaoWithdrawal(appKey: String, context: Context) {
     KakaoSdk.init(context, appKey)
     UserApiClient.instance.unlink { error ->

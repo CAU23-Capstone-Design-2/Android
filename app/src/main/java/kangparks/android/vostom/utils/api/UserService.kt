@@ -1,8 +1,8 @@
 package kangparks.android.vostom.utils.api
 
+import kangparks.android.vostom.models.VostomResponse
 import kangparks.android.vostom.models.user.TokenResponse
 import retrofit2.Response
-import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.Headers
 import retrofit2.http.POST
@@ -12,5 +12,5 @@ interface UserService {
     @POST("/api/auth/login")
     suspend fun login(
         @Header("accessToken") accessToken: String
-    ) : Response<TokenResponse>
+    ) : Response<VostomResponse<TokenResponse>>
 }

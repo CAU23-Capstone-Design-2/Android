@@ -34,12 +34,9 @@ import kangparks.android.vostom.BuildConfig
 import kangparks.android.vostom.R
 import kangparks.android.vostom.components.player.VideoBackground
 import kangparks.android.vostom.components.button.RoundedButton
-import kangparks.android.vostom.navigations.Nav
 import kangparks.android.vostom.utils.helper.auth.withKakaoLogin
 import kangparks.android.vostom.utils.media.getMediaItem
 import kangparks.android.vostom.viewModel.player.VideoBackgroundViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -51,7 +48,6 @@ fun LoginScreen(navHostController: NavHostController){
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
-//    val isBackgroundRelease = remember { mutableStateOf(false) }
     val mediaItem = getMediaItem(context, "login_background", "raw")
     val exoPlayer = remember(context){
         ExoPlayer.Builder(context).build().apply {
@@ -139,8 +135,6 @@ fun LoginScreen(navHostController: NavHostController){
                     )
                 }
             }
-
         }
-
     }
 }

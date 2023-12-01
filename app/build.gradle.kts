@@ -22,6 +22,7 @@ android {
         }
 
         buildConfigField("String", "kakao_api_key", getApiKey("kakao_api_key"))
+        buildConfigField("String", "base_url", getApiKey("base_url"))
 
         manifestPlaceholders["NATIVE_APP_KEY"] = getApiKey("NATIVE_APP_KEY") as String
     }
@@ -34,9 +35,11 @@ android {
                 "proguard-rules.pro"
             )
             buildConfigField("String", "kakao_api_key", getApiKey("kakao_api_key"))
+            buildConfigField("String", "base_url", getApiKey("base_url"))
         }
         getByName("debug"){
             buildConfigField("String", "kakao_api_key", getApiKey("kakao_api_key"))
+            buildConfigField("String", "base_url", getApiKey("base_url"))
         }
     }
     compileOptions {

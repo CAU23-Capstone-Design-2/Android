@@ -1,17 +1,10 @@
 package kangparks.android.vostom.utils.networks.user
 
-import android.content.Context
 import android.util.Log
-import android.widget.Toast
-import androidx.navigation.NavHostController
+import kangparks.android.vostom.models.VostomResponse
 import kangparks.android.vostom.models.user.TokenResponse
-import kangparks.android.vostom.navigations.Nav
 import kangparks.android.vostom.utils.api.UserService
 import kangparks.android.vostom.utils.builder.createApiService
-import kangparks.android.vostom.utils.store.saveAccessToken
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import retrofit2.Response
 
@@ -24,16 +17,15 @@ data class KakaoLoginResponse(
 
 suspend fun login(
     accessToken: String,
-    context: Context,
 ): KakaoLoginResponse {
     val userService: UserService = createApiService()
 
     return try {
-        val response: Response<TokenResponse> = userService.login(accessToken)
+        val response: Response<VostomResponse<TokenResponse>> = userService.login(accessToken)
+        Log.d("NETWORK-login", "response : ${response.body()}")
         if (response.isSuccessful) {
             val token = response.body()?.data?.accessToken
             if (token != null) {
-//                saveAccessToken(context, token)
                 Log.d("NETWORK-login", "success : $token")
 
                 KakaoLoginResponse(true, token, null, null)
