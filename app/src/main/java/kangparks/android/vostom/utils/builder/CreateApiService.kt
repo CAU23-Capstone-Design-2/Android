@@ -1,5 +1,6 @@
 package kangparks.android.vostom.utils.builder
 
+import kangparks.android.vostom.BuildConfig
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -12,7 +13,7 @@ inline fun <reified T> createApiService(): T{
         .build()
 
     val retrofit = Retrofit.Builder()
-        .baseUrl("http://165.194.104.167:1100")
+        .baseUrl(BuildConfig.base_url)
         .addConverterFactory(GsonConverterFactory.create())
         .client(okHttpClient)
         .build()

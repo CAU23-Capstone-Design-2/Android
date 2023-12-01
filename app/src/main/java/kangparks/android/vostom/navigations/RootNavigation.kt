@@ -1,7 +1,6 @@
 package kangparks.android.vostom.navigations
 
 import android.annotation.SuppressLint
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
@@ -23,19 +22,16 @@ object Nav {
     const val HOME_CONTENT = "home_content_graph"
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun VostomApp() {
     val navController = rememberNavController()
-//    val accessToken = getAccessToken(LocalContext.current)
+    val accessToken = getAccessToken(LocalContext.current)
 
-    Scaffold(
-//        bottomBar = { BottomNavigationBar(navController = navController) }
-    ){
+    Scaffold{
         RootNavigation(
             navController = navController,
-//            token = accessToken
+            token = accessToken
         )
     }
 
@@ -44,7 +40,7 @@ fun VostomApp() {
 @Composable
 fun RootNavigation(
     navController: NavHostController,
-    token: String? = null
+    token: String?
 ){
     val contentPlayerViewModel : ContentPlayerViewModel = viewModel()
     val currentGroupViewModel : CurrentGroupViewModel = viewModel()
@@ -53,7 +49,7 @@ fun RootNavigation(
         factory = ContentStoreViewModelFactory(LocalContext.current)
     )
 
-    val curNav = if(false) Nav.AUTH else Nav.CONTENT
+    val curNav = if(token == null) Nav.AUTH else Nav.CONTENT
 
     NavHost(navController = navController, startDestination = curNav){
         authNavigation(navController = navController)

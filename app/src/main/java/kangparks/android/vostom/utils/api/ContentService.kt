@@ -1,5 +1,7 @@
 package kangparks.android.vostom.utils.api
 
+import kangparks.android.vostom.models.VostomResponse
+import kangparks.android.vostom.models.content.Celebrity
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -9,6 +11,14 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface ContentService {
+    @Headers("Content-Type: application/json")
+    @GET("/api/user/celebrityList")
+    suspend fun getCelebrityList(
+        @Header("accessToken") accessToken: String
+    ) : Response<VostomResponse<List<Celebrity>>>
+
+
+    // 미구현 API
     @Headers("Content-Type: application/json")
     @GET("/api/content/userCover")
     suspend fun getUserCoverItems(

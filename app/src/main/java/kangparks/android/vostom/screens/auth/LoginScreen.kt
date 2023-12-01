@@ -3,6 +3,7 @@ package kangparks.android.vostom.screens.auth
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.widget.Toast
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -33,12 +34,9 @@ import kangparks.android.vostom.BuildConfig
 import kangparks.android.vostom.R
 import kangparks.android.vostom.components.player.VideoBackground
 import kangparks.android.vostom.components.button.RoundedButton
-import kangparks.android.vostom.navigations.Nav
 import kangparks.android.vostom.utils.helper.auth.withKakaoLogin
 import kangparks.android.vostom.utils.media.getMediaItem
 import kangparks.android.vostom.viewModel.player.VideoBackgroundViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -50,7 +48,6 @@ fun LoginScreen(navHostController: NavHostController){
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
-    val isBackgroundRelease = remember { mutableStateOf(false) }
     val mediaItem = getMediaItem(context, "login_background", "raw")
     val exoPlayer = remember(context){
         ExoPlayer.Builder(context).build().apply {
@@ -122,25 +119,22 @@ fun LoginScreen(navHostController: NavHostController){
                 Column(modifier = Modifier
                     .padding(bottom = 20.dp)
                     .fillMaxSize(),verticalArrangement = Arrangement.Bottom){
+
+                    val applicationContext = LocalContext.current as ComponentActivity
                     RoundedButton(
                         text = "Vostom 시작하기",
                         onClick = {
-                            // 임시
-                            exoPlayer.release()
-//                            navHostController.navigate(route = Nav.CONTENT){
-//                                navHostController.popBackStack()
-//                            }
                             withKakaoLogin(
                                 appKey = kakaoAppKey,
-                                context = context,
-                                navHostController = navHostController
+                                context = applicationContext,
+                                navController = navHostController,
+                                coroutineScope = coroutineScope,
+                                exoPlayer = exoPlayer
                             )
                         }
                     )
                 }
             }
-
         }
-
     }
 }
