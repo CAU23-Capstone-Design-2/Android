@@ -60,7 +60,7 @@ fun LoadingScreen(
             countValue.value--
         }
 
-        navController.navigate(LearningContent.Welcome.route)
+//        navController.navigate(LearningContent.Welcome.route)
     }
 
     BackHandler(enabled = true) { } // 뒤로 가기 방지

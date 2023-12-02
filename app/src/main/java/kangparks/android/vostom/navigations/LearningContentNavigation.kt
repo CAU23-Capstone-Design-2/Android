@@ -48,7 +48,7 @@ fun NavGraphBuilder.learningContentNavigation(
     val scriptProvider = ScriptProviderViewModel()
     val celebrityContentViewModel = CelebrityContentViewModel()
 
-    val isLearning = false
+    val isLearning = true
 
     val destination = if (isLearning) {
         LearningContent.Loading.route

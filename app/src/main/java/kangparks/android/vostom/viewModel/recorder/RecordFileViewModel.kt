@@ -1,12 +1,17 @@
 package kangparks.android.vostom.viewModel.recorder
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kangparks.android.vostom.utils.constants.getCurrentDate
 import kangparks.android.vostom.utils.networks.learning.uploadLearningData
+import kangparks.android.vostom.utils.store.getAccessToken
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 
@@ -21,6 +26,12 @@ class RecordFileViewModel : ViewModel() {
     private var _currentRecordFileName: String =
         _currentDate + "-" + recordFileList.size.toString() + ".m4a"
 
+    private val _isAfterUploadFiles : MutableLiveData<Boolean> = MutableLiveData(false)
+    private val _isProceedingDialogOpen : MutableLiveData<Boolean> = MutableLiveData(false)
+
+    val isAfterUploadFiles : LiveData<Boolean> = _isAfterUploadFiles
+    val isProceedingDialogOpen : LiveData<Boolean> = _isProceedingDialogOpen
+
     fun addRecordFile(file: File) {
         _recordFileList.add(file)
     }
@@ -30,11 +41,21 @@ class RecordFileViewModel : ViewModel() {
     }
 
     fun uploadRecordFileToServer(
-        accessToken : String,
+        context : Context
     ) {
+        _isProceedingDialogOpen.value = true
+//        val accessToken = getAccessToken(context)
+//        coroutineScope.launch {
+//            if (accessToken != null) {
+//                uploadLearningData(accessToken, recordFileList, context)
+//            }
+//        }
         coroutineScope.launch {
-            uploadLearningData(accessToken, recordFileList)
+            delay(2000)
+            _isProceedingDialogOpen.value = false
+            _isAfterUploadFiles.value = true
         }
+
     }
 
     fun getRecordFileList(): List<File> {
@@ -42,7 +63,7 @@ class RecordFileViewModel : ViewModel() {
     }
 
     fun testForCurrentList(){
-        Log.d("RecordFileViewModel", "currentList: ${recordFileList}")
+        Log.d("RecordFileViewModel", "currentList: $recordFileList")
     }
 
     fun reset() {

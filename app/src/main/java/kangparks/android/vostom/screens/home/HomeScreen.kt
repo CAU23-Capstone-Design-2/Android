@@ -67,7 +67,7 @@ fun HomeScreen(
     starContentViewModel: StarContentViewModel,
     contentPlayerViewModel : ContentPlayerViewModel
 ) {
-    val testBuildString = remember { mutableStateOf("빌드 12-01-20-30") }
+    val testBuildString = remember { mutableStateOf("빌드 12-02-13-00") }
 
     val myCoverItemList = contentStoreViewModel.myCoverItemList.observeAsState(initial = listOf())
     val myGroupCoverItemList = contentStoreViewModel.myGroupCoverItemList.observeAsState(initial = listOf())
