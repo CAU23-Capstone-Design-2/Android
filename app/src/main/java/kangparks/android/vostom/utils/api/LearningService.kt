@@ -1,7 +1,7 @@
 package kangparks.android.vostom.utils.api
 
 import kangparks.android.vostom.models.VostomResponse
-import kangparks.android.vostom.models.learning.LearningStateResponse
+//import kangparks.android.vostom.models.learning.LearningStateResponse
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -20,8 +20,8 @@ interface LearningService {
     ) : Response<VostomResponse<ResponseBody>>
 
     @Headers("Content-Type: application/json")
-    @GET("/api/learning/state")
+    @GET("/api/user/checkTrained")
     suspend fun getLearningState(
-        @Header("Authorization") accessToken: String,
-    ) : Response<VostomResponse<LearningStateResponse>>
+        @Header("accessToken") accessToken: String,
+    ) : Response<VostomResponse<Int>>
 }

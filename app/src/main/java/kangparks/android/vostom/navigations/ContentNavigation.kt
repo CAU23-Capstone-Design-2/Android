@@ -1,10 +1,12 @@
 package kangparks.android.vostom.navigations
 
 import android.content.Context
+import android.util.Log
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import kangparks.android.vostom.models.learning.LearningState
 import kangparks.android.vostom.screens.error.ErrorScreen
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
@@ -19,17 +21,23 @@ fun NavGraphBuilder.contentNavigation(
     contentPlayerViewModel: ContentPlayerViewModel,
     contentStoreViewModel : ContentStoreViewModel,
     currentGroupViewModel: CurrentGroupViewModel,
+    learningState : LearningState?
 ) {
     // TODO("로그인 검증 후 사용자 학습 유무 확인 하기")
-    val isLearnUserVoice = false
+    val isFinishedLearningUserVoice = if(learningState !=null) if(learningState == LearningState.AfterLearning) true else false else false
+    Log.d("Test-ContentNavigation","ContentNavigation")
+    Log.d("Test-ContentNavigation", "isFinishedLearningUserVoice : $isFinishedLearningUserVoice")
 
     navigation(
         route = Nav.CONTENT,
         startDestination =
-            if (isLearnUserVoice) Nav.HOME_CONTENT
+            if (isFinishedLearningUserVoice) Nav.HOME_CONTENT
             else Nav.LEARNING_CONTENT,
     ) {
-        learningContentNavigation(navController = navController)
+        learningContentNavigation(
+            navController = navController,
+            learningState = learningState
+        )
         homeContentNavigation(
             navController = navController,
             contentPlayerViewModel = contentPlayerViewModel,

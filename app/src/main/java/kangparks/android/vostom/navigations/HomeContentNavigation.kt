@@ -1,5 +1,6 @@
 package kangparks.android.vostom.navigations
 
+import android.util.Log
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -81,6 +82,8 @@ fun NavGraphBuilder.homeContentNavigation(
 
     val accessToken = "access_token"
     val startContentViewModel = StarContentViewModel()
+
+    Log.d("Test-HomeContentNavigation", "HomeContentNavigation")
 
     navigation(
         route = Nav.HOME_CONTENT,

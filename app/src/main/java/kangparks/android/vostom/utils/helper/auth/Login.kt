@@ -13,8 +13,10 @@ import com.kakao.sdk.user.UserApiClient
 import kangparks.android.vostom.navigations.Nav
 import kangparks.android.vostom.utils.networks.user.login
 import kangparks.android.vostom.utils.store.saveAccessToken
+import kangparks.android.vostom.viewModel.splash.SplashViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 fun withKakaoLogin(
@@ -22,7 +24,8 @@ fun withKakaoLogin(
     context: Context,
     navController: NavHostController,
     exoPlayer: ExoPlayer,
-    coroutineScope: CoroutineScope
+    coroutineScope: CoroutineScope,
+    viewModel: SplashViewModel
 ) {
     KakaoSdk.init(context, appKey)
 
@@ -45,7 +48,8 @@ fun withKakaoLogin(
                             navController = navController,
                             context = context,
                             exoPlayer = exoPlayer,
-                            coroutineScope = coroutineScope
+                            coroutineScope = coroutineScope,
+                            viewModel
                         )
                     }
                 }
@@ -57,7 +61,8 @@ fun withKakaoLogin(
                     navController = navController,
                     context = context,
                     exoPlayer = exoPlayer,
-                    coroutineScope = coroutineScope
+                    coroutineScope = coroutineScope,
+                    viewModel
                 )
             } else {
                 errorWithKakaoLogin(context = context)
@@ -76,7 +81,8 @@ fun withKakaoLogin(
                     navController = navController,
                     context = context,
                     exoPlayer = exoPlayer,
-                    coroutineScope = coroutineScope
+                    coroutineScope = coroutineScope,
+                    viewModel
                 )
             } else {
                 errorWithKakaoLogin(context = context)
@@ -90,7 +96,8 @@ fun loginWithKakaoToken(
     navController : NavHostController,
     context: Context,
     exoPlayer : ExoPlayer,
-    coroutineScope: CoroutineScope
+    coroutineScope: CoroutineScope,
+    viewModel: SplashViewModel
 ){
 
     CoroutineScope(Dispatchers.IO).launch {
@@ -98,7 +105,12 @@ fun loginWithKakaoToken(
 
         if(result.isSuccess){
             coroutineScope.launch {
+                Log.d("kkkkkkkkkkkkk", "success : ${result.token}")
                 saveAccessToken(context, result.token!!)
+                viewModel.setToken(result.token)
+                delay(500)
+                viewModel.getCurrentLearningState()
+                delay(500)
                 exoPlayer.release()
                 navController.navigate(route = Nav.CONTENT) {
                     navController.popBackStack()

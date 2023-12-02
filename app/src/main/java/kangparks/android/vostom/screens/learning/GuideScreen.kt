@@ -46,7 +46,7 @@ fun GuideScreen(
     navController: NavHostController,
     celebrityContentViewModel : CelebrityContentViewModel
 ) {
-    val testBuildString = remember { mutableStateOf("빌드 12-02-13-00") }
+    val testBuildString = remember { mutableStateOf("빌드 12-02-16-00") }
 
     val singingAnimation by rememberLottieComposition(
         spec = LottieCompositionSpec.Asset("singing.json")
