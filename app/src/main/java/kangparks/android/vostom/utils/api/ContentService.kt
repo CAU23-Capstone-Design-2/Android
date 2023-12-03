@@ -22,7 +22,7 @@ interface ContentService {
     @Headers("Content-Type: application/json")
     @GET("/api/user/celebrity/musicList")
     suspend fun getCelebrityMusicList(
-        @Header("Authorization") accessToken: String,
+        @Header("accessToken") accessToken: String,
         @Query("id") celebrityId: Int,
     ) : Response<VostomResponse<List<Music>>>
 

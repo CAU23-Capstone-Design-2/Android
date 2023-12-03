@@ -52,20 +52,22 @@ class CelebrityContentViewModel : ViewModel() {
     fun updateCelebrityList(
         context : Context
     ){
-//        val token = getAccessToken(context)
+        val token = getAccessToken(context)
         if(_celebrityList.value!!.isEmpty()) {
-            _celebrityList.postValue(dummyOthersItemList)
+//            _celebrityList.postValue(dummyOthersItemList)
 
-//            coroutineScope.launch {
-//                 val result = getCelebrityList(
-//                    accessToken = accessToken,
-//                    context = context
-//                )
-//
-//                result?.let {
-//                    _celebrityList.postValue(it)
-//                }
-//            }
+            coroutineScope.launch {
+                 val result = token?.let {
+                     getCelebrityList(
+                         accessToken = it,
+                         context = context
+                     )
+                 }
+
+                result?.let {
+                    _celebrityList.postValue(it)
+                }
+            }
         }
     }
 
@@ -76,15 +78,21 @@ class CelebrityContentViewModel : ViewModel() {
         if(celebrity.celebrityName == _currentCelebrity.value?.celebrityName) return
         _currentCelebrity.postValue(celebrity)
 
-//        val token = getAccessToken(context)
-//        coroutineScope.launch {
-//            val result = getCelebrityMusicList(
-//                accessToken = accessToken,
-//                celebrityId = celebrity.id,
-//                context = context
-//            )
-//        }
-        _currentCelebrityMusicList.postValue(dummyStarCoverItemList)
+        val token = getAccessToken(context)
+        coroutineScope.launch {
+            val result = token?.let {
+                getCelebrityMusicList(
+                    accessToken = it,
+                    celebrityId = celebrity.id,
+                    context = context
+                )
+            }
+            if(result != null){
+                _currentCelebrityMusicList.postValue(result)
+            }
+        }
+
+//        _currentCelebrityMusicList.postValue(dummyStarCoverItemList)
     }
 
     fun changeView(viewType: CelebrityContentViewType){

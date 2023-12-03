@@ -21,6 +21,7 @@ import kangparks.android.vostom.screens.learning.LoadingScreen
 import kangparks.android.vostom.screens.learning.WelcomeScreen
 import kangparks.android.vostom.screens.permission.PermissionGuideScreen
 import kangparks.android.vostom.viewModel.bottomsheet.CelebrityContentViewModel
+import kangparks.android.vostom.viewModel.learning.LearningStateViewModel
 import kangparks.android.vostom.viewModel.learning.ScriptProviderViewModel
 import kangparks.android.vostom.viewModel.learning.SingingViewModel
 import kangparks.android.vostom.viewModel.recorder.RecordFileViewModel
@@ -44,24 +45,16 @@ sealed class LearningContent(val route: String) {
 
 fun NavGraphBuilder.learningContentNavigation(
     navController: NavHostController,
-//    learningState : LearningState?
+    checkRunningService : (serviceClass: Class<*>)-> Boolean,
+    learningStateViewModel : LearningStateViewModel,
 ) {
     val singingViewModel = SingingViewModel()
     val recordFileViewModel = RecordFileViewModel()
     val scriptProvider = ScriptProviderViewModel()
     val celebrityContentViewModel = CelebrityContentViewModel()
 
-//    val destination = if (learningState == LearningState.Learning) {
-//        LearningContent.Loading.route
-//    } else {
-//        LearningContent.Guide.route
-//    }
-    Log.d("Test-LearningContentNavigation", "LearningContentNavigation")
-//    Log.d("Test-LearningContentNavigation", "destination : $destination")
-
     navigation(
         route = Nav.LEARNING_CONTENT,
-//        startDestination = destination
         startDestination = LearningContent.Guide.route
     ) {
         composable(LearningContent.Guide.route) {
@@ -127,7 +120,9 @@ fun NavGraphBuilder.learningContentNavigation(
         composable(LearningContent.Loading.route) {
             LoadingScreen(
                 navController = navController,
-                celebrityContentViewModel = celebrityContentViewModel
+                celebrityContentViewModel = celebrityContentViewModel,
+                learningStateViewModel = learningStateViewModel,
+                checkRunningService = checkRunningService
             )
         }
         composable(LearningContent.Welcome.route) { WelcomeScreen(navController = navController) }

@@ -1,5 +1,6 @@
 package kangparks.android.vostom.screens.learning
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,8 +33,10 @@ fun DetailGuideScreen(navController: NavHostController){
             nextButtonContent = "학습 시작",
             nextButtonAction = {
                 if (getResultOfCurrentPermissions(context)) {
+                    Log.d("TAG", "DetailGuideScreen: 권한 확인")
                     navController.navigate(LearningContent.GuideScript.route)
                 } else {
+                    Log.d("TAG", "DetailGuideScreen: 권한 없음")
                     navController.navigate(LearningContent.PermissionGuide.route)
                 }
             }

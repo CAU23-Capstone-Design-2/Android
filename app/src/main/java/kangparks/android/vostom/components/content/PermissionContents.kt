@@ -28,7 +28,7 @@ fun PermissionContents() {
             )
             PermissionItem(title = "∙ 녹음", content = "사용자 목소리를 분석하기 위해서 녹음 기능이 필요합니다.")
             Spacer(modifier = Modifier.padding(vertical = 15.dp))
-            PermissionItem(title = "∙ 저장공간", content = "사용자 목소리를 녹음한 파일이 저장됩니다.")
+            PermissionItem(title = "∙ 서비스", content = "포그라운드에서 사용자 목소리의 학습 정도를 확인합니다..")
         }
         Spacer(modifier = Modifier.height(40.dp))
         Column {
