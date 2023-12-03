@@ -7,6 +7,7 @@ import androidx.navigation.navigation
 import kangparks.android.vostom.screens.error.ErrorScreen
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
+import kangparks.android.vostom.viewModel.learning.LearningStateViewModel
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
 sealed class Content(val route: String) {
@@ -18,17 +19,18 @@ fun NavGraphBuilder.contentNavigation(
     contentPlayerViewModel: ContentPlayerViewModel,
     contentStoreViewModel : ContentStoreViewModel,
     currentGroupViewModel: CurrentGroupViewModel,
+    learningStateViewModel : LearningStateViewModel,
+    checkRunningService : (serviceClass: Class<*>)-> Boolean
 ) {
 
     navigation(
         route = Nav.CONTENT,
-        startDestination =
-//            if (isFinishedLearningUserVoice) Nav.HOME_CONTENT
-//            else Nav.LEARNING_CONTENT,
-    Nav.LEARNING_CONTENT
+        startDestination = Nav.LEARNING_CONTENT
     ) {
         learningContentNavigation(
             navController = navController,
+            checkRunningService = checkRunningService,
+            learningStateViewModel = learningStateViewModel,
         )
         homeContentNavigation(
             navController = navController,

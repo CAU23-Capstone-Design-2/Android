@@ -9,6 +9,6 @@ data class Celebrity(
     @SerializedName("id")
     val id: Int,
 
-    @SerializedName("imgUrl")
+    @SerializedName("imgUri")
     val imgUrl: String
 )

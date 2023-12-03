@@ -21,6 +21,7 @@ import kangparks.android.vostom.utils.store.getAccessToken
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModelFactory
 import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
+import kangparks.android.vostom.viewModel.learning.LearningStateViewModel
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 import kangparks.android.vostom.viewModel.splash.SplashViewModel
 
@@ -34,14 +35,20 @@ object Nav {
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun VostomApp(splashViewModel : SplashViewModel) {
+fun VostomApp(
+    splashViewModel : SplashViewModel,
+    learningStateViewModel : LearningStateViewModel,
+    checkRunningService : (serviceClass: Class<*>)-> Boolean
+) {
 
     val navController = rememberNavController()
 
     Scaffold{
         RootNavigation(
             splashViewModel = splashViewModel,
+            learningStateViewModel = learningStateViewModel,
             navController = navController,
+            checkRunningService = checkRunningService
         )
     }
 
@@ -50,7 +57,9 @@ fun VostomApp(splashViewModel : SplashViewModel) {
 @Composable
 fun RootNavigation(
     splashViewModel : SplashViewModel,
+    learningStateViewModel : LearningStateViewModel,
     navController: NavHostController,
+    checkRunningService : (serviceClass: Class<*>)-> Boolean
 ){
     val contentPlayerViewModel : ContentPlayerViewModel = viewModel()
     val currentGroupViewModel : CurrentGroupViewModel = viewModel()
@@ -73,6 +82,8 @@ fun RootNavigation(
             contentPlayerViewModel = contentPlayerViewModel,
             contentStoreViewModel = contentStoreViewModel,
             currentGroupViewModel = currentGroupViewModel,
+            learningStateViewModel = learningStateViewModel,
+            checkRunningService = checkRunningService
         )
     }
     ContentPlayerScreen(
