@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kangparks.android.vostom.models.content.CoverSong
 import kangparks.android.vostom.models.content.Group
+import kangparks.android.vostom.models.content.Music
 import kangparks.android.vostom.utils.dummy.dummyOthersItemList
 import kangparks.android.vostom.utils.dummy.dummyStarCoverItemList
 import kotlinx.coroutines.CoroutineScope
@@ -16,10 +16,10 @@ class CurrentGroupViewModel : ViewModel() {
     private val coroutineScope = CoroutineScope(viewModelScope.coroutineContext)
 
     private val _currentGroup : MutableLiveData<Group?> = MutableLiveData(null)
-    private val _currentGroupCoverItemList : MutableLiveData<List<CoverSong>?> = MutableLiveData(null)
+    private val _currentGroupCoverItemList : MutableLiveData<List<Music>?> = MutableLiveData(null)
 
     val currentGroup : LiveData<Group?> = _currentGroup
-    val currentGroupCoverItemList : LiveData<List<CoverSong>?> = _currentGroupCoverItemList
+    val currentGroupCoverItemList : LiveData<List<Music>?> = _currentGroupCoverItemList
 
     fun selectGroup(group : Group){
         _currentGroup.postValue(group)

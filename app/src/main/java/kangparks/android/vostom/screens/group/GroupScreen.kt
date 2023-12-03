@@ -313,7 +313,7 @@ fun GroupScreen(
                                 )
                                 Spacer(modifier = Modifier.height(5.dp))
                                 Text(
-                                    text = it[index].singer,
+                                    text = it[index].userName,
                                     fontSize = 13.sp,
                                     fontWeight = FontWeight.Bold,
                                     maxLines = 1,
@@ -331,7 +331,7 @@ fun GroupScreen(
                                     )
                                     Spacer(modifier = Modifier.width(5.dp))
                                     Text(
-                                        text = it[index].user + "님의 커버" ?: "",
+                                        text = it[index].userName + "님의 커버" ?: "",
                                         fontSize = 12.sp,
                                         fontWeight = FontWeight.Normal,
                                         maxLines = 1,

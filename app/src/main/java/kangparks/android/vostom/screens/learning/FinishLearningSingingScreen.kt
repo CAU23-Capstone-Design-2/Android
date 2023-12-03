@@ -43,8 +43,6 @@ fun FinishLearningSingingScreen(navController : NavHostController){
 
     Surface {
         LearningLayoutTemplate(
-            backButtonContent = "녹음 다시하기",
-            backButtonAction = {  },
             mainContent = "좋아요! 목소리 학습하는데 도움이 되고 있어요~",
             subAnnotatedString = buildAnnotatedString {
                 append("정확한 학습을 위해서 더 많은 사용자의 목소리 데이터가 필요합니다. ")

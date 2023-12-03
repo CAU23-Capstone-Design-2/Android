@@ -3,23 +3,23 @@ package kangparks.android.vostom.viewModel.content
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import kangparks.android.vostom.models.content.Singer
-import kangparks.android.vostom.models.content.Song
-import kangparks.android.vostom.utils.dummy.othersContentItemList
+import kangparks.android.vostom.models.content.Celebrity
+import kangparks.android.vostom.models.content.Music
+import kangparks.android.vostom.utils.dummy.dummyStarCoverItemList
 
 class StarContentViewModel : ViewModel(){
-    private val _currentSinger : MutableLiveData<Singer> = MutableLiveData(Singer())
-    private val _currentSingerContent : MutableLiveData<List<Song>> = MutableLiveData(listOf())
+    private val _currentSinger : MutableLiveData<Celebrity> = MutableLiveData(null)
+    private val _currentSingerContent : MutableLiveData<List<Music>> = MutableLiveData(listOf())
 
-    val currentSinger : LiveData<Singer> = _currentSinger
-    val currentSingerContent : LiveData<List<Song>> = _currentSingerContent
+    val currentSinger : LiveData<Celebrity> = _currentSinger
+    val currentSingerContent : LiveData<List<Music>> = _currentSingerContent
     fun updateCurrentSinger(
         accessToken : String,
-        singer: Singer
+        singer: Celebrity
     ){
         _currentSinger.postValue(singer)
         // TODO(서버에서 가수의 컨텐츠 받아오기)
         // getStarItems(token, singer.id)
-        _currentSingerContent.postValue(othersContentItemList)
+        _currentSingerContent.postValue(dummyStarCoverItemList)
     }
 }

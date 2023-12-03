@@ -1,9 +1,11 @@
 package kangparks.android.vostom.navigations
 
+import android.util.Log
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import kangparks.android.vostom.models.learning.LearningState
 import kangparks.android.vostom.screens.learning.AddFileScreen
 import kangparks.android.vostom.screens.learning.CountDownScreen
 import kangparks.android.vostom.screens.learning.DetailGuideScreen
@@ -18,6 +20,7 @@ import kangparks.android.vostom.screens.learning.LearningSingingScreen
 import kangparks.android.vostom.screens.learning.LoadingScreen
 import kangparks.android.vostom.screens.learning.WelcomeScreen
 import kangparks.android.vostom.screens.permission.PermissionGuideScreen
+import kangparks.android.vostom.viewModel.bottomsheet.CelebrityContentViewModel
 import kangparks.android.vostom.viewModel.learning.ScriptProviderViewModel
 import kangparks.android.vostom.viewModel.learning.SingingViewModel
 import kangparks.android.vostom.viewModel.recorder.RecordFileViewModel
@@ -37,21 +40,36 @@ sealed class LearningContent(val route: String) {
     object CountDown : LearningContent(route = "count_down")
     object Loading : LearningContent(route = "loading")
     object Welcome : LearningContent(route = "welcome")
-
 }
 
 fun NavGraphBuilder.learningContentNavigation(
     navController: NavHostController,
+//    learningState : LearningState?
 ) {
     val singingViewModel = SingingViewModel()
     val recordFileViewModel = RecordFileViewModel()
     val scriptProvider = ScriptProviderViewModel()
+    val celebrityContentViewModel = CelebrityContentViewModel()
+
+//    val destination = if (learningState == LearningState.Learning) {
+//        LearningContent.Loading.route
+//    } else {
+//        LearningContent.Guide.route
+//    }
+    Log.d("Test-LearningContentNavigation", "LearningContentNavigation")
+//    Log.d("Test-LearningContentNavigation", "destination : $destination")
 
     navigation(
         route = Nav.LEARNING_CONTENT,
+//        startDestination = destination
         startDestination = LearningContent.Guide.route
     ) {
-        composable(LearningContent.Guide.route) { GuideScreen(navController = navController) }
+        composable(LearningContent.Guide.route) {
+            GuideScreen(
+                navController = navController,
+                celebrityContentViewModel = celebrityContentViewModel
+            )
+        }
         composable(LearningContent.DetailGuide.route) { DetailGuideScreen(navController = navController) }
         composable(LearningContent.PermissionGuide.route) { PermissionGuideScreen(navController = navController) }
         composable(LearningContent.CountDown.route + "/{destination}") { it ->
@@ -106,7 +124,12 @@ fun NavGraphBuilder.learningContentNavigation(
                 recordFileViewModel = recordFileViewModel
             )
         }
-        composable(LearningContent.Loading.route) { LoadingScreen(navController = navController) }
+        composable(LearningContent.Loading.route) {
+            LoadingScreen(
+                navController = navController,
+                celebrityContentViewModel = celebrityContentViewModel
+            )
+        }
         composable(LearningContent.Welcome.route) { WelcomeScreen(navController = navController) }
     }
 }

@@ -1,5 +1,6 @@
 package kangparks.android.vostom.screens.learning
 
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -64,11 +65,16 @@ fun AddFileScreen(
             nextButtonContent = "녹음 파일 추가 완료",
             nextButtonAction = {
                 val addFileList = addFileViewModel.getRecordFileFromDeviceList()
-                for (file in addFileList) {
-                    recordFileViewModel.addRecordFile(file)
+                if(sizeOfAddedRecordFiles.value != 0){
+                    for (file in addFileList) {
+                        recordFileViewModel.addRecordFile(file)
+                    }
+                    recordFileViewModel.testForCurrentList()
+                    navController.navigate(LearningContent.GuideFinishLearning.route)
                 }
-                recordFileViewModel.testForCurrentList()
-                navController.navigate(LearningContent.GuideFinishLearning.route)
+                else{
+                    Toast.makeText(context, "추가한 파일이 없습니다!", Toast.LENGTH_SHORT).show()
+                }
             },
             othersOptionButtonContent = "추가할 파일이 없어요!",
             othersOptionButtonAction = {

@@ -17,16 +17,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
@@ -34,19 +39,32 @@ import kangparks.android.vostom.BuildConfig
 import kangparks.android.vostom.R
 import kangparks.android.vostom.components.player.VideoBackground
 import kangparks.android.vostom.components.button.RoundedButton
+import kangparks.android.vostom.models.learning.LearningState
+import kangparks.android.vostom.navigations.HomeContent
+import kangparks.android.vostom.navigations.LearningContent
 import kangparks.android.vostom.utils.helper.auth.withKakaoLogin
 import kangparks.android.vostom.utils.media.getMediaItem
 import kangparks.android.vostom.viewModel.player.VideoBackgroundViewModel
+import kangparks.android.vostom.viewModel.splash.RequestState
+import kangparks.android.vostom.viewModel.splash.SplashViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun LoginScreen(navHostController: NavHostController){
+fun LoginScreen(
+    navHostController: NavHostController,
+    splashViewModel : SplashViewModel
+){
+    val testBuildString = remember { mutableStateOf("빌드 12-02-16-00") }
+
     val kakaoAppKey = BuildConfig.kakao_api_key
     val doubleBackToExitPressedOnce = remember { mutableStateOf(false) }
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+
+    val requestState = splashViewModel.isReceivedRequestLearningState.observeAsState(RequestState.BeforeRequest)
+    val currentLearningState = splashViewModel.currentLearningState.observeAsState(LearningState.BeforeLearning)
 
     val mediaItem = getMediaItem(context, "login_background", "raw")
     val exoPlayer = remember(context){
@@ -61,6 +79,26 @@ fun LoginScreen(navHostController: NavHostController){
 
     val viewModel = remember {
         VideoBackgroundViewModel(exoPlayer)
+    }
+
+    LaunchedEffect(key1 = requestState.value){
+        if(requestState.value == RequestState.AfterRequest){
+            if(currentLearningState.value == LearningState.AfterLearning){
+                navHostController.navigate(HomeContent.Home.route){
+                    navHostController.popBackStack()
+                }
+            }
+            else if(currentLearningState.value == LearningState.BeforeLearning){
+                navHostController.navigate(LearningContent.Guide.route){
+                    navHostController.popBackStack()
+                }
+            }
+            else{
+                navHostController.navigate(LearningContent.Loading.route){
+                    navHostController.popBackStack()
+                }
+            }
+        }
     }
 
     BackHandler(enabled = true) {
@@ -82,6 +120,13 @@ fun LoginScreen(navHostController: NavHostController){
     )
     {
         Box {
+            Text(
+                text = testBuildString.value,
+                fontSize = 12.sp,
+                color = Color.White,
+                modifier = Modifier
+                    .windowInsetsPadding(WindowInsets.statusBars)
+            )
             VideoBackground(
                 viewModel = viewModel,
                 exoPlayer = exoPlayer
@@ -129,7 +174,8 @@ fun LoginScreen(navHostController: NavHostController){
                                 context = applicationContext,
                                 navController = navHostController,
                                 coroutineScope = coroutineScope,
-                                exoPlayer = exoPlayer
+                                exoPlayer = exoPlayer,
+                                viewModel = splashViewModel
                             )
                         }
                     )

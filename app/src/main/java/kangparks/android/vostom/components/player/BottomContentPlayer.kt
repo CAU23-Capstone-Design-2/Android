@@ -120,7 +120,7 @@ fun BottomContentPlayer(
                         overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        text = currentSong.value?.singer ?: "",
+                        text = currentSong.value?.userName ?: "",
                         fontSize = 13.sp,
                         fontWeight = FontWeight.Normal,
                         maxLines = 1,

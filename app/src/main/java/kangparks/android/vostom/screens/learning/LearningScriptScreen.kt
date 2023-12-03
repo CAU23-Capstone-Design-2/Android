@@ -84,7 +84,7 @@ fun LearningScriptScreen(
             nextButtonAction = {
                 recorderViewModel.stop()
 //                val recordFile = recorderViewModel.getAudioFile()
-                val recordFile = recorderViewModel.getOutputFile()
+                val recordFile = recorderViewModel.getOutputFile(recordFileViewModel.getCurrentRecordFileName())
                 if (recordFile != null) {
                     recordFileViewModel.addRecordFile(recordFile)
                     navController.navigate(LearningContent.FinishLearningScript.route)

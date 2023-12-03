@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.exoplayer2.ExoPlayer
 import kangparks.android.vostom.models.content.Comment
-import kangparks.android.vostom.models.content.CoverSong
+import kangparks.android.vostom.models.content.Music
 import kangparks.android.vostom.utils.dummy.dummyCommentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -18,14 +18,14 @@ class ContentPlayerViewModel : ViewModel(){
 
     private val _isPlaying : MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
     private val _isPaused : MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
-    private val _currentSong : MutableLiveData<CoverSong?> = MutableLiveData<CoverSong?>(null)
+    private val _currentSong : MutableLiveData<Music?> = MutableLiveData<Music?>(null)
     private val _isShowPlayer : MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
 
     private val _currentSongCommentList : MutableLiveData<List<Comment>> = MutableLiveData<List<Comment>>(listOf())
 
     val isPlaying : LiveData<Boolean> = _isPlaying
     val isPaused : LiveData<Boolean> = _isPaused
-    val currentSong : LiveData<CoverSong?> = _currentSong
+    val currentSong : LiveData<Music?> = _currentSong
     val isShowPlayer : LiveData<Boolean> = _isShowPlayer
 
     val currentSongCommentList : LiveData<List<Comment>> = _currentSongCommentList
@@ -38,10 +38,10 @@ class ContentPlayerViewModel : ViewModel(){
         return _exoPlayer
     }
 
-    fun playMusic(song: CoverSong){
+    fun playMusic(music: Music){
         _isPlaying.value = true
         _isPaused.value = false
-        _currentSong.value = song
+        _currentSong.value = music
     }
 
     fun showPlayer(){

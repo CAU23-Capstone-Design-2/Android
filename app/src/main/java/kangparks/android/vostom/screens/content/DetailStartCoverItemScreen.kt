@@ -34,7 +34,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kangparks.android.vostom.components.appbar.ContentAppBar
 import kangparks.android.vostom.components.item.CoverSongItem
 import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
-import kangparks.android.vostom.models.content.CoverSong
+import kangparks.android.vostom.models.content.Music
 import kangparks.android.vostom.viewModel.content.StarContentViewModel
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
@@ -88,7 +88,7 @@ fun DetailStarCoverItemScreen(
         isPlaying = isPlaying
     ) {
         AsyncImage(
-            model = currentSinger.value?.imageUri ?: "",
+            model = currentSinger.value?.imgUrl ?: "",
             contentDescription = "",
             modifier = Modifier
                 .fillMaxWidth()
@@ -126,7 +126,7 @@ fun DetailStarCoverItemScreen(
                             .padding(horizontal = 20.dp)
                     ) {
                         Text(
-                            text = "${currentSinger.value?.name}님의 커버곡",
+                            text = "${currentSinger.value?.celebrityName}님의 커버곡",
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White
@@ -145,13 +145,16 @@ fun DetailStarCoverItemScreen(
             ) {
                 currentSingerContent.value?.let {
                     List(it.size) { index ->
-                        val coverItem = CoverSong(
+                        val coverItem = Music(
                             id = it[index].id,
                             title = it[index].title,
-                            singer = it[index].singer,
-                            user = currentSinger.value?.name ?: "",
-                            albumArtUri = it[index].imageUri,
-                            userImgUri = currentSinger.value?.imageUri ?: "",
+                            userName = currentSinger.value?.celebrityName ?: "",
+                            albumArtUri = it[index].albumArtUri,
+                            userId = currentSinger.value?.id ?: 0,
+                            userImgUri = currentSinger.value?.imgUrl ?: "",
+                            contentUri = "",
+                            likeCount = 0,
+                            likedByUser = false,
                         )
                         item {
                             if (index % 2 == 0) {
