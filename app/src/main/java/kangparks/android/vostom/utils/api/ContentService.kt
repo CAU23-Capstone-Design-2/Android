@@ -29,7 +29,6 @@ interface ContentService {
         @Query("id") celebrityId: Int,
     ) : Response<VostomResponse<List<Music>>>
 
-
     @Headers("Content-Type: application/json")
     @POST("/api/music/train")
     suspend fun createCover(
@@ -51,6 +50,18 @@ interface ContentService {
     ) : Response<VostomResponse<List<Music>>>
 
     @Headers("Content-Type: application/json")
+    @GET("/api/user/likedMusic")
+    suspend fun getUserLikedMusic(
+        @Header("accessToken") accessToken: String,
+    ) : Response<VostomResponse<List<Music>>>
+
+    @Headers("Content-Type: application/json")
+    @GET("/api/user/teamMusic")
+    suspend fun getUserTeamMusic(
+        @Header("accessToken") accessToken: String,
+    ) : Response<VostomResponse<List<Music>>>
+
+    @Headers("Content-Type: application/json")
     @POST("/api/music/like")
     suspend fun likeMusic(
         @Header("accessToken") accessToken: String,
@@ -66,13 +77,6 @@ interface ContentService {
 
 //######################################################
     // 미구현 API
-
-
-    @Headers("Content-Type: application/json")
-    @GET("/api/content/userGroupCover")
-    suspend fun getUserGroupCoverItems(
-        @Header("Authorization") accessToken: String,
-    ) : Response<Any>
 
 
 

@@ -264,34 +264,9 @@ fun GroupScreen(
                                 .padding(vertical = 5.dp)
                                 .clip(RoundedCornerShape(5.dp))
                                 .clickable(onClick =
-                                {
-                                    val exoPlayer = contentPlayerViewModel.getPlayer()
-                                    if (exoPlayer == null) {
-                                        val newPlayer = ExoPlayer
-                                            .Builder(context)
-                                            .build()
-                                            .apply {
-                                                setMediaItem(
-                                                    getMediaItem(
-                                                        context,
-                                                        "rose_eleven",
-                                                        "raw"
-                                                    )
-                                                )
-                                                playWhenReady = true
-                                                prepare()
-                                                volume = 1f
-                                            }
-                                        contentPlayerViewModel.setPlayer(newPlayer)
-                                    } else {
-                                        exoPlayer.replaceMediaItem(
-                                            0,
-                                            getMediaItem(context, "rose_eleven", "raw")
-                                        )
+                                    {
+
                                     }
-                                    contentPlayerViewModel.playMusic(it[index])
-//                            contentPlayerViewModel.showPlayer()
-                                }
                                 )
                         ){
                             AsyncImage(

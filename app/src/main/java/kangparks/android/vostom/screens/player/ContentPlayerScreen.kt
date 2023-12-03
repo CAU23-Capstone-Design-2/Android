@@ -66,7 +66,7 @@ fun ContentPlayerScreen(
     var sliderIsChanging by remember { mutableStateOf(false) }
     var localSliderValue by remember { mutableFloatStateOf(0f) }
 
-    val exoPlayer = contentPlayerViewModel.getPlayer()
+    val exoPlayer = contentPlayerViewModel.getPlayer(context)
 
     val currentSong = contentPlayerViewModel.currentSong.observeAsState(null)
     val isPaused = contentPlayerViewModel.isPaused.observeAsState(false)

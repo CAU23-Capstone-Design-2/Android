@@ -50,9 +50,12 @@ import kangparks.android.vostom.components.skeleton.CoverSongItemSkeleton
 import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
 import kangparks.android.vostom.models.content.Music
 import kangparks.android.vostom.navigations.HomeContent
+import kangparks.android.vostom.utils.helper.media.getMediaSource
 import kangparks.android.vostom.utils.media.getMediaItem
+import kangparks.android.vostom.utils.store.getAccessToken
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
+import kotlinx.coroutines.delay
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -67,14 +70,14 @@ fun ProfileScreen(
     val likedCoverItemList = contentStoreViewModel.likeItemList.observeAsState(initial = listOf())
 
     val isPlaying = contentPlayerViewModel.isPlaying.observeAsState(initial = false)
-
     val isDarkTheme = isSystemInDarkTheme()
     val systemUiController = rememberSystemUiController()
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
     LaunchedEffect(key1 = null){
-        contentStoreViewModel.initProfileContent()
+        delay(500)
+        contentStoreViewModel.initProfileContent(context)
     }
 
     LaunchedEffect(key1 = userName.value){
@@ -143,7 +146,7 @@ fun ProfileScreen(
                 contentTitle = "프로필",
                 containerModifier = Modifier.padding(horizontal = 20.dp)
             )
-//            Text(text = "dsfsdfsdfds")
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -198,19 +201,19 @@ fun ProfileScreen(
                     CoverSongItem(
                         content = item,
                         onClick = {
-                            val exoPlayer = contentPlayerViewModel.getPlayer()
-                            if(exoPlayer == null){
-                                val newPlayer = ExoPlayer.Builder(context).build().apply {
-                                    setMediaItem(getMediaItem(context, "iu_all_your_moments", "raw"))
-                                    playWhenReady = true
-                                    prepare()
-                                    volume = 1f
-                                }
-                                contentPlayerViewModel.setPlayer(newPlayer)
-                            }else{
-                                exoPlayer.replaceMediaItem(0, getMediaItem(context, "iu_all_your_moments", "raw"))
+                            val token = getAccessToken(context)
+                            if(token != null){
+                                val mediaSource = getMediaSource(
+                                    context = context,
+                                    token = token,
+                                    musicId = item.id
+                                )
+                                contentPlayerViewModel.setMediaSource(
+                                    context = context,
+                                    mediaSource = mediaSource
+                                )
+                                contentPlayerViewModel.playMusic(item)
                             }
-                            contentPlayerViewModel.playMusic(item)
                         }
                     )
                 },
@@ -231,19 +234,19 @@ fun ProfileScreen(
                     UserCoverSongItem(
                         content = item,
                         onClick = {
-                            val exoPlayer = contentPlayerViewModel.getPlayer()
-                            if(exoPlayer == null){
-                                val newPlayer = ExoPlayer.Builder(context).build().apply {
-                                    setMediaItem(getMediaItem(context, "rose_eleven", "raw"))
-                                    playWhenReady = true
-                                    prepare()
-                                    volume = 1f
-                                }
-                                contentPlayerViewModel.setPlayer(newPlayer)
-                            }else{
-                                exoPlayer.replaceMediaItem(0, getMediaItem(context, "rose_eleven", "raw"))
+                            val token = getAccessToken(context)
+                            if(token != null){
+                                val mediaSource = getMediaSource(
+                                    context = context,
+                                    token = token,
+                                    musicId = item.id
+                                )
+                                contentPlayerViewModel.setMediaSource(
+                                    context = context,
+                                    mediaSource = mediaSource
+                                )
+                                contentPlayerViewModel.playMusic(item)
                             }
-                            contentPlayerViewModel.playMusic(item)
                         }
                     )
                 },

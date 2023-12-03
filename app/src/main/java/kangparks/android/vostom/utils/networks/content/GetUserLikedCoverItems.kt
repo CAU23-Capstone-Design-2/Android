@@ -5,30 +5,30 @@ import kangparks.android.vostom.models.content.Music
 import kangparks.android.vostom.utils.api.ContentService
 import kangparks.android.vostom.utils.helper.builder.createApiService
 
-suspend fun getUserGroupCoverItems(
+suspend fun getUserLikedCoverItems(
     accessToken: String
 ):List<Music>{
     val contentService: ContentService = createApiService()
 
     return try{
-        val response = contentService.getUserTeamMusic(accessToken)
+        val response = contentService.getUserLikedMusic(accessToken)
         if (response.isSuccessful) {
             if(response.body() != null){
                 val userCoverItems = response.body()!!.data
-                Log.d("NETWORK-getUserGroupCoverItems", "getUserGroupCoverItems-success :$userCoverItems")
+                Log.d("NETWORK-getUserLikedCoverItems", "getUserLikedCoverItems-success :$userCoverItems")
                 userCoverItems
             }
             else{
-                Log.e("NETWORK-getUserGroupCoverItems", "$response")
+                Log.e("NETWORK-getUserLikedCoverItems", "$response")
                 listOf<Music>()
             }
         } else {
             // error
-            Log.e("NETWORK-getUserGroupCoverItems", "$response")
+            Log.e("NETWORK-getUserLikedCoverItems", "$response")
             listOf<Music>()
         }
     }catch (e : Exception){
-        Log.e("NETWORK-getUserGroupCoverItems", "${e.message}")
+        Log.e("NETWORK-getUserLikedCoverItems", "${e.message}")
         listOf<Music>()
     }
 }

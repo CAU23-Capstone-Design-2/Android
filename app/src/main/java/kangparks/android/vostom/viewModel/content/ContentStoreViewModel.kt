@@ -16,6 +16,9 @@ import kangparks.android.vostom.utils.dummy.dummyMyGroupList
 import kangparks.android.vostom.utils.dummy.dummyOthersItemList
 import kangparks.android.vostom.utils.networks.content.getCelebrityList
 import kangparks.android.vostom.utils.networks.content.getUserCoverItems
+import kangparks.android.vostom.utils.networks.content.getUserGroupCoverItems
+import kangparks.android.vostom.utils.networks.content.getUserLikedCoverItems
+import kangparks.android.vostom.utils.networks.user.getUserInfo
 import kangparks.android.vostom.utils.store.getAccessToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -63,10 +66,11 @@ class ContentStoreViewModel(
                 Log.d("ContentStoreViewModel", "userMusicList : $userMusicList")
                 _myCoverItemList.postValue(userMusicList)
 
-                delay(500)
-                _myGroupCoverItemList.postValue(dummyMyGroupCoverItemList)
+                val groupMusicList = getUserGroupCoverItems(accessToken = token)
+                _myGroupCoverItemList.postValue(groupMusicList)
 
                 Log.d("ContentStoreViewModel", "token : $token")
+
                 val celebrityList = getCelebrityList(
                     accessToken = token,
                     context =  context
@@ -84,15 +88,18 @@ class ContentStoreViewModel(
         }
     }
 
-    fun initProfileContent(){
+    fun initProfileContent(context : Context){
+        val token = getAccessToken(context)
         if(_isInitProfileContent.value == true) return
         else{
             coroutineScope.launch{
+                val result = getUserInfo(token!!)
+                _userImgUrl.postValue(result.profileImage)
+                _userName.postValue(result.nickname)
                 delay(500)
-                _userImgUrl.postValue("https://avatars.githubusercontent.com/u/29995267?s=70&v=4")
-                _userName.postValue("박상현")
-                delay(500)
-                _likeItemList.postValue(dummyMyGroupCoverItemList)
+
+                val likedMusicList = getUserLikedCoverItems(token!!)
+                _likeItemList.postValue(likedMusicList)
             }
         }
     }
