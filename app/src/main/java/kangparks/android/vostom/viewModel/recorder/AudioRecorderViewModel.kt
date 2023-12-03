@@ -12,11 +12,13 @@ class AudioRecorderViewModel constructor(
 ) : ViewModel() {
     private val audioRecorder = AndroidAudioRecorder(context)
     private var audioFile : File? = null
+//    private var currentFileName = ""
 
     fun start(fileName : String) {
+//        currentFileName = fileName
 //        val fileName = getCurrentDate() + ".m4a"
         val file = File(filesDir.absolutePath, fileName)
-//        Log.d("AudioRecorderViewModel", "file path: ${file.absolutePath}")
+        Log.d("AudioRecorderViewModel", "file path: ${file.absolutePath}")
 //        val file = getOutputFile()
         audioRecorder.start(file)
         audioFile = file
@@ -38,8 +40,8 @@ class AudioRecorderViewModel constructor(
         return audioFile
     }
 
-    fun getOutputFile() : File? {
-        val fileName = getCurrentDate() + ".m4a"
+    fun getOutputFile(fileName: String) : File? {
+//        val fileName = currentFileName
         return File(filesDir.absolutePath, fileName)?:null
     }
 }
