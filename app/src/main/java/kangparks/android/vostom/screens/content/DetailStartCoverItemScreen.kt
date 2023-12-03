@@ -1,5 +1,6 @@
 package kangparks.android.vostom.screens.content
 
+import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -25,16 +26,22 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import kangparks.android.vostom.BuildConfig
 import kangparks.android.vostom.components.appbar.ContentAppBar
 import kangparks.android.vostom.components.item.CoverSongItem
 import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
 import kangparks.android.vostom.models.content.Music
+import kangparks.android.vostom.screens.home.createSourceFactory
 import kangparks.android.vostom.viewModel.content.StarContentViewModel
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
@@ -43,10 +50,12 @@ import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 fun DetailStarCoverItemScreen(
     navController: NavHostController,
     startContentViewModel: StarContentViewModel,
-    contentPlayerViewModel : ContentPlayerViewModel
+    contentPlayerViewModel : ContentPlayerViewModel,
+    token : String
 //    startId : Int,
 //    starName : String
 ) {
+    val context = LocalContext.current
     val isPlaying = contentPlayerViewModel.isPlaying.observeAsState(initial = false)
 
     val currentSinger = startContentViewModel.currentSinger.observeAsState()
@@ -61,7 +70,7 @@ fun DetailStarCoverItemScreen(
     SideEffect {
         systemUiController.setSystemBarsColor(
             color = Color.Transparent,
-            darkIcons = !isDarkTheme
+            darkIcons = isDarkTheme
         )
     }
 
@@ -103,7 +112,7 @@ fun DetailStarCoverItemScreen(
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            Color.Transparent,
+                            Color(0x54575757),
                             Color.DarkGray,
                         )
                     ),
@@ -170,6 +179,36 @@ fun DetailStarCoverItemScreen(
                                         content = coverItem,
                                         contentSize = (screenWidth - 60) / 2,
                                         onClick = {
+                                            val exoPlayer = contentPlayerViewModel.getPlayer()
+
+                                            if(exoPlayer == null){
+                                                val streamUri = "${BuildConfig.base_url}/api/music/stream/${coverItem.id}"
+                                                val mediaItem = MediaItem.Builder().setUri(Uri.parse(streamUri)).build()
+                                                val mediaSource = ProgressiveMediaSource.Factory(
+                                                    createSourceFactory(context, token)
+                                                )
+                                                    .createMediaSource(mediaItem)
+//                                                exoPlayer.setMediaSource(mediaSource)
+//                                                contentPlayerViewModel.playMusic(coverItem)
+
+                                                val newPlayer = ExoPlayer.Builder(context).build().apply {
+//                                    setMediaItem(getMediaItem(context, "iu_all_your_moments", "raw"))
+                                                    setMediaSource(mediaSource)
+                                                    playWhenReady = true
+                                                    prepare()
+                                                    volume = 1f
+                                                }
+
+                                                contentPlayerViewModel.setPlayer(newPlayer)
+
+                                            }else{
+                                                val streamUri = "${BuildConfig.base_url}/api/music/stream/${coverItem.id}"
+                                                val mediaItem = MediaItem.Builder().setUri(Uri.parse(streamUri)).build()
+                                                val mediaSource = ProgressiveMediaSource.Factory(createSourceFactory(context, token))
+                                                    .createMediaSource(mediaItem)
+                                                exoPlayer.setMediaSource(mediaSource)
+                                            }
+
                                             contentPlayerViewModel.playMusic(coverItem)
                                         }
                                     )
@@ -187,7 +226,39 @@ fun DetailStarCoverItemScreen(
                                         content = coverItem,
                                         contentSize = (screenWidth - 60) / 2,
                                         onClick = {
+
+                                            val exoPlayer = contentPlayerViewModel.getPlayer()
+
+                                            if(exoPlayer == null){
+                                                val streamUri = "${BuildConfig.base_url}/api/music/stream/${coverItem.id}"
+                                                val mediaItem = MediaItem.Builder().setUri(Uri.parse(streamUri)).build()
+                                                val mediaSource = ProgressiveMediaSource.Factory(
+                                                    createSourceFactory(context, token)
+                                                )
+                                                    .createMediaSource(mediaItem)
+//                                                exoPlayer.setMediaSource(mediaSource)
+//
+
+                                                val newPlayer = ExoPlayer.Builder(context).build().apply {
+//                                    setMediaItem(getMediaItem(context, "iu_all_your_moments", "raw"))
+                                                    setMediaSource(mediaSource)
+                                                    playWhenReady = true
+                                                    prepare()
+                                                    volume = 1f
+                                                }
+
+                                                contentPlayerViewModel.setPlayer(newPlayer)
+
+                                            }else{
+                                                val streamUri = "${BuildConfig.base_url}/api/music/stream/${coverItem.id}"
+                                                val mediaItem = MediaItem.Builder().setUri(Uri.parse(streamUri)).build()
+                                                val mediaSource = ProgressiveMediaSource.Factory(createSourceFactory(context, token))
+                                                    .createMediaSource(mediaItem)
+                                                exoPlayer.setMediaSource(mediaSource)
+                                            }
+
                                             contentPlayerViewModel.playMusic(coverItem)
+
                                         }
                                     )
                                 }
@@ -209,6 +280,7 @@ fun DetailStarCoverItemScreen(
                     navController.popBackStack()
                 },
                 backButtonContent = "뒤로",
+                color = Color.White
             )
 //            Spacer(modifier = Modifier.height(200.dp))
 //            Text(

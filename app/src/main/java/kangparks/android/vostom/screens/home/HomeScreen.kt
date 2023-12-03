@@ -2,6 +2,8 @@ package kangparks.android.vostom.screens.home
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
+import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateContentSize
@@ -38,7 +40,15 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.MediaItem
+import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.source.SingleSampleMediaSource
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
+import com.google.android.exoplayer2.upstream.ResolvingDataSource
+import com.google.android.exoplayer2.util.Util
 import drawVerticalScrollbar
+import kangparks.android.vostom.BuildConfig
 import kangparks.android.vostom.R
 import kangparks.android.vostom.components.appbar.ContentAppBar
 import kangparks.android.vostom.components.item.CelebrityItem
@@ -57,6 +67,8 @@ import kangparks.android.vostom.viewModel.content.StarContentViewModel
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import javax.sql.DataSource
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -67,6 +79,7 @@ fun HomeScreen(
     starContentViewModel: StarContentViewModel,
     contentPlayerViewModel : ContentPlayerViewModel
 ) {
+
     val testBuildString = remember { mutableStateOf("빌드 12-03-16-30") }
 
     val myCoverItemList = contentStoreViewModel.myCoverItemList.observeAsState(initial = listOf())
@@ -81,8 +94,13 @@ fun HomeScreen(
     val scrollState = rememberScrollState()
     val doubleBackToExitPressedOnce = remember { mutableStateOf(false) }
 
+//    val token = getAccessToken(context)
+
     LaunchedEffect(key1 = null){
-        contentStoreViewModel.initHomeContent()
+        contentStoreViewModel.initHomeContent(
+            token!!,
+            context = context
+        )
     }
 
     SideEffect {
@@ -168,15 +186,30 @@ fun HomeScreen(
                         onClick = {
                             val exoPlayer = contentPlayerViewModel.getPlayer()
                             if(exoPlayer == null){
+
+
+                                val streamUri = "${BuildConfig.base_url}/api/music/stream/${item.id}"
+
+                                val mediaItem = MediaItem.Builder().setUri(Uri.parse(streamUri)).build()
+                                val mediaSource = ProgressiveMediaSource.Factory(createSourceFactory(context, token))
+                                    .createMediaSource(mediaItem)
+
+//                                val mediaItem = MediaItem.fromUri(streamUri)
                                 val newPlayer = ExoPlayer.Builder(context).build().apply {
-                                    setMediaItem(getMediaItem(context, "iu_all_your_moments", "raw"))
+//                                    setMediaItem(getMediaItem(context, "iu_all_your_moments", "raw"))
+                                    setMediaSource(mediaSource)
                                     playWhenReady = true
                                     prepare()
                                     volume = 1f
                                 }
                                 contentPlayerViewModel.setPlayer(newPlayer)
                             }else{
-                                exoPlayer.replaceMediaItem(0, getMediaItem(context, "iu_all_your_moments", "raw"))
+//                                exoPlayer.replaceMediaItem(0, getMediaItem(context, "iu_all_your_moments", "raw"))
+                                val streamUri = "${BuildConfig.base_url}/api/music/stream/${item.id}"
+                                val mediaItem = MediaItem.Builder().setUri(Uri.parse(streamUri)).build()
+                                val mediaSource = ProgressiveMediaSource.Factory(createSourceFactory(context, token))
+                                    .createMediaSource(mediaItem)
+                                exoPlayer.setMediaSource(mediaSource)
                             }
                             contentPlayerViewModel.playMusic(item)
                         }
@@ -201,15 +234,25 @@ fun HomeScreen(
                         onClick = {
                             val exoPlayer = contentPlayerViewModel.getPlayer()
                             if(exoPlayer == null){
+                                val streamUri = "${BuildConfig.base_url}/api/music/stream/${item.id}"
+                                val mediaItem = MediaItem.Builder().setUri(Uri.parse(streamUri)).build()
+                                val mediaSource = ProgressiveMediaSource.Factory(createSourceFactory(context, token))
+                                    .createMediaSource(mediaItem)
                                 val newPlayer = ExoPlayer.Builder(context).build().apply {
-                                    setMediaItem(getMediaItem(context, "rose_eleven", "raw"))
+//                                    setMediaItem(getMediaItem(context, "rose_eleven", "raw"))
+                                    setMediaSource(mediaSource)
                                     playWhenReady = true
                                     prepare()
                                     volume = 1f
                                 }
                                 contentPlayerViewModel.setPlayer(newPlayer)
                             }else{
-                                exoPlayer.replaceMediaItem(0, getMediaItem(context, "rose_eleven", "raw"))
+//                                exoPlayer.replaceMediaItem(0, getMediaItem(context, "rose_eleven", "raw"))
+                                val streamUri = "${BuildConfig.base_url}/api/music/stream/${item.id}"
+                                val mediaItem = MediaItem.Builder().setUri(Uri.parse(streamUri)).build()
+                                val mediaSource = ProgressiveMediaSource.Factory(createSourceFactory(context, token))
+                                    .createMediaSource(mediaItem)
+                                exoPlayer.setMediaSource(mediaSource)
                             }
                             contentPlayerViewModel.playMusic(item)
                         }
@@ -234,7 +277,8 @@ fun HomeScreen(
                         content = item,
                         onClick = {
                             starContentViewModel.updateCurrentSinger(
-                                accessToken = token,
+                                context = context,
+                                accessToken = token!!,
                                 singer = item
                             )
                             navController.navigate(HomeContent.DetailStarCoverItem.route)
@@ -252,4 +296,23 @@ fun HomeScreen(
             )
         }
     }
+}
+
+//private fun buildMediaSource(uri: Uri): MediaSource? {
+//    return Factory(
+//        DefaultHttpDataSourceFactory("exoplayer-codelab")
+//    ).createMediaSource(uri)
+//}
+
+
+fun createSourceFactory(context : Context, token : String):ResolvingDataSource.Factory{
+    val defaultDataSourceFactory = DefaultHttpDataSource.Factory().setUserAgent(Util.getUserAgent(context, "Vostom"))
+
+    val dataSourceFactory = ResolvingDataSource.Factory(defaultDataSourceFactory){
+        it.withAdditionalHeaders(mutableMapOf<String, String>().apply{
+            put("accessToken",token)
+        })
+    }
+
+    return dataSourceFactory
 }

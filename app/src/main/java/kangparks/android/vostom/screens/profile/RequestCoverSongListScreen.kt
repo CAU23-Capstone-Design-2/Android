@@ -58,7 +58,6 @@ fun RequestCoverSongListScreen(
     val systemUiController = rememberSystemUiController()
     val requestCoverSongList = requestCoverSongViewModel.requestCoverSongList.observeAsState(listOf())
 
-
     SideEffect {
         systemUiController.setSystemBarsColor(
             color = Color.Transparent,

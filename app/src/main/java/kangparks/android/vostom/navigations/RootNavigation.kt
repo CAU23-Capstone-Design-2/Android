@@ -1,6 +1,7 @@
 package kangparks.android.vostom.navigations
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.Scaffold
@@ -61,6 +62,8 @@ fun RootNavigation(
     navController: NavHostController,
     checkRunningService : (serviceClass: Class<*>)-> Boolean
 ){
+    val context = LocalContext.current
+
     val contentPlayerViewModel : ContentPlayerViewModel = viewModel()
     val currentGroupViewModel : CurrentGroupViewModel = viewModel()
 
@@ -79,6 +82,7 @@ fun RootNavigation(
         )
         contentNavigation(
             navController = navController,
+            context = context,
             contentPlayerViewModel = contentPlayerViewModel,
             contentStoreViewModel = contentStoreViewModel,
             currentGroupViewModel = currentGroupViewModel,

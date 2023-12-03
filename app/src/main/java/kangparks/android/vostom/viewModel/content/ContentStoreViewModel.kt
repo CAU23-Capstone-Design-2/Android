@@ -1,6 +1,7 @@
 package kangparks.android.vostom.viewModel.content
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,6 +14,8 @@ import kangparks.android.vostom.utils.dummy.dummyMyCoverItemList
 import kangparks.android.vostom.utils.dummy.dummyMyGroupCoverItemList
 import kangparks.android.vostom.utils.dummy.dummyMyGroupList
 import kangparks.android.vostom.utils.dummy.dummyOthersItemList
+import kangparks.android.vostom.utils.networks.content.getCelebrityList
+import kangparks.android.vostom.utils.networks.content.getUserCoverItems
 import kangparks.android.vostom.utils.store.getAccessToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
@@ -49,20 +52,34 @@ class ContentStoreViewModel(
     val allGroupList : LiveData<List<Group>> = _allGroupList
     val myGroupList : LiveData<List<Group>> = _myGroupList
 
-    fun initHomeContent(){
-//        val token =getAccessToken()
+    fun initHomeContent(
+        token : String,
+        context : Context
+    ){
         if(_isInitHomeContent.value == true) return
         else{
             coroutineScope.launch {
-//            _myCoverItemList.postValue(getUserCoverItems(accessToken))
-//            _myGroupCoverItemList.postValue(getUserGroupCoverItems(accessToken))
-//            _othersItemList.postValue(getStarList(accessToken))
-                delay(500)
-                _myCoverItemList.postValue(dummyMyCoverItemList)
+                val userMusicList = getUserCoverItems(accessToken = token)
+                Log.d("ContentStoreViewModel", "userMusicList : $userMusicList")
+                _myCoverItemList.postValue(userMusicList)
+
                 delay(500)
                 _myGroupCoverItemList.postValue(dummyMyGroupCoverItemList)
-                delay(500)
-                _othersItemList.postValue(dummyOthersItemList)
+
+                Log.d("ContentStoreViewModel", "token : $token")
+                val celebrityList = getCelebrityList(
+                    accessToken = token,
+                    context =  context
+                )
+
+                if (celebrityList != null) {
+                    if(celebrityList.isNotEmpty()){
+                        _othersItemList.postValue(celebrityList!!)
+                    }
+                }
+
+                _isInitHomeContent.postValue(true)
+
             }
         }
     }
@@ -91,6 +108,11 @@ class ContentStoreViewModel(
             }
         }
     }
+
+//
+//    fun updatelikeInfoOfMusic(music : Music){
+//
+//    }
 
     fun updateUserImgUrl(imgUrl: String){
         _userImgUrl.postValue(imgUrl)
