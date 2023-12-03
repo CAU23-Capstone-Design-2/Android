@@ -107,14 +107,15 @@ fun loginWithKakaoToken(
             coroutineScope.launch {
                 Log.d("kkkkkkkkkkkkk", "success : ${result.token}")
                 saveAccessToken(context, result.token!!)
-                viewModel.setToken(result.token)
-                delay(500)
-                viewModel.getCurrentLearningState()
-                delay(500)
-                exoPlayer.release()
-                navController.navigate(route = Nav.CONTENT) {
-                    navController.popBackStack()
-                }
+//                viewModel.setToken(result.token)
+//                delay(500)
+//                viewModel.getCurrentLearningState()
+//                delay(500)
+                viewModel.getCurrentLearningState(result.token)
+//                exoPlayer.release()
+//                navController.navigate(route = Nav.CONTENT) {
+//                    navController.popBackStack()
+//                }
             }
         }
         else{

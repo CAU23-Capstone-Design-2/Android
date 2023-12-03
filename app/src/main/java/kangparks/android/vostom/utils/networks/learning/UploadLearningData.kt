@@ -27,10 +27,11 @@ suspend fun uploadLearningData(
     val parts = mutableListOf<MultipartBody.Part>()
 
     for (recordFile in recordFiles) {
+        Log.d("NETWORK-uploadLearningData", "$recordFile")
         val audioRequestBody =
             RequestBody.create("multipart/form-data".toMediaTypeOrNull(), recordFile)
         val audioPart =
-            MultipartBody.Part.createFormData("audioFiles", recordFile.name, audioRequestBody)
+            MultipartBody.Part.createFormData("voiceFiles", recordFile.name, audioRequestBody)
         parts.add(audioPart)
     }
 
@@ -39,14 +40,14 @@ suspend fun uploadLearningData(
             learningService.addUserAudioFiles(accessToken, parts)
         if (response.isSuccessful) {
             val learningData = response.body()?.data
-            Log.d("NETWORK-uploadLearningData", "$learningData")
+            Log.d("NETWORK-uploadLearningData", "학습 데이터 전송 완료 $learningData")
             CoroutineScope(Dispatchers.Main).launch {
                 Toast.makeText(context, "학습 데이터 업로드 완료", Toast.LENGTH_SHORT).show()
             }
             true
         } else {
             // error
-            Log.e("NETWORK-uploadLearningData", "${response.errorBody()}")
+            Log.e("NETWORK-uploadLearningData", "오류 발생 ${response.errorBody()}")
             CoroutineScope(Dispatchers.Main).launch {
                 Toast.makeText(
                     context, "업로드 중 오류 발생했습니다.\n" +
@@ -56,7 +57,7 @@ suspend fun uploadLearningData(
             false
         }
     } catch (e: Exception) {
-        Log.e("NETWORK-uploadLearningData", "$e, ${e.message}")
+        Log.e("NETWORK-uploadLearningData", "알수 없는 오류 $e, ${e.message}")
         CoroutineScope(Dispatchers.Main).launch {
             Toast.makeText(context, "알 수 없는 오류가 발생했습니다.\n다시 시도해 주세요.", Toast.LENGTH_SHORT).show()
         }

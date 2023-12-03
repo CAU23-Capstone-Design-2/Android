@@ -14,14 +14,14 @@ sealed class Auth(val route: String) {
 
 fun NavGraphBuilder.authNavigation(
     navController: NavHostController,
-    viewModel: SplashViewModel
+    splashViewModel: SplashViewModel
 ) {
     Log.d("Test-AuthNavigation", "authNavigation")
     navigation(startDestination = Auth.Login.route, route = Nav.AUTH) {
         composable(route = Auth.Login.route) {
             LoginScreen(
                 navHostController = navController,
-                splashViewModel =  viewModel
+                splashViewModel =  splashViewModel
             )
         }
     }

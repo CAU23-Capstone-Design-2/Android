@@ -8,14 +8,16 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Headers
+import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 
 interface LearningService {
-    @Headers("Content-Type: application/json")
-    @POST("/api/learning/addFiles")
+//    @Headers("Content-Type: application/json")
+    @Multipart
+    @POST("/api/user/voiceData")
     suspend fun addUserAudioFiles(
-        @Header("Authorization") accessToken: String,
+        @Header("accessToken") accessToken: String,
         @Part image: List<MultipartBody.Part>,
     ) : Response<VostomResponse<ResponseBody>>
 

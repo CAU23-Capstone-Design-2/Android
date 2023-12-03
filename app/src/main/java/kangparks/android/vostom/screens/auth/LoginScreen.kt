@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -37,9 +39,13 @@ import kangparks.android.vostom.BuildConfig
 import kangparks.android.vostom.R
 import kangparks.android.vostom.components.player.VideoBackground
 import kangparks.android.vostom.components.button.RoundedButton
+import kangparks.android.vostom.models.learning.LearningState
+import kangparks.android.vostom.navigations.HomeContent
+import kangparks.android.vostom.navigations.LearningContent
 import kangparks.android.vostom.utils.helper.auth.withKakaoLogin
 import kangparks.android.vostom.utils.media.getMediaItem
 import kangparks.android.vostom.viewModel.player.VideoBackgroundViewModel
+import kangparks.android.vostom.viewModel.splash.RequestState
 import kangparks.android.vostom.viewModel.splash.SplashViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -57,6 +63,9 @@ fun LoginScreen(
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
+    val requestState = splashViewModel.isReceivedRequestLearningState.observeAsState(RequestState.BeforeRequest)
+    val currentLearningState = splashViewModel.currentLearningState.observeAsState(LearningState.BeforeLearning)
+
     val mediaItem = getMediaItem(context, "login_background", "raw")
     val exoPlayer = remember(context){
         ExoPlayer.Builder(context).build().apply {
@@ -70,6 +79,26 @@ fun LoginScreen(
 
     val viewModel = remember {
         VideoBackgroundViewModel(exoPlayer)
+    }
+
+    LaunchedEffect(key1 = requestState.value){
+        if(requestState.value == RequestState.AfterRequest){
+            if(currentLearningState.value == LearningState.AfterLearning){
+                navHostController.navigate(HomeContent.Home.route){
+                    navHostController.popBackStack()
+                }
+            }
+            else if(currentLearningState.value == LearningState.BeforeLearning){
+                navHostController.navigate(LearningContent.Guide.route){
+                    navHostController.popBackStack()
+                }
+            }
+            else{
+                navHostController.navigate(LearningContent.Loading.route){
+                    navHostController.popBackStack()
+                }
+            }
+        }
     }
 
     BackHandler(enabled = true) {

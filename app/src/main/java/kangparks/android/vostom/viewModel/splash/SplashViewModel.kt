@@ -55,9 +55,9 @@ class SplashViewModel(application: Application) : AndroidViewModel(application) 
         _accessToken.postValue(token)
     }
 
-    fun getCurrentLearningState() {
+    fun getCurrentLearningState(token : String) {
         Log.d("Test-SplashViewModel", "getCurrentLearningState")
-        val token = getAccessToken(context)
+//        val token = getAccessToken(context)
         if (token == null) {
             Log.d("Test-SplashViewModel", "token is null")
             _isReceivedRequestLearningState.postValue(RequestState.Requesting)
@@ -68,12 +68,14 @@ class SplashViewModel(application: Application) : AndroidViewModel(application) 
             return
         }
 
+        _accessToken.postValue(token)
         _isReceivedRequestLearningState.postValue(RequestState.Requesting)
 
         coroutineScope.launch {
             val learningState = getLearningState(token)
             Log.d("Test-SplashViewModel", "learningState : $learningState")
             _currentLearningState.postValue(learningState)
+//            _currentLearningState.postValue(LearningState.AfterLearning)
             _isReceivedRequestLearningState.postValue(RequestState.AfterRequest)
         }
     }

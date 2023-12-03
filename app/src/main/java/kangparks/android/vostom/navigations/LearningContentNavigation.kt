@@ -44,24 +44,25 @@ sealed class LearningContent(val route: String) {
 
 fun NavGraphBuilder.learningContentNavigation(
     navController: NavHostController,
-    learningState : LearningState?
+//    learningState : LearningState?
 ) {
     val singingViewModel = SingingViewModel()
     val recordFileViewModel = RecordFileViewModel()
     val scriptProvider = ScriptProviderViewModel()
     val celebrityContentViewModel = CelebrityContentViewModel()
 
-    val destination = if (learningState == LearningState.Learning) {
-        LearningContent.Loading.route
-    } else {
-        LearningContent.Guide.route
-    }
+//    val destination = if (learningState == LearningState.Learning) {
+//        LearningContent.Loading.route
+//    } else {
+//        LearningContent.Guide.route
+//    }
     Log.d("Test-LearningContentNavigation", "LearningContentNavigation")
-    Log.d("Test-LearningContentNavigation", "destination : $destination")
+//    Log.d("Test-LearningContentNavigation", "destination : $destination")
 
     navigation(
         route = Nav.LEARNING_CONTENT,
-        startDestination = destination
+//        startDestination = destination
+        startDestination = LearningContent.Guide.route
     ) {
         composable(LearningContent.Guide.route) {
             GuideScreen(

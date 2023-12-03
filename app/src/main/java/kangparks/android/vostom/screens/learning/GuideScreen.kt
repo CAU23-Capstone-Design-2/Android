@@ -3,6 +3,7 @@ package kangparks.android.vostom.screens.learning
 import android.app.Activity
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,11 +19,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -33,6 +36,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kangparks.android.vostom.components.bottomsheet.CelebrityContentBottomSheet
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
 import kangparks.android.vostom.navigations.LearningContent
@@ -46,7 +50,7 @@ fun GuideScreen(
     navController: NavHostController,
     celebrityContentViewModel : CelebrityContentViewModel
 ) {
-    val testBuildString = remember { mutableStateOf("빌드 12-02-16-00") }
+    val testBuildString = remember { mutableStateOf("빌드 12-03-10-30") }
 
     val singingAnimation by rememberLottieComposition(
         spec = LottieCompositionSpec.Asset("singing.json")
@@ -60,9 +64,19 @@ fun GuideScreen(
     val doubleBackToExitPressedOnce = remember { mutableStateOf(false) }
     val context = LocalContext.current
 
+    val isDarkTheme = isSystemInDarkTheme()
+    val systemUiController = rememberSystemUiController()
+
     LaunchedEffect(key1 = null){
         celebrityContentViewModel.updateCelebrityList(
             context = context
+        )
+    }
+
+    SideEffect {
+        systemUiController.setSystemBarsColor(
+            color = Color.Transparent,
+            darkIcons = !isDarkTheme
         )
     }
 
