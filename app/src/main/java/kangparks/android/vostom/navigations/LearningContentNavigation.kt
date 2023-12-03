@@ -1,9 +1,11 @@
 package kangparks.android.vostom.navigations
 
+import android.util.Log
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import kangparks.android.vostom.models.learning.LearningState
 import kangparks.android.vostom.screens.learning.AddFileScreen
 import kangparks.android.vostom.screens.learning.CountDownScreen
 import kangparks.android.vostom.screens.learning.DetailGuideScreen
@@ -42,23 +44,25 @@ sealed class LearningContent(val route: String) {
 
 fun NavGraphBuilder.learningContentNavigation(
     navController: NavHostController,
+//    learningState : LearningState?
 ) {
     val singingViewModel = SingingViewModel()
     val recordFileViewModel = RecordFileViewModel()
     val scriptProvider = ScriptProviderViewModel()
     val celebrityContentViewModel = CelebrityContentViewModel()
 
-    val isLearning = true
-
-    val destination = if (isLearning) {
-        LearningContent.Loading.route
-    } else {
-        LearningContent.Guide.route
-    }
+//    val destination = if (learningState == LearningState.Learning) {
+//        LearningContent.Loading.route
+//    } else {
+//        LearningContent.Guide.route
+//    }
+    Log.d("Test-LearningContentNavigation", "LearningContentNavigation")
+//    Log.d("Test-LearningContentNavigation", "destination : $destination")
 
     navigation(
         route = Nav.LEARNING_CONTENT,
-        startDestination = destination
+//        startDestination = destination
+        startDestination = LearningContent.Guide.route
     ) {
         composable(LearningContent.Guide.route) {
             GuideScreen(

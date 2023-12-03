@@ -79,7 +79,7 @@ fun LearningSingingScreen(
             mainContent = "사용자의 노래를 녹음 중 입니다.",
             nextButtonContent = "노래 녹음 완료하기",
             nextButtonAction = {
-                val recordFile = recorderViewModel.getOutputFile()
+                val recordFile = recorderViewModel.getOutputFile(recordFileViewModel.getCurrentRecordFileName())
                 if (recordFile != null){
                     recordFileViewModel.addRecordFile(recordFile)
                     navController.navigate(LearningContent.FinishLearningSinging.route)

@@ -1,6 +1,5 @@
 package kangparks.android.vostom.navigations
 
-import android.content.Context
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -20,16 +19,17 @@ fun NavGraphBuilder.contentNavigation(
     contentStoreViewModel : ContentStoreViewModel,
     currentGroupViewModel: CurrentGroupViewModel,
 ) {
-    // TODO("로그인 검증 후 사용자 학습 유무 확인 하기")
-    val isLearnUserVoice = false
 
     navigation(
         route = Nav.CONTENT,
         startDestination =
-            if (isLearnUserVoice) Nav.HOME_CONTENT
-            else Nav.LEARNING_CONTENT,
+//            if (isFinishedLearningUserVoice) Nav.HOME_CONTENT
+//            else Nav.LEARNING_CONTENT,
+    Nav.LEARNING_CONTENT
     ) {
-        learningContentNavigation(navController = navController)
+        learningContentNavigation(
+            navController = navController,
+        )
         homeContentNavigation(
             navController = navController,
             contentPlayerViewModel = contentPlayerViewModel,

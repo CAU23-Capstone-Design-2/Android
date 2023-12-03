@@ -1,5 +1,6 @@
 package kangparks.android.vostom.screens.learning
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
@@ -62,6 +63,7 @@ fun GuideFinishLearningScreen(
     LaunchedEffect(key1 = isAfterUploadFiles.value){
         // 업로드 완료 후 다음 화면으로 이동
         if(isAfterUploadFiles.value){
+            Log.d("GuideFinishLearningScreen", "업로드 완료 isAfterUploadFiles.value : ${isAfterUploadFiles.value}")
             navController.navigate(LearningContent.Loading.route)
         }
     }

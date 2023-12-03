@@ -33,6 +33,8 @@ class RecordFileViewModel : ViewModel() {
     val isProceedingDialogOpen : LiveData<Boolean> = _isProceedingDialogOpen
 
     fun addRecordFile(file: File) {
+        Log.d("RecordFileViewModel", "addRecordFile: 파일 추가  $file")
+        Log.d("RecordFileViewModel", "addRecordFile: 현재 파일 리스트 $recordFileList")
         _recordFileList.add(file)
     }
 
@@ -44,21 +46,27 @@ class RecordFileViewModel : ViewModel() {
         context : Context
     ) {
         _isProceedingDialogOpen.value = true
-//        val accessToken = getAccessToken(context)
-//        coroutineScope.launch {
-//            if (accessToken != null) {
-//                uploadLearningData(accessToken, recordFileList, context)
-//            }
-//        }
+        val accessToken = getAccessToken(context)
         coroutineScope.launch {
-            delay(2000)
-            _isProceedingDialogOpen.value = false
-            _isAfterUploadFiles.value = true
-        }
+            if (accessToken != null) {
+                Log.d("RecordFileViewModel", "uploadRecordFileToServer")
+                val result = uploadLearningData(accessToken, recordFileList, context)
 
+                if(result){
+                    _isProceedingDialogOpen.value = false
+                    _isAfterUploadFiles.value = true
+                }
+                else{
+                    _isProceedingDialogOpen.value = false
+                    _isAfterUploadFiles.value = false
+                }
+
+            }
+        }
     }
 
     fun getRecordFileList(): List<File> {
+        Log.d("RecordFileViewModel", "getRecordFileList: 파일 리스트 추출 $recordFileList")
         return recordFileList
     }
 
