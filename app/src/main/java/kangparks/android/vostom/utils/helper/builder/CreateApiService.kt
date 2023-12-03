@@ -1,4 +1,4 @@
-package kangparks.android.vostom.utils.builder
+package kangparks.android.vostom.utils.helper.builder
 
 import kangparks.android.vostom.BuildConfig
 import okhttp3.OkHttpClient

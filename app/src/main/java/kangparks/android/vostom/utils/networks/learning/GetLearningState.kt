@@ -6,7 +6,7 @@ import kangparks.android.vostom.models.VostomResponse
 import kangparks.android.vostom.models.learning.LearningState
 //import kangparks.android.vostom.models.learning.LearningStateResponse
 import kangparks.android.vostom.utils.api.LearningService
-import kangparks.android.vostom.utils.builder.createApiService
+import kangparks.android.vostom.utils.helper.builder.createApiService
 import kangparks.android.vostom.utils.store.getAccessToken
 import retrofit2.HttpException
 import retrofit2.Response
