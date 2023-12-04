@@ -129,7 +129,7 @@ fun GroupScreen(
                     when(isParticipant.value){
                         true -> {
                             DropDownIconButton(
-                                dropDownState = isDropDownOpen.value,
+                                dropDownState = isDropDownOpen,
                                 dropDownContent = {
                                     DropdownMenuItem(
                                         text = {

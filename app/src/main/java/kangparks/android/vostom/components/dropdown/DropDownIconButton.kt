@@ -11,6 +11,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -28,13 +29,13 @@ fun DropDownIconButton(
 //    onClick: () -> Unit,
 //    icon: @Composable () -> Unit,
 //    content: @Composable () -> Unit,
-    dropDownState : Boolean,
+    dropDownState : MutableState<Boolean>,
     dropDownIconSize : Int = 38,
     dropDownContent: @Composable ()->Unit,
 ) {
-    val isDropDownOpen = remember {
-        mutableStateOf(false)
-    }
+//    val isDropDownOpen = remember {
+//        mutableStateOf(dropDownState)
+//    }
 
     Box {
         Icon(
@@ -43,12 +44,12 @@ fun DropDownIconButton(
             modifier = Modifier
                 .size(dropDownIconSize.dp)
                 .clip(shape = CircleShape)
-                .clickable { isDropDownOpen.value = true }
+                .clickable { dropDownState.value = true }
                 .padding(10.dp),
         )
         DropdownMenu(
-            expanded = isDropDownOpen.value,
-            onDismissRequest = { isDropDownOpen.value = false },
+            expanded = dropDownState.value,
+            onDismissRequest = { dropDownState.value = false },
             modifier = Modifier.wrapContentSize()
         ) {
             dropDownContent()

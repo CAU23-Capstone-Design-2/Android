@@ -22,13 +22,14 @@ suspend fun updateProfile(
         val byteArray = inputStream.readBytes()
 
         val requestFile = byteArray?.let {
-            RequestBody.create("image/*".toMediaTypeOrNull(), it)
+            RequestBody.create("multipart/form-data".toMediaTypeOrNull(), it)
         }
         val imagePart = requestFile?.let {
-            MultipartBody.Part.createFormData("image", "userProfileImg.png", it)
+            MultipartBody.Part.createFormData("imageFile", "userProfileImg.png", it)
         }
 
         try {
+            Log.d("network", "updateProfile : $imagePart")
             Log.d("network", "updateProfile : token : $token")
             val response = imagePart?.let {
                 apiService.updateProfile(

@@ -17,7 +17,7 @@ suspend fun getUserInfo(
 
         if(response.isSuccessful){
             if(response.body() != null){
-                Log.d("network", "getUserInfo - success $response")
+                Log.d("network", "getUserInfo - success ${response.body()}")
                 response.body()!!.data
             }
             else{

@@ -40,6 +40,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -65,6 +66,7 @@ fun PlayerCommentBottomSheet(
 ) {
 //    val backgroundColor = MaterialTheme.colorScheme.background
 
+    val context = LocalContext.current
     val isDarkTheme = isSystemInDarkTheme()
 
     val commentValue = remember { mutableStateOf("") }
@@ -72,7 +74,6 @@ fun PlayerCommentBottomSheet(
     val currentSongCommentList = contentPlayerViewModel.currentSongCommentList.observeAsState(listOf<Comment>())
 
     val keyboardController = LocalSoftwareKeyboardController.current
-
 
 //    ModalBottomSheet(onDismissRequest = { /*TODO*/ }) {
 //
@@ -119,6 +120,11 @@ fun PlayerCommentBottomSheet(
                     onValueChange = { commentValue.value = it },
                     placeholder = "댓글을 입력해주세요.",
                     onSearch = {
+                        contentPlayerViewModel.addComment(
+                            context = context,
+                            commentContent = commentValue.value
+                        )
+                        commentValue.value =""
                         keyboardController?.hide()
                     }
                 )
@@ -129,7 +135,11 @@ fun PlayerCommentBottomSheet(
                 ) {
                     currentSongCommentList.value.forEach {
                         item {
-                            CommentItem(it = it, screenWidth = screenWidth)
+                            CommentItem(
+                                it = it,
+                                contentPlayerViewModel =contentPlayerViewModel,
+                                screenWidth = screenWidth
+                            )
                         }
                     }
                 }

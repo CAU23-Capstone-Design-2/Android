@@ -173,7 +173,7 @@ fun ProfileScreen(
                     )
                     Spacer(modifier = Modifier.height(5.dp))
                     Text(
-                        text = "생성한 AI 커버 곡 :",
+                        text = "생성한 AI 커버 곡 : ${myCoverItemList.value.size}개",
                         fontSize = 14.sp,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface,

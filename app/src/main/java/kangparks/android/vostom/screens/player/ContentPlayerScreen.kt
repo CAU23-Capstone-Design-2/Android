@@ -79,7 +79,7 @@ fun ContentPlayerScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(key1 = currentSong.value){
-        contentPlayerViewModel.updateCommentList()
+        contentPlayerViewModel.updateCommentList(context)
     }
 
     SideEffect {
