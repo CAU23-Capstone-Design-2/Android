@@ -35,7 +35,7 @@ interface ContentService {
         @Header("accessToken") accessToken: String,
         @Body body : CreateCoverBody,
         @Query("url") url : String
-    ) : Response<ResponseBody>
+    ) : Response<VostomResponse<ResponseBody>>
 
     @Headers("Content-Type: application/json")
     @GET("/api/user/music")

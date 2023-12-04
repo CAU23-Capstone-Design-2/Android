@@ -78,6 +78,10 @@ fun GroupScreen(
         mutableStateOf(false)
     }
 
+    val isRemoveGroupDialogOpen = remember {
+        mutableStateOf(false)
+    }
+
     val context = LocalContext.current
 
     val isDarkTheme = isSystemInDarkTheme()
@@ -231,7 +235,7 @@ fun GroupScreen(
                             Spacer(modifier = Modifier.height(5.dp))
                             Row {
                                 AsyncImage(
-                                    model = currentGroup.value?.groupLeaderImg?:null,
+                                    model = currentGroup.value?.userImgUri ?:null,
                                     contentDescription = null,
                                     modifier = Modifier
                                         .size(20.dp)
@@ -240,7 +244,7 @@ fun GroupScreen(
                                 )
                                 Spacer(modifier = Modifier.width(5.dp))
                                 Text(
-                                    text = currentGroup.value?.groupLeader?: "",
+                                    text = currentGroup.value?.userName?: "",
                                     fontSize = 13.sp,
                                     maxLines = 1,
                                     overflow = TextOverflow.Ellipsis
@@ -341,6 +345,24 @@ fun GroupScreen(
     AnimatedVisibility(visible = isLeaveGroupDialogOpen.value) {
         VostomDialog(
             title = "그룹에서 떠나겠습니까?",
+            content = "그룹에 공유한 커버곡은 삭제됩니다.",
+            positiveText = "확인",
+            negativeText = "취소",
+            onPositiveClick = {
+                isParticipant.value = !isParticipant.value
+                isLeaveGroupDialogOpen.value = false
+            },
+            onNegativeClick = {
+                isLeaveGroupDialogOpen.value = false
+            },
+            onDismiss = {
+                isLeaveGroupDialogOpen.value = false
+            }
+        )
+    }
+    AnimatedVisibility(visible = isRemoveGroupDialogOpen.value) {
+        VostomDialog(
+            title = "그룹를 삭제하시겠습니까?",
             content = "그룹에 공유한 커버곡은 삭제됩니다.",
             positiveText = "확인",
             negativeText = "취소",

@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import kangparks.android.vostom.components.item.GroupItem
@@ -25,6 +26,7 @@ fun AllGroupListTabScreen(
     screenWidth : Int
 ){
     val lazyVerticalGridState = rememberLazyGridState()
+    val context = LocalContext.current
 
     LazyVerticalGrid(
         state = lazyVerticalGridState,
@@ -49,7 +51,7 @@ fun AllGroupListTabScreen(
                                 content = it[index],
                                 contentSize = (screenWidth-60)/2,
                                 onClick = {
-                                    currentGroupViewModel.selectGroup(it[index])
+                                    currentGroupViewModel.selectGroup(context,it[index])
                                     navController.navigate(HomeContent.Group.route)
                                 }
                             )
@@ -68,7 +70,7 @@ fun AllGroupListTabScreen(
                                 content = it[index],
                                 contentSize = (screenWidth-60)/2,
                                 onClick = {
-                                    currentGroupViewModel.selectGroup(it[index])
+                                    currentGroupViewModel.selectGroup(context,it[index])
                                     navController.navigate(HomeContent.Group.route)
                                 }
                             )

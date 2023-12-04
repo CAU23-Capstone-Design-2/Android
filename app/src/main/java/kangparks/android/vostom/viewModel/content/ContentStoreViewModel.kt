@@ -18,6 +18,8 @@ import kangparks.android.vostom.utils.networks.content.getCelebrityList
 import kangparks.android.vostom.utils.networks.content.getUserCoverItems
 import kangparks.android.vostom.utils.networks.content.getUserGroupCoverItems
 import kangparks.android.vostom.utils.networks.content.getUserLikedCoverItems
+import kangparks.android.vostom.utils.networks.group.getGroupList
+import kangparks.android.vostom.utils.networks.group.getMyGroupList
 import kangparks.android.vostom.utils.networks.user.getUserInfo
 import kangparks.android.vostom.utils.store.getAccessToken
 import kotlinx.coroutines.CoroutineScope
@@ -104,13 +106,19 @@ class ContentStoreViewModel(
         }
     }
 
-    fun initGroupContent(){
+    fun initGroupContent(context: Context){
         if(_isInitGroupContent.value == true) return
         else{
             coroutineScope.launch {
                 delay(500)
+//                val allGroup = getGroupList(context)
+//                _allGroupList.postValue(allGroup)
+
                 _allGroupList.postValue(dummyGroupList)
                 delay(500)
+
+//                val myGroup = getMyGroupList(context)
+//                _myGroupList.postValue(myGroup)
                 _myGroupList.postValue(dummyMyGroupList)
             }
         }

@@ -52,7 +52,7 @@ fun GroupItem(
         Spacer(modifier = Modifier.height(5.dp))
         Row {
             AsyncImage(
-                model = content?.groupLeaderImg?:null,
+                model = content?.userImgUri?:null,
                 contentDescription = null,
                 modifier = Modifier
                     .size(20.dp)
@@ -61,7 +61,7 @@ fun GroupItem(
             )
             Spacer(modifier = Modifier.width(5.dp))
             Text(
-                text = content?.groupLeader?: "",
+                text = content?.userName?: "",
                 fontSize = 13.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis

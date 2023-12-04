@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -44,17 +45,21 @@ import kangparks.android.vostom.components.blur.BlurForList
 import kangparks.android.vostom.components.button.RoundedButton
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.group.AddCoverToGroupViewModel
+import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
 
 @Composable
 fun AddCoverToGroupScreen(
     accessToken : String,
     navController : NavHostController,
     contentStoreViewModel: ContentStoreViewModel,
-    addCoverToGroupViewModel: AddCoverToGroupViewModel= viewModel()
+    addCoverToGroupViewModel: AddCoverToGroupViewModel= viewModel(),
+    currentGroupViewModel : CurrentGroupViewModel
 ) {
+    val currentGroup = currentGroupViewModel.currentGroup.observeAsState(initial = null)
     val myCoverList = contentStoreViewModel.myCoverItemList.observeAsState(initial = listOf())
     val selectedSong = addCoverToGroupViewModel.songItem.observeAsState(initial = null)
 
+    val context = LocalContext.current
     val isDarkTheme = isSystemInDarkTheme()
     val systemUiController = rememberSystemUiController()
 
@@ -106,7 +111,8 @@ fun AddCoverToGroupScreen(
                                         selected = (selectedSong.value?.id == it.id),
                                         onClick = { addCoverToGroupViewModel.setSongItem(it) },
                                         role = Role.RadioButton
-                                    ).fillMaxWidth(),
+                                    )
+                                    .fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically
                             ){
                                 Box(
@@ -159,7 +165,10 @@ fun AddCoverToGroupScreen(
                         Toast.makeText(navController.context, "선택된 노래가 없습니다.", Toast.LENGTH_SHORT).show()
                     }
                     else{
-                        addCoverToGroupViewModel.addCoverToGroup(accessToken)
+                        addCoverToGroupViewModel.addCoverToGroup(
+                            context = context,
+                            currentGroup = currentGroup.value!!,
+                        )
                         Toast.makeText(navController.context, "선택한 커버곡을 그룹에 추가했습니다.", Toast.LENGTH_LONG).show()
                         navController.popBackStack()
                     }

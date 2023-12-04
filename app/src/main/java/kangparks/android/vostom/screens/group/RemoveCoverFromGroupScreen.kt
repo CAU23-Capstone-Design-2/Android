@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -52,9 +53,11 @@ fun RemoveCoverFromGroupScreen(
     currentGroupViewModel : CurrentGroupViewModel,
     removeCoverFromGroupViewModel: RemoveCoverFromGroupViewModel = viewModel()
 ) {
+    val currentGroup = currentGroupViewModel.currentGroup.observeAsState(null)
     val currentGroupCoverList = currentGroupViewModel.currentGroupCoverItemList.observeAsState(listOf())
     val selectedSong = removeCoverFromGroupViewModel.songItem.observeAsState(initial = null)
 
+    val context = LocalContext.current
     val isDarkTheme = isSystemInDarkTheme()
     val systemUiController = rememberSystemUiController()
 
@@ -106,7 +109,8 @@ fun RemoveCoverFromGroupScreen(
                                         selected = (selectedSong.value?.id == it.id),
                                         onClick = { removeCoverFromGroupViewModel.setSongItem(it) },
                                         role = Role.RadioButton
-                                    ).fillMaxWidth(),
+                                    )
+                                    .fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
                                 Box(
@@ -158,7 +162,10 @@ fun RemoveCoverFromGroupScreen(
                         Toast.makeText(navController.context, "선택된 노래가 없습니다.", Toast.LENGTH_SHORT).show()
                     }
                     else{
-                        removeCoverFromGroupViewModel.removeCoverFromGroup(accessToken)
+                        removeCoverFromGroupViewModel.removeCoverFromGroup(
+                            context = context,
+                            currentGroup = currentGroup.value!!,
+                        )
                         Toast.makeText(navController.context, "선택한 커버곡을 그룹에서 삭제했습니다.", Toast.LENGTH_LONG).show()
                         navController.popBackStack()
                     }

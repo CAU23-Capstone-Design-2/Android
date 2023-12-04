@@ -40,6 +40,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -68,6 +69,7 @@ fun GroupListScreen(
     val allGroupList = contentStoreViewModel.allGroupList.observeAsState(initial = listOf())
     val myGroupList = contentStoreViewModel.myGroupList.observeAsState(initial = listOf())
 
+    val context = LocalContext.current
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp
 
@@ -83,7 +85,7 @@ fun GroupListScreen(
     }
 
     LaunchedEffect(key1 = null){
-        contentStoreViewModel.initGroupContent()
+        contentStoreViewModel.initGroupContent(context)
     }
 
     LaunchedEffect(key1 = selectedTabIndex.value){

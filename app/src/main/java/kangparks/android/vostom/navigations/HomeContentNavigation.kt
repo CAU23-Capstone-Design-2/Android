@@ -27,6 +27,7 @@ import kangparks.android.vostom.utils.store.getAccessToken
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.content.StarContentViewModel
 import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
+import kangparks.android.vostom.viewModel.group.GroupInfoVIewModel
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
 sealed class HomeContent(val route: String) {
@@ -182,6 +183,7 @@ fun NavGraphBuilder.homeContentNavigation(
                 accessToken = accessToken!!,
                 navController = navController,
                 contentStoreViewModel = contentStoreViewModel,
+                currentGroupViewModel = currentGroupViewModel,
             )
         }
         composable(HomeContent.RemoveCoverFromGroup.route){
@@ -192,7 +194,10 @@ fun NavGraphBuilder.homeContentNavigation(
             )
         }
         composable(HomeContent.EditGroup.route){
-            EditGroupScreen(navController = navController)
+            EditGroupScreen(
+                navController = navController,
+                currentGroupViewModel = currentGroupViewModel
+            )
         }
 
         composable(HomeContent.EditProfile.route){
