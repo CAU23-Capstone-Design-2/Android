@@ -90,6 +90,37 @@ class ContentStoreViewModel(
         }
     }
 
+    fun updateHomeContent(
+//        token : String,
+        context : Context
+    ){
+        val token= getAccessToken(context)
+        coroutineScope.launch {
+            val userMusicList = getUserCoverItems(accessToken = token!!)
+            Log.d("ContentStoreViewModel", "userMusicList : $userMusicList")
+            _myCoverItemList.postValue(userMusicList)
+
+            val groupMusicList = getUserGroupCoverItems(accessToken = token!!)
+            _myGroupCoverItemList.postValue(groupMusicList)
+
+            Log.d("ContentStoreViewModel", "token : $token")
+
+            val celebrityList = getCelebrityList(
+                accessToken = token!!,
+                context =  context
+            )
+
+            if (celebrityList != null) {
+                if(celebrityList.isNotEmpty()){
+                    _othersItemList.postValue(celebrityList!!)
+                }
+            }
+
+            _isInitHomeContent.postValue(true)
+
+        }
+    }
+
     fun initProfileContent(context : Context){
         val token = getAccessToken(context)
         if(_isInitProfileContent.value == true) return
@@ -106,21 +137,50 @@ class ContentStoreViewModel(
         }
     }
 
+    fun updateProfileContent(context : Context){
+        val token = getAccessToken(context)
+        coroutineScope.launch{
+            val result = getUserInfo(token!!)
+//            Log.d()
+            _userImgUrl.postValue(result.profileImage)
+            _userName.postValue(result.nickname)
+            delay(500)
+
+            val likedMusicList = getUserLikedCoverItems(token!!)
+            _likeItemList.postValue(likedMusicList)
+        }
+    }
+
     fun initGroupContent(context: Context){
         if(_isInitGroupContent.value == true) return
         else{
             coroutineScope.launch {
                 delay(500)
-//                val allGroup = getGroupList(context)
-//                _allGroupList.postValue(allGroup)
+                val allGroup = getGroupList(context)
+                _allGroupList.postValue(allGroup)
 
-                _allGroupList.postValue(dummyGroupList)
+//                _allGroupList.postValue(dummyGroupList)
                 delay(500)
 
-//                val myGroup = getMyGroupList(context)
-//                _myGroupList.postValue(myGroup)
-                _myGroupList.postValue(dummyMyGroupList)
+                val myGroup = getMyGroupList(context)
+                _myGroupList.postValue(myGroup)
+//                _myGroupList.postValue(dummyMyGroupList)
             }
+        }
+    }
+
+    fun updateGroupContent(context: Context) {
+        coroutineScope.launch {
+            delay(500)
+            val allGroup = getGroupList(context)
+            _allGroupList.postValue(allGroup)
+
+//                _allGroupList.postValue(dummyGroupList)
+            delay(500)
+
+            val myGroup = getMyGroupList(context)
+            _myGroupList.postValue(myGroup)
+//                _myGroupList.postValue(dummyMyGroupList)
         }
     }
 

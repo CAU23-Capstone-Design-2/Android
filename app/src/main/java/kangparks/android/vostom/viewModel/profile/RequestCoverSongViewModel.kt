@@ -25,4 +25,13 @@ class RequestCoverSongViewModel(token : String) : ViewModel() {
             _requestCoverSongList.postValue(result)
         }
     }
+
+    fun update(token : String){
+        coroutineScope.launch {
+            Log.d("RequestCoverSongViewModel", "업데이트")
+            val result = getRequestMusicList(token)
+
+            _requestCoverSongList.postValue(result)
+        }
+    }
 }

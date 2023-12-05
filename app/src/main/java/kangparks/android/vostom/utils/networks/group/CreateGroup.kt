@@ -28,8 +28,9 @@ suspend fun createGroup(
             RequestBody.create("image/*".toMediaTypeOrNull(), it)
         }
         val imagePart = requestFile?.let {
-            MultipartBody.Part.createFormData("image", "${teamName}Img.png", it)
+            MultipartBody.Part.createFormData("teamImage", "${teamName}Img.png", it)
         }
+
 
         try {
             val response = imagePart?.let {

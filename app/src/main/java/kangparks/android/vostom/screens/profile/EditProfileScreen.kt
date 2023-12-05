@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -61,6 +62,7 @@ fun EditProfileScreen(
     navController : NavHostController,
     userName : String,
     userImgUrl : String,
+    contentStoreViewModel : ContentStoreViewModel,
 ) {
     val context = LocalContext.current
     val isDarkTheme = isSystemInDarkTheme()
@@ -125,7 +127,8 @@ fun EditProfileScreen(
                     modifier = Modifier
                         .size(100.dp)
                         .clip(CircleShape)
-                        .background(Color(0xFF8B62FF))
+                        .background(Color(0xFF8B62FF)),
+                    contentScale = ContentScale.Crop
                 )
                 Box(
                     modifier = Modifier
@@ -185,6 +188,7 @@ fun EditProfileScreen(
                         )
                     }
                     Toast.makeText(context, "프로필이 변경되었습니다.", Toast.LENGTH_SHORT).show()
+                    contentStoreViewModel.updateProfileContent(context)
                     navController.popBackStack()
                 }
 

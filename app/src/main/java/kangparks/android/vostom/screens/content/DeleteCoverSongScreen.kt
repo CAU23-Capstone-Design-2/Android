@@ -1,6 +1,9 @@
-package kangparks.android.vostom.screens.group
+package kangparks.android.vostom.screens.content
 
+import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,7 +23,11 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -33,6 +40,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -43,23 +51,24 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kangparks.android.vostom.components.appbar.ContentAppBar
 import kangparks.android.vostom.components.blur.BlurForList
 import kangparks.android.vostom.components.button.RoundedButton
+import kangparks.android.vostom.components.navigationBar.BottomNavigationBar
+import kangparks.android.vostom.navigations.HomeContent
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
-import kangparks.android.vostom.viewModel.group.AddCoverToGroupViewModel
-import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
+import kangparks.android.vostom.viewModel.content.DeleteCoverSongViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AddCoverToGroupScreen(
-    accessToken : String,
+fun DeleteCoverSongScreen(
     navController : NavHostController,
     contentStoreViewModel: ContentStoreViewModel,
-    addCoverToGroupViewModel: AddCoverToGroupViewModel= viewModel(),
-    currentGroupViewModel : CurrentGroupViewModel
+    deleteCoverSongViewModel : DeleteCoverSongViewModel = viewModel()
 ) {
-    val currentGroup = currentGroupViewModel.currentGroup.observeAsState(initial = null)
-    val myCoverList = contentStoreViewModel.myCoverItemList.observeAsState(initial = listOf())
-    val selectedSong = addCoverToGroupViewModel.songItem.observeAsState(initial = null)
-
     val context = LocalContext.current
+    val myCoverItemList = contentStoreViewModel.myCoverItemList.observeAsState()
+    val selectedSong = deleteCoverSongViewModel.songItem.observeAsState(initial = null)
+
+
     val isDarkTheme = isSystemInDarkTheme()
     val systemUiController = rememberSystemUiController()
 
@@ -77,31 +86,28 @@ fun AddCoverToGroupScreen(
             .padding(horizontal = 20.dp)
             .padding(bottom = 48.dp)
     ){
-        Column {
+        Column{
             ContentAppBar(
                 backButtonAction = {
                     navController.popBackStack()
                 },
                 backButtonContent = "취소",
             )
-
             Text(
-                text = "그룹에 나의 커버 곡 추가",
+                text = "삭제할 커버곡 선택",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(20.dp))
             Text(
-                text = "그룹에 공유할 커버 곡을 선택해 주세요.",
+                text = "커버한 삭제 곡은 되돌릴 수 없습니다.😢",
                 fontSize = 16.sp,
-                fontWeight = FontWeight.Normal
+                fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(30.dp))
             Box(){
-                LazyColumn(
-                    contentPadding = PaddingValues(bottom = 170.dp)
-                ){
-                    myCoverList.value.forEach{
+                LazyColumn(contentPadding = PaddingValues(bottom = 170.dp)){
+                    myCoverItemList.value?.forEach{
                         item {
                             Row(
                                 modifier = Modifier
@@ -109,16 +115,16 @@ fun AddCoverToGroupScreen(
                                     .clip(RoundedCornerShape(5.dp))
                                     .selectable(
                                         selected = (selectedSong.value?.id == it.id),
-                                        onClick = { addCoverToGroupViewModel.setSongItem(it) },
+                                        onClick = { deleteCoverSongViewModel.setSongItem(it) },
                                         role = Role.RadioButton
                                     )
                                     .fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically
-                            ){
+                            ) {
                                 Box(
-//                                    modifier = Modifier.height(80.dp),
+                                    //                                    modifier = Modifier.height(80.dp),
                                     contentAlignment = Alignment.Center,
-                                ){
+                                ) {
                                     RadioButton(
                                         selected = (selectedSong.value?.id == it.id),
                                         onClick = null
@@ -158,23 +164,28 @@ fun AddCoverToGroupScreen(
             contentAlignment = Alignment.BottomCenter
         ){
             RoundedButton(
-                text = "선택한 커버곡 추가하기",
+                text = "선택한 커버곡 삭제하기",
                 onClick = {
-                    if(selectedSong.value == null){
-                        Toast.makeText(navController.context, "선택된 노래가 없습니다.", Toast.LENGTH_SHORT).show()
-                    }
-                    else{
-                        addCoverToGroupViewModel.addCoverToGroup(
-                            context = context,
-                            currentGroup = currentGroup.value!!,
-                        )
-                        Toast.makeText(navController.context, "선택한 커버곡을 그룹에 추가했습니다.", Toast.LENGTH_LONG).show()
-                        navController.popBackStack()
-                    }
+                        if(selectedSong.value == null){
+                            Toast.makeText(context, "선택된 노래가 없습니다.", Toast.LENGTH_SHORT).show()
+                        }
+                        else{
+                            Log.d("DeleteCoverSongScreen", " DeleteCoverSongScreen : 서버 요청")
+                            deleteCoverSongViewModel.deleteCurrentCoverSong(
+                                context = context,
+                            )
+                            contentStoreViewModel.updateHomeContent(
+                                context = context
+                            )
+                            Toast.makeText(context, "선택한 커버곡을 삭제했습니다.", Toast.LENGTH_LONG).show()
+                            navController.popBackStack()
+//
+                        }
                 }
 
             )
         }
 
     }
+
 }

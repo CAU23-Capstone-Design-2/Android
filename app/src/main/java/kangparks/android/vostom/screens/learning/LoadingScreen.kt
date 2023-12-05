@@ -51,7 +51,7 @@ fun LoadingScreen(
     learningStateViewModel : LearningStateViewModel,
     checkRunningService : (serviceClass: Class<*>)-> Boolean
 ){
-    val testBuildString = remember { mutableStateOf("빌드 12-03-16-30") }
+    val testBuildString = remember { mutableStateOf("빌드 12-05-09-00") }
     val currentLearningState = learningStateViewModel.currentLearningState.observeAsState(LearningState.Learning)
 
     val context = LocalContext.current

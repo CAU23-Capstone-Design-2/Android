@@ -38,6 +38,13 @@ interface ContentService {
     ) : Response<VostomResponse<ResponseBody>>
 
     @Headers("Content-Type: application/json")
+    @DELETE("/api/music/{musicId}")
+    suspend fun deleteCover(
+        @Header("accessToken") accessToken: String,
+        @Path("musicId") id : Int
+    ) : Response<VostomResponse<ResponseBody>>
+
+    @Headers("Content-Type: application/json")
     @GET("/api/user/music")
     suspend fun getUserMusicList(
         @Header("accessToken") accessToken: String

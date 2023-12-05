@@ -47,7 +47,6 @@ fun ContentAppBar(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
-
             ) {
             Row(
                 modifier = Modifier
