@@ -1,5 +1,6 @@
 package kangparks.android.vostom.navigations
 
+import android.content.Context
 import android.util.Log
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -7,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import kangparks.android.vostom.R
 import kangparks.android.vostom.screens.content.CreateCoverSongScreen
+import kangparks.android.vostom.screens.content.DeleteCoverSongScreen
 import kangparks.android.vostom.screens.content.DetailLikeCoverItemScreen
 import kangparks.android.vostom.screens.content.DetailMyCoverItemScreen
 import kangparks.android.vostom.screens.content.DetailMyGroupCoverItemScreen
@@ -22,9 +24,11 @@ import kangparks.android.vostom.screens.home.HomeScreen
 import kangparks.android.vostom.screens.profile.EditProfileScreen
 import kangparks.android.vostom.screens.profile.ProfileScreen
 import kangparks.android.vostom.screens.profile.RequestCoverSongListScreen
+import kangparks.android.vostom.utils.store.getAccessToken
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.content.StarContentViewModel
 import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
+import kangparks.android.vostom.viewModel.group.GroupInfoVIewModel
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
 sealed class HomeContent(val route: String) {
@@ -33,6 +37,7 @@ sealed class HomeContent(val route: String) {
     object Profile : HomeContent(route = "profile")
     object BuildGroup : HomeContent(route = "build_group")
     object CreateCoverSong : HomeContent(route = "create_cover_song")
+    object DeleteCoverSong : HomeContent(route = "delete_cover_song")
     object RequestCoverSongList : HomeContent(route = "request_cover_song_list")
     object DetailMyCoverItem : HomeContent(route = "detail_my_cover_item")
     object DetailMyGroupCoverItem : HomeContent(route = "detail_my_group_cover_item")
@@ -78,9 +83,10 @@ fun NavGraphBuilder.homeContentNavigation(
     contentPlayerViewModel: ContentPlayerViewModel,
     contentStoreViewModel: ContentStoreViewModel,
     currentGroupViewModel: CurrentGroupViewModel,
+    context : Context
 ) {
 
-    val accessToken = "access_token"
+    val accessToken = getAccessToken(context)
     val startContentViewModel = StarContentViewModel()
 
     Log.d("Test-HomeContentNavigation", "HomeContentNavigation")
@@ -92,7 +98,7 @@ fun NavGraphBuilder.homeContentNavigation(
         composable(HomeContent.Home.route) {
             HomeScreen(
                 navController = navController,
-                token = accessToken,
+                token = accessToken!!,
                 contentStoreViewModel = contentStoreViewModel,
                 starContentViewModel = startContentViewModel,
                 contentPlayerViewModel = contentPlayerViewModel
@@ -119,19 +125,26 @@ fun NavGraphBuilder.homeContentNavigation(
         composable(HomeContent.CreateCoverSong.route) {
             CreateCoverSongScreen(
                 navController = navController,
-                token = accessToken,
+                token = accessToken!!,
 //                createContentViewModel = createContentViewModel
+            )
+        }
+        composable(HomeContent.DeleteCoverSong.route) {
+            DeleteCoverSongScreen(
+                navController = navController,
+                contentStoreViewModel = contentStoreViewModel
             )
         }
         composable(HomeContent.RequestCoverSongList.route){
             RequestCoverSongListScreen(
-                token = accessToken,
+                token = accessToken!!,
                 navController = navController
             )
         }
         composable(HomeContent.DetailMyCoverItem.route){
             DetailMyCoverItemScreen(
                 navController = navController,
+                token = accessToken!!,
                 contentStoreViewModel = contentStoreViewModel,
                 contentPlayerViewModel = contentPlayerViewModel
             )
@@ -139,6 +152,7 @@ fun NavGraphBuilder.homeContentNavigation(
         composable(HomeContent.DetailMyGroupCoverItem.route){
             DetailMyGroupCoverItemScreen(
                 navController = navController,
+                token = accessToken!!,
                 contentStoreViewModel = contentStoreViewModel,
                 contentPlayerViewModel = contentPlayerViewModel
             )
@@ -146,7 +160,7 @@ fun NavGraphBuilder.homeContentNavigation(
         composable(HomeContent.DetailStarList.route){
             DetailStarListScreen(
                 navController = navController,
-                token = accessToken,
+                token = accessToken!!,
                 contentStoreViewModel = contentStoreViewModel,
                 startContentViewModel = startContentViewModel,
                 contentPlayerViewModel = contentPlayerViewModel
@@ -156,7 +170,8 @@ fun NavGraphBuilder.homeContentNavigation(
             DetailStarCoverItemScreen(
                 navController = navController,
                 startContentViewModel = startContentViewModel,
-                contentPlayerViewModel = contentPlayerViewModel
+                contentPlayerViewModel = contentPlayerViewModel,
+                token = accessToken!!
             )
         }
         composable(HomeContent.DetailLikeCoverItem.route){
@@ -170,30 +185,37 @@ fun NavGraphBuilder.homeContentNavigation(
             GroupScreen(
                 navController = navController,
                 contentPlayerViewModel = contentPlayerViewModel,
+                contentStoreViewModel = contentStoreViewModel,
                 currentGroupViewModel = currentGroupViewModel,
             )
         }
         composable(HomeContent.AddCoverToGroup.route){
             AddCoverToGroupScreen(
-                accessToken = accessToken,
+                accessToken = accessToken!!,
                 navController = navController,
                 contentStoreViewModel = contentStoreViewModel,
+                currentGroupViewModel = currentGroupViewModel,
             )
         }
         composable(HomeContent.RemoveCoverFromGroup.route){
             RemoveCoverFromGroupScreen(
-                accessToken = accessToken,
+                accessToken = accessToken!!,
                 navController = navController,
+                contentStoreViewModel = contentStoreViewModel,
                 currentGroupViewModel = currentGroupViewModel,
             )
         }
         composable(HomeContent.EditGroup.route){
-            EditGroupScreen(navController = navController)
+            EditGroupScreen(
+                navController = navController,
+                currentGroupViewModel = currentGroupViewModel
+            )
         }
 
         composable(HomeContent.EditProfile.route){
             EditProfileScreen(
                 navController = navController,
+                contentStoreViewModel = contentStoreViewModel,
                 userName = contentStoreViewModel.userName.value!!,
                 userImgUrl = contentStoreViewModel.userImgUrl.value!!,
             )

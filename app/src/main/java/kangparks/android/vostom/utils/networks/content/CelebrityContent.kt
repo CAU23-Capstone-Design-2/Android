@@ -7,7 +7,7 @@ import kangparks.android.vostom.models.VostomResponse
 import kangparks.android.vostom.models.content.Celebrity
 import kangparks.android.vostom.models.content.Music
 import kangparks.android.vostom.utils.api.ContentService
-import kangparks.android.vostom.utils.builder.createApiService
+import kangparks.android.vostom.utils.helper.builder.createApiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

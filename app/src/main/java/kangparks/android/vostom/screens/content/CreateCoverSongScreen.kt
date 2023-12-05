@@ -1,5 +1,6 @@
 package kangparks.android.vostom.screens.content
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -49,6 +50,9 @@ import kangparks.android.vostom.components.item.YoutubeContentItem
 import kangparks.android.vostom.components.searchbar.SearchBar
 import kangparks.android.vostom.viewModel.content.CreateContentViewModel
 import kangparks.android.vostom.viewModel.search.YoutubeSearchViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -202,9 +206,16 @@ fun CreateCoverSongScreen(
                         Toast.makeText(context, "선택된 노래가 없습니다.", Toast.LENGTH_SHORT).show()
                     }
                     else{
-                        createContentViewModel.createCoverSong(token)
+                        Log.d("CreateCoverSongScreen", " CreateCoverSongScreen : 서버 요청")
+                        createContentViewModel.createCoverSong(
+                            token = token,
+                            context = context,
+//                            navController = navController
+                        )
+
                         Toast.makeText(context, "선택한 노래로 AI 커버곡을 생성할게요.\n마이페이지를 확인해주세요.", Toast.LENGTH_LONG).show()
                         navController.popBackStack()
+
                     }
                 }
 

@@ -13,10 +13,10 @@ data class Music(
     val id: Int,
 
     @SerializedName("likeCount")
-    val likeCount: Int,
+    var likeCount: Int,
 
     @SerializedName("likedByUser")
-    val likedByUser: Boolean,
+    var likedByUser: Boolean,
 
     @SerializedName("title")
      val title: String,
@@ -29,4 +29,17 @@ data class Music(
 
     @SerializedName("userName")
     val userName: String
-)
+
+){
+    fun setLikeState(){
+        if(this.likedByUser){
+            this.likedByUser = false
+            this.likeCount -= 1
+        }
+        else{
+            this.likedByUser = true
+            this.likeCount += 1
+        }
+
+    }
+}

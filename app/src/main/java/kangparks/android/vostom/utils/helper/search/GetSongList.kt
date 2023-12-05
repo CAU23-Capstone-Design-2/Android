@@ -47,9 +47,12 @@ suspend fun getSongList(
 
                 val itemSectionRenderer = contentsArray.getJSONObject(0).getJSONObject("itemSectionRenderer")
                 val contents = itemSectionRenderer.getJSONArray("contents")
+                Log.d("getJsonOnject :","content : $contents")
 
                 for (j in 0..<contents.length()){
                     val content = contents.getJSONObject(j)
+
+                    Log.d("getJsonOnject :","content : $content")
 
                     try {
                         val videoRenderer = content.getJSONObject("videoRenderer")
@@ -77,7 +80,7 @@ suspend fun getSongList(
             }
         }
     } catch (e: Exception){
-        Log.d("Search Result :","$e")
+        Log.e("Error get Youtube list :","${e.message}")
         return null
     }
 

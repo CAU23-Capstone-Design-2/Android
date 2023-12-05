@@ -23,6 +23,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -46,6 +47,8 @@ fun DetailStarListScreen(
     startContentViewModel: StarContentViewModel,
     contentPlayerViewModel : ContentPlayerViewModel
 ) {
+    val context = LocalContext.current
+
     val othersItemList = contentStoreViewModel.othersItemList.observeAsState()
     val isPlaying = contentPlayerViewModel.isPlaying.observeAsState(initial = false)
 
@@ -127,6 +130,7 @@ fun DetailStarListScreen(
                                         contentSize = (screenWidth - 60) / 3,
                                         onClick = {
                                             startContentViewModel.updateCurrentSinger(
+                                                context =context,
                                                 accessToken = token,
                                                 singer = it[index]
                                             )
@@ -149,6 +153,7 @@ fun DetailStarListScreen(
                                         contentSize = (screenWidth - 60) / 3,
                                         onClick = {
                                             startContentViewModel.updateCurrentSinger(
+                                                context = context,
                                                 accessToken = token,
                                                 singer = it[index]
                                             )
@@ -170,6 +175,7 @@ fun DetailStarListScreen(
                                         contentSize = (screenWidth - 60) / 3,
                                         onClick = {
                                             startContentViewModel.updateCurrentSinger(
+                                                context = context,
                                                 accessToken = token,
                                                 singer = it[index]
                                             )

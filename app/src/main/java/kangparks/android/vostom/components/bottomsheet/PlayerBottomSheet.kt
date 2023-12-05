@@ -1,5 +1,6 @@
 package kangparks.android.vostom.components.bottomsheet
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -7,6 +8,7 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,6 +42,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -50,6 +53,8 @@ import coil.compose.AsyncImage
 import kangparks.android.vostom.components.item.CommentItem
 import kangparks.android.vostom.components.searchbar.SearchBar
 import kangparks.android.vostom.models.content.Comment
+import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
+import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -60,19 +65,21 @@ import kotlinx.coroutines.launch
 @Composable
 fun PlayerCommentBottomSheet(
     bottomSheetScaffoldState : BottomSheetScaffoldState = rememberBottomSheetScaffoldState(),
+    contentStoreViewModel : ContentStoreViewModel,
     contentPlayerViewModel : ContentPlayerViewModel,
     screenWidth : Dp
 ) {
 //    val backgroundColor = MaterialTheme.colorScheme.background
 
+    val context = LocalContext.current
     val isDarkTheme = isSystemInDarkTheme()
 
     val commentValue = remember { mutableStateOf("") }
 
+    val userId = contentStoreViewModel.userId.observeAsState(-1)
     val currentSongCommentList = contentPlayerViewModel.currentSongCommentList.observeAsState(listOf<Comment>())
 
     val keyboardController = LocalSoftwareKeyboardController.current
-
 
 //    ModalBottomSheet(onDismissRequest = { /*TODO*/ }) {
 //
@@ -119,19 +126,39 @@ fun PlayerCommentBottomSheet(
                     onValueChange = { commentValue.value = it },
                     placeholder = "댓글을 입력해주세요.",
                     onSearch = {
+                        contentPlayerViewModel.addComment(
+                            context = context,
+                            commentContent = commentValue.value
+                        )
+                        commentValue.value =""
                         keyboardController?.hide()
                     }
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 LazyColumn(
                     modifier = Modifier
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                    contentPadding = PaddingValues(bottom = 50.dp)
                 ) {
-                    currentSongCommentList.value.forEach {
-                        item {
-                            CommentItem(it = it, screenWidth = screenWidth)
-                        }
+                    Log.d( "[PlayerCommentBottomSheet]", "currentSongCommentList.value: ${currentSongCommentList.value}")
+                    items(currentSongCommentList.value.size){
+                        CommentItem(
+                            userId = userId.value,
+                            it = currentSongCommentList.value[it],
+                            contentPlayerViewModel =contentPlayerViewModel,
+                            screenWidth = screenWidth
+                        )
                     }
+//                    currentSongCommentList.value.forEach {
+//                        item {
+//                            CommentItem(
+//                                userId = userId.value,
+//                                it = it,
+//                                contentPlayerViewModel =contentPlayerViewModel,
+//                                screenWidth = screenWidth
+//                            )
+//                        }
+//                    }
                 }
             }
         }) {}

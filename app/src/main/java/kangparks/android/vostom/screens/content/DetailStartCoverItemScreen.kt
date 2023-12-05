@@ -1,6 +1,7 @@
 package kangparks.android.vostom.screens.content
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -14,7 +15,6 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,18 +36,18 @@ import kangparks.android.vostom.components.appbar.ContentAppBar
 import kangparks.android.vostom.components.item.CoverSongItem
 import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
 import kangparks.android.vostom.models.content.Music
+import kangparks.android.vostom.utils.helper.media.getMediaSource
 import kangparks.android.vostom.viewModel.content.StarContentViewModel
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailStarCoverItemScreen(
     navController: NavHostController,
     startContentViewModel: StarContentViewModel,
-    contentPlayerViewModel : ContentPlayerViewModel
-//    startId : Int,
-//    starName : String
+    contentPlayerViewModel : ContentPlayerViewModel,
+    token : String
 ) {
+    val context = LocalContext.current
     val isPlaying = contentPlayerViewModel.isPlaying.observeAsState(initial = false)
 
     val currentSinger = startContentViewModel.currentSinger.observeAsState()
@@ -61,7 +62,7 @@ fun DetailStarCoverItemScreen(
     SideEffect {
         systemUiController.setSystemBarsColor(
             color = Color.Transparent,
-            darkIcons = !isDarkTheme
+            darkIcons = isDarkTheme
         )
     }
 
@@ -84,7 +85,6 @@ fun DetailStarCoverItemScreen(
         navController = navController,
         surfaceBottomPadding = 0,
         playerBottomPadding = 20,
-//        surfaceModifier = Modifier.windowInsetsPadding(WindowInsets.statusBars),
         isPlaying = isPlaying
     ) {
         AsyncImage(
@@ -103,7 +103,7 @@ fun DetailStarCoverItemScreen(
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            Color.Transparent,
+                            Color(0x54575757),
                             Color.DarkGray,
                         )
                     ),
@@ -170,6 +170,15 @@ fun DetailStarCoverItemScreen(
                                         content = coverItem,
                                         contentSize = (screenWidth - 60) / 2,
                                         onClick = {
+                                            val mediaSource = getMediaSource(
+                                                context = context,
+                                                token = token,
+                                                musicId = coverItem.id
+                                            )
+                                            contentPlayerViewModel.setMediaSource(
+                                                context = context,
+                                                mediaSource = mediaSource
+                                            )
                                             contentPlayerViewModel.playMusic(coverItem)
                                         }
                                     )
@@ -187,6 +196,15 @@ fun DetailStarCoverItemScreen(
                                         content = coverItem,
                                         contentSize = (screenWidth - 60) / 2,
                                         onClick = {
+                                            val mediaSource = getMediaSource(
+                                                context = context,
+                                                token = token,
+                                                musicId = coverItem.id
+                                            )
+                                            contentPlayerViewModel.setMediaSource(
+                                                context = context,
+                                                mediaSource = mediaSource
+                                            )
                                             contentPlayerViewModel.playMusic(coverItem)
                                         }
                                     )
@@ -196,7 +214,6 @@ fun DetailStarCoverItemScreen(
                     }
                 }
             }
-
         }
 
         Column(
@@ -209,34 +226,8 @@ fun DetailStarCoverItemScreen(
                     navController.popBackStack()
                 },
                 backButtonContent = "뒤로",
+                color = Color.White
             )
-//            Spacer(modifier = Modifier.height(200.dp))
-//            Text(
-//                text = "${currentSinger.value?.name}님의 커버곡",
-//                fontSize = 20.sp,
-//                fontWeight = FontWeight.Bold
-//            )
-//            Spacer(modifier = Modifier.height(10.dp))
         }
     }
-
-//    Box(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .navigationBarsPadding()
-//    ) {
-//
-//
-//        AnimatedVisibility(
-//            visible = isPlaying.value,
-//            enter = fadeIn(),
-//            exit = fadeOut()
-//        ) {
-//            BottomContentPlayer(
-//                navController = navController,
-//                contentPlayerViewModel = contentPlayerViewModel,
-//                bottomPaddingValue = 20
-//            )
-//        }
-//    }
 }

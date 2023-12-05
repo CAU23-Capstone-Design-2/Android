@@ -1,12 +1,29 @@
 package kangparks.android.vostom.models.content
 
+import com.google.gson.annotations.SerializedName
+
 data class Comment(
-    val id : String,
+    @SerializedName("id")
+    val id : Int,
+
+    @SerializedName("content")
     val content : String,
+
+    @SerializedName("date")
     val date : String,
-    val userId : String,
-    val userName : String = "",
+
+    @SerializedName("userId")
+    val userId : Int,
+
+    @SerializedName("nickname")
+    val nickname : String = "",
+
+    @SerializedName("userImgUri")
     val userImgUri: String,
+
+    @SerializedName("likeCount")
     val likeCount: Int,
-    val likedByUser : Boolean = false
+
+    @SerializedName("likedByUser")
+    val likedByUser : Boolean
 )

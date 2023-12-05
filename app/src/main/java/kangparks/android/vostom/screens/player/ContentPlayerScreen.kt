@@ -48,6 +48,7 @@ import kangparks.android.vostom.components.player.ContentPlayerController
 import kangparks.android.vostom.components.player.ContentPlayerHideButton
 import kangparks.android.vostom.components.player.ContentPlayerInfoSection
 import kangparks.android.vostom.components.player.ContentPlayerSlider
+import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
@@ -56,6 +57,7 @@ import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 @Composable
 fun ContentPlayerScreen(
     navController: NavHostController,
+    contentStoreViewModel : ContentStoreViewModel,
     contentPlayerViewModel: ContentPlayerViewModel,
     contentColor: Color = Color(0xFFEBEBEB),
 ) {
@@ -66,7 +68,7 @@ fun ContentPlayerScreen(
     var sliderIsChanging by remember { mutableStateOf(false) }
     var localSliderValue by remember { mutableFloatStateOf(0f) }
 
-    val exoPlayer = contentPlayerViewModel.getPlayer()
+    val exoPlayer = contentPlayerViewModel.getPlayer(context)
 
     val currentSong = contentPlayerViewModel.currentSong.observeAsState(null)
     val isPaused = contentPlayerViewModel.isPaused.observeAsState(false)
@@ -79,7 +81,7 @@ fun ContentPlayerScreen(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(key1 = currentSong.value){
-        contentPlayerViewModel.updateCommentList()
+        contentPlayerViewModel.updateCommentList(context)
     }
 
     SideEffect {
@@ -162,6 +164,7 @@ fun ContentPlayerScreen(
                     }
                     PlayerCommentBottomSheet(
                         bottomSheetScaffoldState = bottomSheetScaffoldState,
+                        contentStoreViewModel= contentStoreViewModel,
                         contentPlayerViewModel = contentPlayerViewModel,
                         screenWidth = screenWidth,
                     )

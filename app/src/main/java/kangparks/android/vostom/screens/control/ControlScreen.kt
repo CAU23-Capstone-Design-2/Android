@@ -91,13 +91,13 @@ fun ControlScreen(
     Surface(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFFBEAFE2)),
+            .background(if(isDarkTheme)Color(0xFF161517) else Color(0xFFBEAFE2)),
         color = MaterialTheme.colorScheme.background
     ){
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color(0xFFEBE7F4)),
+                .background(if(isDarkTheme)Color(0xFF161517) else Color(0xFFEBE7F4)),
             contentAlignment = Alignment.Center,
         ){
             Image(

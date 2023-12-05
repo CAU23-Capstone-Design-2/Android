@@ -4,7 +4,7 @@ import android.util.Log
 import kangparks.android.vostom.models.VostomResponse
 import kangparks.android.vostom.models.user.TokenResponse
 import kangparks.android.vostom.utils.api.UserService
-import kangparks.android.vostom.utils.builder.createApiService
+import kangparks.android.vostom.utils.helper.builder.createApiService
 import retrofit2.HttpException
 import retrofit2.Response
 

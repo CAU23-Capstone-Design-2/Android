@@ -15,14 +15,22 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,17 +39,22 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kangparks.android.vostom.components.appbar.ContentAppBar
 import kangparks.android.vostom.components.item.UserCoverSongItem
 import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
+import kangparks.android.vostom.components.template.PullRefreshLayoutTemplate
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterialApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun DetailMyGroupCoverItemScreen(
     navController: NavHostController,
+    token: String,
     contentStoreViewModel: ContentStoreViewModel,
     contentPlayerViewModel : ContentPlayerViewModel
 ) {
+    val context = LocalContext.current
     val isPlaying = contentPlayerViewModel.isPlaying.observeAsState(initial = false)
 
     val myGroupCoverItemList = contentStoreViewModel.myGroupCoverItemList.observeAsState()
@@ -51,6 +64,21 @@ fun DetailMyGroupCoverItemScreen(
 
     val isDarkTheme = isSystemInDarkTheme()
     val systemUiController = rememberSystemUiController()
+
+    val refreshScope = rememberCoroutineScope()
+    var refreshing by remember { mutableStateOf(false) }
+
+    fun refresh() = refreshScope.launch {
+        refreshing = true
+        delay(1000)
+        contentStoreViewModel.updateHomeContent(
+//            token!!,
+            context = context
+        )
+        refreshing = false
+    }
+
+    val state = rememberPullRefreshState(refreshing, ::refresh)
 
     SideEffect {
         systemUiController.setSystemBarsColor(
@@ -73,77 +101,83 @@ fun DetailMyGroupCoverItemScreen(
         }
     }
 
-    HomeContentLayoutTemplate(
-        contentPlayerViewModel = contentPlayerViewModel,
-        navController = navController,
-        surfaceBottomPadding = 0,
-        playerBottomPadding = 20,
-        surfaceModifier = Modifier.windowInsetsPadding(WindowInsets.statusBars),
-        isPlaying = isPlaying
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
+    PullRefreshLayoutTemplate(
+        state = state,
+        refreshing = refreshing,
+        isDarkTheme = isDarkTheme
+    ){
+        HomeContentLayoutTemplate(
+            contentPlayerViewModel = contentPlayerViewModel,
+            navController = navController,
+            surfaceBottomPadding = 0,
+            playerBottomPadding = 20,
+            surfaceModifier = Modifier.windowInsetsPadding(WindowInsets.statusBars),
+            isPlaying = isPlaying
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
 //            .windowInsetsPadding(WindowInsets.statusBars)
 //            .padding(bottom = 48.dp)
-                .padding(horizontal = 20.dp)
+                    .padding(horizontal = 20.dp)
 
-        ) {
-            ContentAppBar(
-                backButtonAction = {
-                    navController.popBackStack()
-                },
-                backButtonContent = "뒤로",
-            )
-            Text(
-                text = "나의 그룹 커버곡",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(
-                    bottom = if(isPlaying.value) 90.dp else 48.dp
+            ) {
+                ContentAppBar(
+                    backButtonAction = {
+                        navController.popBackStack()
+                    },
+                    backButtonContent = "뒤로",
                 )
-            ){
-                myGroupCoverItemList.value?.let {
-                    List(it.size){index ->
-                        item {
-                            if(index % 2 == 0){
-                                Box(
-                                    modifier = Modifier
-                                        .padding(
-                                            top = 10.dp,
-                                            bottom = 10.dp,
-                                            end = 10.dp
+                Text(
+                    text = "나의 그룹 커버곡",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                LazyVerticalGrid(
+                    columns = GridCells.Fixed(2),
+                    contentPadding = PaddingValues(
+                        bottom = if(isPlaying.value) 90.dp else 48.dp
+                    )
+                ){
+                    myGroupCoverItemList.value?.let {
+                        List(it.size){index ->
+                            item {
+                                if(index % 2 == 0){
+                                    Box(
+                                        modifier = Modifier
+                                            .padding(
+                                                top = 10.dp,
+                                                bottom = 10.dp,
+                                                end = 10.dp
+                                            )
+                                    ){
+                                        UserCoverSongItem(
+                                            content = it[index],
+                                            contentSize = (screenWidth-60)/2,
+                                            onClick = {
+                                                contentPlayerViewModel.playMusic(it[index])
+                                            }
                                         )
-                                ){
-                                    UserCoverSongItem(
-                                        content = it[index],
-                                        contentSize = (screenWidth-60)/2,
-                                        onClick = {
-                                            contentPlayerViewModel.playMusic(it[index])
-                                        }
-                                    )
+                                    }
                                 }
-                            }
-                            else{
-                                Box(
-                                    modifier = Modifier
-                                        .padding(
-                                            top = 10.dp,
-                                            bottom = 10.dp,
-                                            start = 10.dp
+                                else{
+                                    Box(
+                                        modifier = Modifier
+                                            .padding(
+                                                top = 10.dp,
+                                                bottom = 10.dp,
+                                                start = 10.dp
+                                            )
+                                    ){
+                                        UserCoverSongItem(
+                                            content = it[index],
+                                            contentSize = (screenWidth-60)/2,
+                                            onClick = {
+                                                contentPlayerViewModel.playMusic(it[index])
+                                            }
                                         )
-                                ){
-                                    UserCoverSongItem(
-                                        content = it[index],
-                                        contentSize = (screenWidth-60)/2,
-                                        onClick = {
-                                            contentPlayerViewModel.playMusic(it[index])
-                                        }
-                                    )
+                                    }
                                 }
                             }
                         }
@@ -152,32 +186,4 @@ fun DetailMyGroupCoverItemScreen(
             }
         }
     }
-//    Scaffold(
-////        contentWindowInsets =
-//    ){
-//        Surface(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .windowInsetsPadding(WindowInsets.statusBars)
-//                .navigationBarsPadding()
-////                .padding(bottom = 40.dp)
-//        ){
-//            Box{
-//
-//                AnimatedVisibility(
-//                    visible = isPlaying.value,
-//                    enter = fadeIn(),
-//                    exit = fadeOut()
-//                ) {
-//                    BottomContentPlayer(
-//                        navController = navController,
-//                        contentPlayerViewModel = contentPlayerViewModel,
-//                        bottomPaddingValue = 20
-//                    )
-//                }
-//            }
-//
-//        }
-//    }
-
 }

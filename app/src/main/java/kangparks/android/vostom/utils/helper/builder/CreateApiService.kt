@@ -1,4 +1,4 @@
-package kangparks.android.vostom.utils.builder
+package kangparks.android.vostom.utils.helper.builder
 
 import kangparks.android.vostom.BuildConfig
 import okhttp3.OkHttpClient
@@ -8,8 +8,8 @@ import java.util.concurrent.TimeUnit
 
 inline fun <reified T> createApiService(): T{
     val okHttpClient = OkHttpClient.Builder()
-        .connectTimeout(60, TimeUnit.SECONDS) // 연결 시간 제한을 늘립니다.
-        .readTimeout(60, TimeUnit.SECONDS) // 읽기 시간 제한을 늘립니다.
+        .connectTimeout(300, TimeUnit.SECONDS) // 연결 시간 제한을 늘립니다.
+        .readTimeout(300, TimeUnit.SECONDS) // 읽기 시간 제한을 늘립니다.
         .build()
 
     val retrofit = Retrofit.Builder()

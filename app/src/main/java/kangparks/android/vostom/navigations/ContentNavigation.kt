@@ -1,5 +1,6 @@
 package kangparks.android.vostom.navigations
 
+import android.content.Context
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -16,6 +17,7 @@ sealed class Content(val route: String) {
 
 fun NavGraphBuilder.contentNavigation(
     navController: NavHostController,
+    context : Context,
     contentPlayerViewModel: ContentPlayerViewModel,
     contentStoreViewModel : ContentStoreViewModel,
     currentGroupViewModel: CurrentGroupViewModel,
@@ -37,6 +39,7 @@ fun NavGraphBuilder.contentNavigation(
             contentPlayerViewModel = contentPlayerViewModel,
             contentStoreViewModel = contentStoreViewModel,
             currentGroupViewModel = currentGroupViewModel,
+            context = context
         )
         composable(route = Content.Error.route) {
             ErrorScreen(navController = navController)

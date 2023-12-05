@@ -2,6 +2,7 @@ package kangparks.android.vostom.screens.group
 
 
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -64,6 +65,7 @@ fun BuildGroupScreen(
 ) {
     val isDarkTheme = isSystemInDarkTheme()
     val systemUiController = rememberSystemUiController()
+    val context = LocalContext.current
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -77,13 +79,10 @@ fun BuildGroupScreen(
         contract = ActivityResultContracts.PickVisualMedia(),
     ){ uri ->
         CoroutineScope(Dispatchers.IO).launch{
-//            addPhotoFromGallery(uri, context)
             Log.d("BuildGroupScreen", "uri : $uri")
             groupInfoVIewModel.setCurrentImgUri(uri)
         }
     }
-
-
 
     val groupTitle = rememberSaveable {
         mutableStateOf("")
@@ -206,7 +205,6 @@ fun BuildGroupScreen(
 
         }
 
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -219,7 +217,24 @@ fun BuildGroupScreen(
             RoundedButton(
                 text = "그룹 생성하기",
                 onClick = {
-
+                    if(groupInfoVIewModel.currentImgUri.value == null){
+                        Toast.makeText(context, "그룹 대표 사진을 선택해 주세요.", Toast.LENGTH_SHORT).show()
+                        return@RoundedButton
+                    }
+                    if(groupTitle.value.isEmpty()){
+                        Toast.makeText(context, "그룹 이름을 입력해 주세요.", Toast.LENGTH_SHORT).show()
+                        return@RoundedButton
+                    }
+                    if(groupDescription.value.isEmpty()){
+                        Toast.makeText(context, "그룹 설명을 입력해 주세요.", Toast.LENGTH_SHORT).show()
+                        return@RoundedButton
+                    }
+                    groupInfoVIewModel.createGroupWithInfo(
+                        context = context,
+                        name = groupTitle.value,
+                        description = groupDescription.value,
+                    )
+                    navController.popBackStack()
                 }
 
             )
