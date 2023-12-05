@@ -17,7 +17,7 @@ suspend fun leaveGroup(
     try {
         val response = groupService.leaveGroup(
             accessToken = token!!,
-            teamId = id
+            groupId = id
         )
         if (response.isSuccessful) {
             Log.d("network", "leaveGroup : success!")

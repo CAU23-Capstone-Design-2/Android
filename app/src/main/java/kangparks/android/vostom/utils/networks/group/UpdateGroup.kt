@@ -11,9 +11,8 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
 data class UpdateGroupDto(
-    val teamId: Int,
-    val teamName: String,
-    val teamDescription: String,
+    val groupName: String,
+    val groupDescription: String,
 )
 
 suspend fun updateGroup(
@@ -42,12 +41,12 @@ suspend fun updateGroup(
             val response = imagePart?.let {
                 groupService.updateGroup(
                     accessToken = token!!,
-                    teamName = UpdateGroupDto(
-                        teamId = teamId,
-                        teamName = teamName,
-                        teamDescription = teamDescription,
+                    updateGroupDto = UpdateGroupDto(
+                        groupName = teamName,
+                        groupDescription = teamDescription,
                     ),
-                    teamImage = it
+                    groupImage = it,
+                    id = teamId,
                 )
             }
             if (response != null) {

@@ -18,77 +18,81 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface GroupService {
     @Headers("Content-Type: application/json")
-    @GET("/api/group/list")
+    @GET("/api/groups")
     suspend fun getGroupList(
         @Header("accessToken") accessToken: String,
     ) : Response<VostomResponse<List<Group>>>
 
     @Headers("Content-Type: application/json")
-    @GET("/api/group/mylist")
+    @GET("/api/groups/my-groups")
     suspend fun getMyGroupList(
         @Header("accessToken") accessToken: String,
     ) : Response<VostomResponse<List<Group>>>
 
     @Headers("Content-Type: application/json")
-    @GET("/api/group/playlist")
+    @GET("/api/groups/{groupId}/playlist")
     suspend fun getGroupMusicList(
         @Header("accessToken") accessToken: String,
-        @Query("id") groupId: Int,
+        @Path("groupId") groupId : Int
     ) : Response<VostomResponse<List<Music>>>
 
     @Multipart
-    @POST("/api/group")
+    @POST("/api/groups")
     suspend fun createGroup(
         @Header("accessToken") accessToken: String,
-        @Part("createTeamDto") teamName : CreateGroupDto,
-        @Part teamImage: MultipartBody.Part,
+        @Part("createGroupDto") teamName : CreateGroupDto,
+        @Part groupImage: MultipartBody.Part,
     ) : Response<VostomResponse<ResponseBody>>
 
     @Multipart
-    @PUT("/api/group")
+    @PUT("/api/groups/{groupId}")
     suspend fun updateGroup(
         @Header("accessToken") accessToken: String,
-        @Part("updateTeamDto") teamName : UpdateGroupDto,
-        @Part teamImage: MultipartBody.Part,
+        @Part("updateGroupDto") updateGroupDto : UpdateGroupDto,
+        @Part groupImage: MultipartBody.Part,
+        @Path("groupId") id : Int
     ) : Response<VostomResponse<ResponseBody>>
 
     @Headers("Content-Type: application/json")
-    @DELETE("/api/group")
+    @DELETE("/api/groups/{groupId}")
     suspend fun deleteGroup(
         @Header("accessToken") accessToken: String,
-        @Body id : Int
+        @Path("groupId") id : Int
     ) : Response<VostomResponse<ResponseBody>>
 
     @Headers("Content-Type: application/json")
-    @POST("/api/group/join")
+    @POST("/api/groups/{groupId}/join")
     suspend fun joinGroup(
         @Header("accessToken") accessToken: String,
-        @Body teamId : Int
+        @Path("groupId") groupId : Int
     ) : Response<VostomResponse<ResponseBody>>
 
     @Headers("Content-Type: application/json")
-    @POST("/api/group/leave")
+    @DELETE("/api/groups/{groupId}/leave")
     suspend fun leaveGroup(
         @Header("accessToken") accessToken: String,
-        @Body teamId : Int
+        @Path("groupId") groupId : Int
     ) : Response<VostomResponse<ResponseBody>>
 
     @Headers("Content-Type: application/json")
-    @PUT("/api/music/group")
+    @POST("/api/groups/{groupId}/add-song/{musicId}")
     suspend fun addMusicToGroup(
         @Header("accessToken") accessToken: String,
-        @Body data : GroupMusicDto,
-    ) : Response<VostomResponse<ResponseBody>>
+        @Path("groupId") groupId : Int,
+        @Path("musicId") musicId : Int
+    ) : Response<VostomResponse<Any>>
 
     @Headers("Content-Type: application/json")
-    @DELETE("/api/music/group")
+    @DELETE("/api/groups/{groupId}/remove-song/{musicId}")
     suspend fun deleteMusicFromGroup(
         @Header("accessToken") accessToken: String,
-        @Body data : GroupMusicDto,
+        @Path("groupId") groupId : Int,
+        @Path("musicId") musicId : Int
     ) : Response<VostomResponse<ResponseBody>>
 
 }

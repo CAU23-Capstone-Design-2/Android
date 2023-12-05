@@ -55,6 +55,7 @@ fun AddCoverToGroupScreen(
     addCoverToGroupViewModel: AddCoverToGroupViewModel= viewModel(),
     currentGroupViewModel : CurrentGroupViewModel
 ) {
+    val userId = contentStoreViewModel.userId.observeAsState(-1)
     val currentGroup = currentGroupViewModel.currentGroup.observeAsState(initial = null)
     val myCoverList = contentStoreViewModel.myCoverItemList.observeAsState(initial = listOf())
     val selectedSong = addCoverToGroupViewModel.songItem.observeAsState(initial = null)
@@ -167,6 +168,11 @@ fun AddCoverToGroupScreen(
                         addCoverToGroupViewModel.addCoverToGroup(
                             context = context,
                             currentGroup = currentGroup.value!!,
+                        )
+                        currentGroupViewModel.selectGroup(
+                            userId = userId.value!!,
+                            context = context,
+                            group = currentGroup.value!!
                         )
                         Toast.makeText(navController.context, "선택한 커버곡을 그룹에 추가했습니다.", Toast.LENGTH_LONG).show()
                         navController.popBackStack()

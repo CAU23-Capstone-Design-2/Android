@@ -19,7 +19,7 @@ suspend fun getGroupList(
             accessToken = token!!
         )
         if (response.isSuccessful) {
-            Log.d("network", "getGroupList : success!")
+            Log.d("network", "getGroupList : success! $response ${response.body()}")
             response.body()?.data ?: listOf()
         } else {
             Log.e("network", "getGroupList : server error : $response")
@@ -43,7 +43,7 @@ suspend fun getMyGroupList(
             accessToken = token!!
         )
         if (response.isSuccessful) {
-            Log.d("network", "getMyGroupList : success!")
+            Log.d("network", "getMyGroupList : success! $response")
             response.body()?.data ?: listOf()
         } else {
             Log.e("network", "getMyGroupList : server error : $response")

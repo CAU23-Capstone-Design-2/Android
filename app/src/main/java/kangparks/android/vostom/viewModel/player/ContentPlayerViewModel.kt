@@ -1,6 +1,9 @@
 package kangparks.android.vostom.viewModel.player
 
 import android.content.Context
+import android.media.MediaSession2
+import android.media.session.MediaSession
+import android.support.v4.media.session.MediaSessionCompat
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -25,6 +28,9 @@ class ContentPlayerViewModel : ViewModel() {
     private val coroutineScope = CoroutineScope(viewModelScope.coroutineContext)
 
     private var _exoPlayer: ExoPlayer? = null
+//    private var _mediaSession = null
+//    private var mediaSessionCompat : MediaSessionCompat? = null
+//    private var mediaSessionConnector : MediaSession? = null
 
     private val _isPlaying: MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
     private val _isPaused: MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
@@ -49,7 +55,8 @@ class ContentPlayerViewModel : ViewModel() {
         context: Context
     ): ExoPlayer {
         return if (_exoPlayer == null) {
-            ExoPlayer.Builder(context).build()
+            _exoPlayer = ExoPlayer.Builder(context).build()
+            _exoPlayer as ExoPlayer
         } else {
             _exoPlayer as ExoPlayer
         }
@@ -107,6 +114,7 @@ class ContentPlayerViewModel : ViewModel() {
 
     fun stopMusic() {
         _exoPlayer?.stop()
+        _exoPlayer = null
         _isPlaying.value = false
         _isPaused.value = false
         _currentSong.value = null

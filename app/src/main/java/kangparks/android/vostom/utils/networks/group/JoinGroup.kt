@@ -17,7 +17,7 @@ suspend fun joinGroup(
     try {
         val response = groupService.joinGroup(
             accessToken = token!!,
-            teamId = id
+            groupId = id
         )
         return if (response.isSuccessful) {
             Log.d("network", "joinGroup : success!")

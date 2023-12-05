@@ -63,7 +63,7 @@ interface ContentService {
     ) : Response<VostomResponse<List<Music>>>
 
     @Headers("Content-Type: application/json")
-    @GET("/api/user/teamMusic")
+    @GET("/api/user/groupMusic")
     suspend fun getUserTeamMusic(
         @Header("accessToken") accessToken: String,
     ) : Response<VostomResponse<List<Music>>>

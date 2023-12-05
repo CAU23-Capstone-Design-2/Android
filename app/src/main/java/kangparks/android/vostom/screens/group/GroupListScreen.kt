@@ -272,6 +272,7 @@ fun GroupListScreen(
                                                 navController = navController,
                                                 isPlaying = isPlaying,
                                                 allGroupList = allGroupList.value,
+                                                contentStoreViewModel = contentStoreViewModel,
                                                 currentGroupViewModel = currentGroupViewModel,
                                                 screenWidth = screenWidth
                                             )
@@ -331,6 +332,7 @@ fun GroupListScreen(
                                                 navController = navController,
                                                 isPlaying = isPlaying,
                                                 myGroupList = myGroupList.value,
+                                                contentStoreViewModel= contentStoreViewModel,
                                                 currentGroupViewModel = currentGroupViewModel,
                                                 screenWidth = screenWidth
                                             )

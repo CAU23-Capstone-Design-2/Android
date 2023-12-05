@@ -14,8 +14,9 @@ suspend fun getUserGroupCoverItems(
         val response = contentService.getUserTeamMusic(accessToken)
         if (response.isSuccessful) {
             if(response.body() != null){
+
                 val userCoverItems = response.body()!!.data
-                Log.d("NETWORK-getUserGroupCoverItems", "getUserGroupCoverItems-success :$userCoverItems")
+                Log.d("NETWORK-getUserGroupCoverItems", "getUserGroupCoverItems-success :$response ${response.body()}")
                 userCoverItems
             }
             else{

@@ -185,6 +185,7 @@ fun NavGraphBuilder.homeContentNavigation(
             GroupScreen(
                 navController = navController,
                 contentPlayerViewModel = contentPlayerViewModel,
+                contentStoreViewModel = contentStoreViewModel,
                 currentGroupViewModel = currentGroupViewModel,
             )
         }
@@ -200,6 +201,7 @@ fun NavGraphBuilder.homeContentNavigation(
             RemoveCoverFromGroupScreen(
                 accessToken = accessToken!!,
                 navController = navController,
+                contentStoreViewModel = contentStoreViewModel,
                 currentGroupViewModel = currentGroupViewModel,
             )
         }

@@ -9,11 +9,6 @@ import androidx.lifecycle.viewModelScope
 import kangparks.android.vostom.models.content.Celebrity
 import kangparks.android.vostom.models.content.Group
 import kangparks.android.vostom.models.content.Music
-import kangparks.android.vostom.utils.dummy.dummyGroupList
-import kangparks.android.vostom.utils.dummy.dummyMyCoverItemList
-import kangparks.android.vostom.utils.dummy.dummyMyGroupCoverItemList
-import kangparks.android.vostom.utils.dummy.dummyMyGroupList
-import kangparks.android.vostom.utils.dummy.dummyOthersItemList
 import kangparks.android.vostom.utils.networks.content.getCelebrityList
 import kangparks.android.vostom.utils.networks.content.getUserCoverItems
 import kangparks.android.vostom.utils.networks.content.getUserGroupCoverItems

@@ -3,27 +3,33 @@ package kangparks.android.vostom.models.content
 import com.google.gson.annotations.SerializedName
 
 data class Group(
-    @SerializedName("teamId")
+    @SerializedName("groupId")
     val teamId: Int,
 
-    @SerializedName("title")
+    @SerializedName("groupName")
     val title: String,
 
-    @SerializedName("description")
+    @SerializedName("groupDescription")
     val description: String,
 
     @SerializedName("groupImgUri")
     val groupImgUri: String,
 
-    @SerializedName("userId")
+    @SerializedName("leaderId")
     val userId: Int,
 
-    @SerializedName("userName")
+    @SerializedName("leaderName")
     val userName: String,
 
-    @SerializedName("userImgUri")
+    @SerializedName("leaderImgUri")
     val userImgUri: String,
 
     @SerializedName("groupMemberCount")
     val groupMemberCount : Int,
+
+    @SerializedName("member")
+    val isMember : Boolean,
+
+    @SerializedName("leader")
+    val isLeader : Boolean
 )

@@ -24,10 +24,8 @@ suspend fun addMusicToGroup(
     try {
         val response = groupService.addMusicToGroup(
             accessToken = token!!,
-            data = GroupMusicDto(
-                musicId = musicId,
-                teamId = groupId
-            )
+            musicId = musicId,
+            groupId = groupId
         )
         return if (response.isSuccessful) {
             Log.d("network", "addMusicToGroup : success!")
@@ -54,13 +52,11 @@ suspend fun deleteMusicFromGroup(
     try {
         val response = groupService.deleteMusicFromGroup(
             accessToken = token!!,
-            data = GroupMusicDto(
-                musicId = musicId,
-                teamId = groupId
-            )
+            musicId = musicId,
+            groupId = groupId
         )
         return if (response.isSuccessful) {
-            Log.d("network", "deleteMusicFromGroup : success!")
+            Log.d("network", "deleteMusicFromGroup : success! - $response")
             true
         } else {
             Log.e("network", "deleteMusicFromGroup : server error : ${response}")
@@ -86,7 +82,7 @@ suspend fun getGroupMusicList(
             groupId = groupId
         )
         return if (response.isSuccessful) {
-            Log.d("network", "getGroupMusicList : success!")
+            Log.d("network", "getGroupMusicList : success! $response")
             return if (response.body()?.data != null) {
                 response.body()!!.data
             } else {

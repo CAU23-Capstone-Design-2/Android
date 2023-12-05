@@ -11,8 +11,8 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
 data class CreateGroupDto(
-    val teamName: String,
-    val teamDescription: String,
+    val groupName: String,
+    val groupDescription: String,
 )
 
 suspend fun createGroup(
@@ -33,7 +33,7 @@ suspend fun createGroup(
             RequestBody.create("image/*".toMediaTypeOrNull(), it)
         }
         val imagePart = requestFile?.let {
-            MultipartBody.Part.createFormData("teamImage", "${teamName}Img.png", it)
+            MultipartBody.Part.createFormData("groupImage", "${teamName}Img.png", it)
         }
 
 
@@ -42,7 +42,7 @@ suspend fun createGroup(
                 groupService.createGroup(
                     accessToken = token!!,
                     teamName = CreateGroupDto(teamName, teamDescription),
-                    teamImage = it
+                    groupImage = it
                 )
             }
             if (response != null) {
