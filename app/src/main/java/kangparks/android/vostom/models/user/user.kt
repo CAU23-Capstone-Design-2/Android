@@ -8,4 +8,7 @@ data class UserInfo(
 
     @SerializedName("profileImage")
     val profileImage : String,
+
+    @SerializedName("userId")
+    val userId : Int,
 )

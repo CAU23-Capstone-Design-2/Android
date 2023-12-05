@@ -3,7 +3,9 @@ package kangparks.android.vostom.utils.api
 import kangparks.android.vostom.models.VostomResponse
 import kangparks.android.vostom.models.content.Group
 import kangparks.android.vostom.models.content.Music
+import kangparks.android.vostom.utils.networks.group.CreateGroupDto
 import kangparks.android.vostom.utils.networks.group.GroupMusicDto
+import kangparks.android.vostom.utils.networks.group.UpdateGroupDto
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -42,8 +44,7 @@ interface GroupService {
     @POST("/api/group")
     suspend fun createGroup(
         @Header("accessToken") accessToken: String,
-        @Part teamName : String,
-        @Part teamDescription : String,
+        @Part("createTeamDto") teamName : CreateGroupDto,
         @Part teamImage: MultipartBody.Part,
     ) : Response<VostomResponse<ResponseBody>>
 
@@ -51,9 +52,7 @@ interface GroupService {
     @PUT("/api/group")
     suspend fun updateGroup(
         @Header("accessToken") accessToken: String,
-        @Part teamId : String,
-        @Part teamName : String,
-        @Part teamDescription : String,
+        @Part("updateTeamDto") teamName : UpdateGroupDto,
         @Part teamImage: MultipartBody.Part,
     ) : Response<VostomResponse<ResponseBody>>
 

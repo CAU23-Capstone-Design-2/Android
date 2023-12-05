@@ -20,14 +20,15 @@ interface CommentService {
     @POST("/api/comment")
     suspend fun createComment(
         @Header("accessToken") accessToken: String,
-        @Body commentData : CreateCommentDto
+        @Body content : CreateCommentDto,
+        @Query("id") id : Int
     ) : Response<VostomResponse<Any>>
 
     @Headers("Content-Type: application/json")
     @PUT("/api/comment")
     suspend fun updateComment(
         @Header("accessToken") accessToken: String,
-        @Body comment : String,
+        @Body comment : CreateCommentDto,
         @Query("id") commentId : Int
     ) : Response<VostomResponse<ResponseBody>>
 

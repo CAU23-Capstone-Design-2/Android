@@ -10,9 +10,15 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
+data class UpdateGroupDto(
+    val teamId: Int,
+    val teamName: String,
+    val teamDescription: String,
+)
+
 suspend fun updateGroup(
     context : Context,
-    teamId : String,
+    teamId : Int,
     teamName: String,
     teamDescription: String,
     teamImgUri: String,
@@ -36,9 +42,11 @@ suspend fun updateGroup(
             val response = imagePart?.let {
                 groupService.updateGroup(
                     accessToken = token!!,
-                    teamId = teamId,
-                    teamName = teamName,
-                    teamDescription = teamDescription,
+                    teamName = UpdateGroupDto(
+                        teamId = teamId,
+                        teamName = teamName,
+                        teamDescription = teamDescription,
+                    ),
                     teamImage = it
                 )
             }

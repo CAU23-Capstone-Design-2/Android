@@ -10,7 +10,6 @@ import okhttp3.ResponseBody
 import retrofit2.Response
 
 data class CreateCommentDto(
-    val coverSongId : Int,
     val content : String
 )
 suspend fun createComment(
@@ -25,10 +24,8 @@ suspend fun createComment(
     try{
         val response : Response<VostomResponse<Any>> = apiService.createComment(
             accessToken = token!!,
-            commentData = CreateCommentDto(
-                coverSongId = musicId,
-                content = comment
-            )
+            id = musicId,
+            content = CreateCommentDto(content = comment)
         )
 
         return if(response.isSuccessful) {
@@ -57,7 +54,7 @@ suspend fun updateComment(
     try{
         val response = apiService.updateComment(
             accessToken = token!!,
-            comment = comment,
+            comment = CreateCommentDto(content = comment),
             commentId = commentId
         )
 

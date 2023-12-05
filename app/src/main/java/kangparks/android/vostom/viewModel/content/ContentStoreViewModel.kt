@@ -32,6 +32,7 @@ class ContentStoreViewModel(
     private val coroutineScope = CoroutineScope(viewModelScope.coroutineContext)
 
     private val _isInitProfileContent : MutableLiveData<Boolean> = MutableLiveData(false)
+    private val _userId : MutableLiveData<Int> = MutableLiveData(-1)
     private val _userImgUrl : MutableLiveData<String> = MutableLiveData("")
     private val _userName : MutableLiveData<String> = MutableLiveData("")
     private val _likeItemList : MutableLiveData<List<Music>> = MutableLiveData(listOf())
@@ -45,7 +46,7 @@ class ContentStoreViewModel(
     private val _allGroupList : MutableLiveData<List<Group>> = MutableLiveData(listOf())
     private val _myGroupList : MutableLiveData<List<Group>> = MutableLiveData(listOf())
 
-
+    val userId : LiveData<Int> = _userId
     val userImgUrl : LiveData<String> = _userImgUrl
     val userName : LiveData<String> = _userName
 
@@ -85,6 +86,11 @@ class ContentStoreViewModel(
                 }
 
                 _isInitHomeContent.postValue(true)
+
+                val resultOfUserInfo = getUserInfo(token)
+                _userId.postValue(resultOfUserInfo.userId)
+                _userName.postValue(resultOfUserInfo.nickname)
+                _userImgUrl.postValue(resultOfUserInfo.profileImage)
 
             }
         }

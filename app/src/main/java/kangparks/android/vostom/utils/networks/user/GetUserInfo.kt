@@ -22,14 +22,14 @@ suspend fun getUserInfo(
             }
             else{
                 Log.e("network", "getUserInfo - server error2 $response")
-                UserInfo(nickname = "", profileImage = "")
+                UserInfo(nickname = "", profileImage = "", userId = -1)
             }
         }else{
             Log.e("network", "getUserInfo - server error $response")
-            UserInfo(nickname = "", profileImage = "")
+            UserInfo(nickname = "", profileImage = "",  userId = -1)
         }
     }catch (e : Exception){
         Log.e("network", "getUserInfo - unknown error ${e.message}")
-        UserInfo(nickname = "", profileImage = "")
+        UserInfo(nickname = "", profileImage = "",  userId = -1)
     }
 }

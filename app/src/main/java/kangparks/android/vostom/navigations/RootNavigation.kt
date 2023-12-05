@@ -92,6 +92,7 @@ fun RootNavigation(
     }
     ContentPlayerScreen(
         navController = navController,
+        contentStoreViewModel = contentStoreViewModel,
         contentPlayerViewModel = contentPlayerViewModel,
     )
 }

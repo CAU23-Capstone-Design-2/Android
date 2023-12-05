@@ -49,6 +49,7 @@ import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun CommentItem(
+    userId : Int,
     it: Comment,
     contentPlayerViewModel : ContentPlayerViewModel,
     screenWidth: Dp
@@ -95,42 +96,82 @@ fun CommentItem(
                 fontWeight = FontWeight.Normal,
                 fontSize = 14.sp,
             )
-            DropDownIconButton(
-                dropDownState = isDropDownOpen,
-                dropDownIconSize = 34,
-                dropDownContent = {
-                    DropdownMenuItem(
-                        text = {
-                            Text(
-                                text = "댓글 수정",
+            if(userId == it.userId){
+                DropDownIconButton(
+                    dropDownState = isDropDownOpen,
+                    dropDownIconSize = 34,
+                    dropDownContent = {
+                        if(isEditMode.value){
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        text = "수정 취소",
 //                                fontWeight = FontWeight.Bold,
-                                textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Center
+                                    )
+                                },
+                                onClick = {
+                                    isDropDownOpen.value = false
+                                    isEditMode.value = false
+                                    commentValue.value = it.content
+                                },
                             )
-                        },
-                        onClick = {
-                            isDropDownOpen.value = false
-                            isEditMode.value = true
-                        },
-                    )
-                    DropdownMenuItem(
-                        text = {
-                            Text(
-                                text = "댓글 삭제",
+                        }
+                        else{
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        text = "댓글 수정",
 //                                fontWeight = FontWeight.Bold,
-                                textAlign = TextAlign.Center
+                                        textAlign = TextAlign.Center
+                                    )
+                                },
+                                onClick = {
+                                    isDropDownOpen.value = false
+                                    isEditMode.value = true
+                                },
                             )
-                        },
-                        onClick = {
-                            isDropDownOpen.value = false
-                            contentPlayerViewModel.deleteSelectedComment(
-                                context = context,
-                                commentId = it.id
-                            )
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        text = "댓글 삭제",
+//                                fontWeight = FontWeight.Bold,
+                                        textAlign = TextAlign.Center
+                                    )
+                                },
+                                onClick = {
+                                    isDropDownOpen.value = false
+                                    contentPlayerViewModel.deleteSelectedComment(
+                                        context = context,
+                                        commentId = it.id
+                                    )
 
-                        },
-                    )
-                }
-            )
+                                },
+                            )
+                        }
+                    }
+                )
+            }else{
+                DropDownIconButton(
+                    dropDownState = isDropDownOpen,
+                    dropDownIconSize = 34,
+                    dropDownContent = {
+                        DropdownMenuItem(
+                            text = {
+                                Text(
+                                    text = "신고",
+//                                fontWeight = FontWeight.Bold,
+                                    textAlign = TextAlign.Center
+                                )
+                            },
+                            onClick = {
+                                isDropDownOpen.value = false
+
+                            },
+                        )
+                    }
+                )
+            }
         }
         Spacer(modifier = Modifier.height(10.dp))
         Row(
@@ -203,7 +244,6 @@ fun CommentItem(
                             commentId = it.id,
                             comment = commentValue.value.toString()
                         )
-                        commentValue.value =""
                         isEditMode.value = false
                         keyboardController?.hide()
                     }

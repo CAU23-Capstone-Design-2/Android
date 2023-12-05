@@ -10,6 +10,11 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
+data class CreateGroupDto(
+    val teamName: String,
+    val teamDescription: String,
+)
+
 suspend fun createGroup(
     context : Context,
     teamName: String,
@@ -36,8 +41,7 @@ suspend fun createGroup(
             val response = imagePart?.let {
                 groupService.createGroup(
                     accessToken = token!!,
-                    teamName = teamName,
-                    teamDescription = teamDescription,
+                    teamName = CreateGroupDto(teamName, teamDescription),
                     teamImage = it
                 )
             }

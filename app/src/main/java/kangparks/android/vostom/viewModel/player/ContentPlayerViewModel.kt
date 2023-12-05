@@ -189,10 +189,11 @@ class ContentPlayerViewModel : ViewModel() {
                 context = context,
                 commentId = commentId,
             )
-
+//            Log.d("deleteSelectedComment", "deleteSelectedComment : $result")
             if (result) {
                 val newCommentList = getCommentList(context, _currentSong.value!!.id)
                 _currentSongCommentList.postValue(newCommentList)
+                Log.d("deleteSelectedComment", "deleteSelectedComment : $newCommentList")
             }
         }
     }

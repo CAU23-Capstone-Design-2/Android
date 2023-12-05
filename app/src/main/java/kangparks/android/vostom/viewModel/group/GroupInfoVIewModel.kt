@@ -50,7 +50,7 @@ class GroupInfoVIewModel : ViewModel() {
 
     fun updateGroupWithInfo(
         context : Context,
-        id : String,
+        id : Int,
         name : String,
         description : String,
     ){
