@@ -54,17 +54,17 @@ class ContentStoreViewModel(
     val myGroupList : LiveData<List<Group>> = _myGroupList
 
     fun initHomeContent(
-        token : String,
         context : Context
     ){
         if(_isInitHomeContent.value == true) return
         else{
             coroutineScope.launch {
-                val userMusicList = getUserCoverItems(accessToken = token)
+                val token = getAccessToken(context)
+                val userMusicList = getUserCoverItems(accessToken = token!!)
                 Log.d("ContentStoreViewModel", "userMusicList : $userMusicList")
                 _myCoverItemList.postValue(userMusicList)
 
-                val groupMusicList = getUserGroupCoverItems(accessToken = token)
+                val groupMusicList = getUserGroupCoverItems(accessToken = token!!)
                 _myGroupCoverItemList.postValue(groupMusicList)
 
                 Log.d("ContentStoreViewModel", "token : $token")

@@ -25,6 +25,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ContentPlayerViewModel : ViewModel() {
+
     private val coroutineScope = CoroutineScope(viewModelScope.coroutineContext)
 
     private var _exoPlayer: ExoPlayer? = null
@@ -35,6 +36,9 @@ class ContentPlayerViewModel : ViewModel() {
     private val _isPlaying: MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
     private val _isPaused: MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
     private val _currentSong: MutableLiveData<Music?> = MutableLiveData<Music?>(null)
+    private val _currentPlayList : MutableLiveData<List<Music>> = MutableLiveData<List<Music>>(listOf())
+    private val _currentPlayIndex : MutableLiveData<Int> = MutableLiveData<Int>(-1)
+
     private val _isShowPlayer: MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
 
     private val _currentSongCommentList: MutableLiveData<List<Comment>> =
@@ -47,19 +51,33 @@ class ContentPlayerViewModel : ViewModel() {
 
     val currentSongCommentList: LiveData<List<Comment>> = _currentSongCommentList
 
+    init {
+        Log.d("ContentPlayerViewModel", "ContentPlayerViewModel init")
+        if(_exoPlayer == null){
+            Log.d("ContentPlayerViewModel", "ContentPlayerViewModel init : _exoPlayer is null")
+        }else{
+            Log.d("ContentPlayerViewModel", "ContentPlayerViewModel init : _exoPlayer is not null")
+        }
+    }
+
     fun setPlayer(player: ExoPlayer) {
+        Log.d("setPlayer", "setPlayer : ${player}")
         _exoPlayer = player
     }
 
     fun getPlayer(
         context: Context
-    ): ExoPlayer {
-        return if (_exoPlayer == null) {
-            _exoPlayer = ExoPlayer.Builder(context).build()
-            _exoPlayer as ExoPlayer
-        } else {
-            _exoPlayer as ExoPlayer
-        }
+    ): ExoPlayer? {
+//        Log.d("getPlayer", "getPlayer : ${_exoPlayer}")
+//        return if (_exoPlayer == null) {
+//            Log.d("getPlayer", "getPlayer : _exoPlayer is null")
+//            _exoPlayer = ExoPlayer.Builder(context).build()
+//            _exoPlayer as ExoPlayer
+//        } else {
+//            Log.d("getPlayer", "getPlayer : _exoPlayer is not null")
+//            _exoPlayer as ExoPlayer
+//        }
+        return _exoPlayer
     }
 
     fun setMediaSource(
@@ -67,15 +85,30 @@ class ContentPlayerViewModel : ViewModel() {
         mediaSource: ProgressiveMediaSource
     ) {
         if (_exoPlayer == null) {
+            Log.d("setMediaSource", "setMediaSource : _exoPlayer is null")
             val newPlayer = ExoPlayer.Builder(context).build().apply {
                 setMediaSource(mediaSource)
                 playWhenReady = true
                 prepare()
+
                 volume = 1f
             }
 
             _exoPlayer = newPlayer
+
+//            newPlayer.play()
         } else {
+            Log.d("setMediaSource", "setMediaSource : _exoPlayer is not null")
+
+//            val newPlayer = ExoPlayer.Builder(context).build().apply {
+//                setMediaSource(mediaSource)
+//                playWhenReady = true
+//                prepare()
+//
+//                volume = 1f
+//            }
+//
+//            _exoPlayer = newPlayer
             _exoPlayer!!.setMediaSource(mediaSource)
         }
     }

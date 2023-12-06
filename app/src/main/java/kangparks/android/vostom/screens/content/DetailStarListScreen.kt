@@ -42,7 +42,6 @@ import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 @Composable
 fun DetailStarListScreen(
     navController: NavHostController,
-    token : String,
     contentStoreViewModel: ContentStoreViewModel,
     startContentViewModel: StarContentViewModel,
     contentPlayerViewModel : ContentPlayerViewModel
@@ -131,7 +130,6 @@ fun DetailStarListScreen(
                                         onClick = {
                                             startContentViewModel.updateCurrentSinger(
                                                 context =context,
-                                                accessToken = token,
                                                 singer = it[index]
                                             )
                                             navController.navigate(HomeContent.DetailStarCoverItem.route)
@@ -154,7 +152,6 @@ fun DetailStarListScreen(
                                         onClick = {
                                             startContentViewModel.updateCurrentSinger(
                                                 context = context,
-                                                accessToken = token,
                                                 singer = it[index]
                                             )
                                             navController.navigate(HomeContent.DetailStarCoverItem.route)
@@ -176,7 +173,6 @@ fun DetailStarListScreen(
                                         onClick = {
                                             startContentViewModel.updateCurrentSinger(
                                                 context = context,
-                                                accessToken = token,
                                                 singer = it[index]
                                             )
                                             navController.navigate(HomeContent.DetailStarCoverItem.route)

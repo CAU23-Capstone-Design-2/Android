@@ -53,6 +53,7 @@ import kangparks.android.vostom.R
 import kangparks.android.vostom.components.appbar.ContentAppBar
 import kangparks.android.vostom.components.button.RoundedButton
 import kangparks.android.vostom.components.searchbar.SearchBar
+import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
 import kangparks.android.vostom.viewModel.group.GroupInfoVIewModel
 import kotlinx.coroutines.CoroutineScope
@@ -63,6 +64,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun EditGroupScreen(
     navController: NavHostController,
+    contentStoreViewModel : ContentStoreViewModel,
     currentGroupViewModel : CurrentGroupViewModel,
     groupInfoVIewModel: GroupInfoVIewModel = viewModel()
 ) {
@@ -72,6 +74,7 @@ fun EditGroupScreen(
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
+    val userId = contentStoreViewModel.userId.observeAsState(-1)
     val curGroup = currentGroupViewModel.currentGroup.observeAsState(null)
     val curImgUri = groupInfoVIewModel.currentImgUri.observeAsState(null)
 
@@ -246,8 +249,9 @@ fun EditGroupScreen(
                         Toast.makeText(context, "그룹 설명을 입력해 주세요.", Toast.LENGTH_SHORT).show()
                         return@RoundedButton
                     }
-                    groupInfoVIewModel.createGroupWithInfo(
+                    groupInfoVIewModel.updateGroupWithInfo(
                         context = context,
+                        id = userId.value,
                         name = groupTitle.value,
                         description = groupDescription.value,
                     )

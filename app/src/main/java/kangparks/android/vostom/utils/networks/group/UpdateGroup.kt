@@ -34,14 +34,14 @@ suspend fun updateGroup(
             RequestBody.create("image/*".toMediaTypeOrNull(), it)
         }
         val imagePart = requestFile?.let {
-            MultipartBody.Part.createFormData("image", "${teamName}Img.png", it)
+            MultipartBody.Part.createFormData("groupImage", "${teamName}Img.png", it)
         }
 
         try {
             val response = imagePart?.let {
                 groupService.updateGroup(
                     accessToken = token!!,
-                    updateGroupDto = UpdateGroupDto(
+                    requestGroupDto = UpdateGroupDto(
                         groupName = teamName,
                         groupDescription = teamDescription,
                     ),

@@ -32,6 +32,14 @@ fun getRefreshToken(context: Context): String? {
     return sharedPreferences.getString(REFRESH_TOKEN, null)
 }
 
+fun deleteAccessToken(context: Context) {
+    val sharedPreferences = context.getSharedPreferences(VOSTOM_STORE, Context.MODE_PRIVATE)
+    with(sharedPreferences.edit()) {
+        remove(ACCESS_TOKEN)
+        apply()
+    }
+}
+
 fun deleteAllToken(context: Context) {
     val sharedPreferences = context.getSharedPreferences(VOSTOM_STORE, Context.MODE_PRIVATE)
     with(sharedPreferences.edit()) {

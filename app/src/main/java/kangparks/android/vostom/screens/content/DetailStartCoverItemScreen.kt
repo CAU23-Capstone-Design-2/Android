@@ -45,7 +45,6 @@ fun DetailStarCoverItemScreen(
     navController: NavHostController,
     startContentViewModel: StarContentViewModel,
     contentPlayerViewModel : ContentPlayerViewModel,
-    token : String
 ) {
     val context = LocalContext.current
     val isPlaying = contentPlayerViewModel.isPlaying.observeAsState(initial = false)
@@ -172,7 +171,6 @@ fun DetailStarCoverItemScreen(
                                         onClick = {
                                             val mediaSource = getMediaSource(
                                                 context = context,
-                                                token = token,
                                                 musicId = coverItem.id
                                             )
                                             contentPlayerViewModel.setMediaSource(
@@ -198,7 +196,6 @@ fun DetailStarCoverItemScreen(
                                         onClick = {
                                             val mediaSource = getMediaSource(
                                                 context = context,
-                                                token = token,
                                                 musicId = coverItem.id
                                             )
                                             contentPlayerViewModel.setMediaSource(

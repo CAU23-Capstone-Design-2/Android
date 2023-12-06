@@ -54,7 +54,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun DetailMyCoverItemScreen(
     navController: NavHostController,
-    token: String,
     contentStoreViewModel: ContentStoreViewModel,
     contentPlayerViewModel : ContentPlayerViewModel
 ) {

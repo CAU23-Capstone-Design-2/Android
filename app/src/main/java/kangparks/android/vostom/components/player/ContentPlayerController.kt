@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.google.android.exoplayer2.ExoPlayer
 import kangparks.android.vostom.R
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 

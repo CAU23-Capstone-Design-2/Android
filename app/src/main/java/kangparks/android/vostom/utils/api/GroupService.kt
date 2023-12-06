@@ -53,7 +53,7 @@ interface GroupService {
     @PUT("/api/groups/{groupId}")
     suspend fun updateGroup(
         @Header("accessToken") accessToken: String,
-        @Part("updateGroupDto") updateGroupDto : UpdateGroupDto,
+        @Part("requestGroupDto") requestGroupDto : UpdateGroupDto,
         @Part groupImage: MultipartBody.Part,
         @Path("groupId") id : Int
     ) : Response<VostomResponse<ResponseBody>>

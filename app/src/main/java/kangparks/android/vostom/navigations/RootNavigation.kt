@@ -1,24 +1,14 @@
 package kangparks.android.vostom.navigations
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.util.Log
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import kangparks.android.vostom.models.learning.LearningState
 import kangparks.android.vostom.screens.player.ContentPlayerScreen
-import kangparks.android.vostom.utils.helper.learning.checkCurrentUserLearningState
-import kangparks.android.vostom.utils.store.getAccessToken
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModelFactory
 import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel

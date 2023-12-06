@@ -50,7 +50,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun DetailMyGroupCoverItemScreen(
     navController: NavHostController,
-    token: String,
     contentStoreViewModel: ContentStoreViewModel,
     contentPlayerViewModel : ContentPlayerViewModel
 ) {

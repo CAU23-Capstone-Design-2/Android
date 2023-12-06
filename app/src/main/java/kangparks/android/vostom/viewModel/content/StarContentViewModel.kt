@@ -9,6 +9,7 @@ import kangparks.android.vostom.models.content.Celebrity
 import kangparks.android.vostom.models.content.Music
 import kangparks.android.vostom.utils.dummy.dummyStarCoverItemList
 import kangparks.android.vostom.utils.networks.content.getCelebrityMusicList
+import kangparks.android.vostom.utils.store.getAccessToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -22,9 +23,9 @@ class StarContentViewModel : ViewModel(){
     val currentSingerContent : LiveData<List<Music>> = _currentSingerContent
     fun updateCurrentSinger(
         context: Context,
-        accessToken : String,
         singer: Celebrity
     ){
+        val accessToken = getAccessToken(context) ?: ""
         _currentSinger.postValue(singer)
         coroutineScope.launch {
             val result = getCelebrityMusicList(

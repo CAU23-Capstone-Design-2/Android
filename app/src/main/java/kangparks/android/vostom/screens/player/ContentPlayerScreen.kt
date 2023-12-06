@@ -154,7 +154,8 @@ fun ContentPlayerScreen(
                         )
 
                         ContentPlayerSlider(
-                            contentColor = contentColor
+                            contentColor = contentColor,
+                            exoPlayer = exoPlayer,
                         )
 
                         ContentPlayerController(
