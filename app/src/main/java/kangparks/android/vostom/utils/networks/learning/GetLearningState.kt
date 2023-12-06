@@ -13,7 +13,7 @@ import retrofit2.Response
 
 suspend fun getLearningState(
     accessToken : String,
-) : LearningState{
+) : LearningState?{
     val learningService: LearningService = createApiService()
 
     return try {
@@ -43,10 +43,10 @@ suspend fun getLearningState(
         }
     }catch (e : HttpException){
         Log.d("NETWORK-getLearningState", "HttpException : ${e.message()}")
-        LearningState.BeforeLearning
+        null
     }
     catch (e: Exception){
         Log.d("NETWORK-getLearningState", "Exception : ${e.message}")
-        LearningState.BeforeLearning
+        null
     }
 }

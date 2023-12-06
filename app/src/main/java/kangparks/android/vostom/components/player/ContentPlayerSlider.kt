@@ -6,10 +6,16 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableFloatState
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -17,41 +23,109 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.android.exoplayer2.ExoPlayer
+import kangparks.android.vostom.utils.helper.media.formatTime
+import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun ContentPlayerSlider(
+    contentPlayerViewModel: ContentPlayerViewModel,
     contentColor : Color,
+    exoPlayer : ExoPlayer?,
+    isPlaying : Boolean,
 ) {
-    LinearProgressIndicator(
-        progress = 0.5f,
-        trackColor = Color(0x8C5C5C5C),
-        color = Color(0x8CE2E2E2),
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 10.dp)
-            .height(5.dp)
-            .clip(RoundedCornerShape(5.dp))
-    )
+    val currentSongDuration = contentPlayerViewModel.currentSongDuration.observeAsState(0L)
+    val currentSongCurrentProgress = contentPlayerViewModel.currentSongCurrentProgress.observeAsState(0L)
+
+
+//    val currentSongCurrentProgress = remember {
+//        mutableFloatStateOf(
+//            0f
+//        )
+//    }
+    val currentProgress = remember {
+        mutableFloatStateOf(
+            currentSongCurrentProgress.value.toFloat()
+        )
+    }
+
+//    val interval = 1000L
+
+//    LaunchedEffect(key1 = currentSongDuration.value, key2 = isPlaying) {
+//        val interval = 1000L
+//        if(isPlaying && exoPlayer != null){
+//
+//            while (currentSongCurrentProgress.value < currentSongDuration.value) {
+//                delay(interval)
+//                currentSongCurrentProgress.value += interval
+//            }
+//        }
+//    }
+
+    if(exoPlayer != null){
+
+
+        Slider(
+            value = currentSongCurrentProgress.value.toFloat(),
+            onValueChange = {
+//                contentPlayerViewModel.setCurrentSongCurrentProgress(it.toLong())
+//                currentSongCurrentProgress.value = it
+                currentProgress.value = it
+            },
+            onValueChangeFinished = {
+                if(!exoPlayer.isPlaying){
+                    contentPlayerViewModel.resumeMusic()
+                }
+
+                exoPlayer?.seekTo(currentProgress.value.toLong())
+            },
+            enabled = true,
+            valueRange = 0f..currentSongDuration.value.toFloat(),
+            colors = SliderDefaults.colors(
+                thumbColor = Color(0xFFE0E0E0),
+                activeTrackColor = Color(0xF0D1D1D1),
+                inactiveTrackColor = Color(0xA8979797),
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 5.dp)
+        )
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = "00:00",
+            text = formatTime(currentSongCurrentProgress.value.toLong()),
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp,
             textAlign = TextAlign.Start,
             color = contentColor
         )
-        Text(
-            text = "03:00",
-            fontWeight = FontWeight.Normal,
-            fontSize = 14.sp,
-            textAlign = TextAlign.Start,
-            color = contentColor
-        )
+        if (exoPlayer != null) {
+            Text(
+                text = formatTime(exoPlayer.duration) ,
+                fontWeight = FontWeight.Normal,
+                fontSize = 14.sp,
+                textAlign = TextAlign.Start,
+                color = contentColor
+            )
+        }
     }
 
-    Spacer(modifier = Modifier.height(20.dp))
+    Spacer(modifier = Modifier.height(10.dp))
 }
+
+//@Composable
+//private fun UpdateProgress(
+//    isPlaying: Boolean,
+//    currentProgress : MutableFloatState,
+//    totalDuration: Long,
+//    exoPlayer: ExoPlayer?
+//) {
+//
+//
+//}

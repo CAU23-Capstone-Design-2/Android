@@ -181,7 +181,7 @@ fun EditProfileScreen(
             RoundedButton(
                 text = "프로필 수정하기",
                 onClick = {
-                    if(updateImgUri.value == null){
+                    if(updateImgUri.value == userImgUrl){
                         Toast.makeText(context, "변경할 사진을 추가해주세요.", Toast.LENGTH_SHORT).show()
                         return@RoundedButton
                     }

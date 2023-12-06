@@ -41,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -65,12 +66,12 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun RequestCoverSongListScreen(
-    token : String,
     navController: NavHostController,
     requestCoverSongViewModel: RequestCoverSongViewModel = viewModel(
-        factory = RequestCoverSongViewModelFactory(token = token)
+        factory = RequestCoverSongViewModelFactory(applicationContext = LocalContext.current)
     )
 ) {
+    val context = LocalContext.current
     val isDarkTheme = isSystemInDarkTheme()
     val systemUiController = rememberSystemUiController()
     val requestCoverSongList = requestCoverSongViewModel.requestCoverSongList.observeAsState(listOf())
@@ -81,7 +82,7 @@ fun RequestCoverSongListScreen(
     fun refresh() = refreshScope.launch {
         refreshing = true
         delay(1000)
-        requestCoverSongViewModel.update(token)
+        requestCoverSongViewModel.update(context)
         refreshing = false
     }
 

@@ -2,32 +2,24 @@ package kangparks.android.vostom.screens.home
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
-import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,29 +31,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.lerp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.source.MediaSource
-import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.source.SingleSampleMediaSource
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
-import com.google.android.exoplayer2.upstream.ResolvingDataSource
-import com.google.android.exoplayer2.util.Util
 import drawVerticalScrollbar
-import kangparks.android.vostom.BuildConfig
 import kangparks.android.vostom.R
 import kangparks.android.vostom.components.appbar.ContentAppBar
 import kangparks.android.vostom.components.item.CelebrityItem
@@ -76,13 +56,11 @@ import kangparks.android.vostom.models.content.Celebrity
 import kangparks.android.vostom.models.content.Music
 import kangparks.android.vostom.navigations.HomeContent
 import kangparks.android.vostom.utils.helper.media.getMediaSource
-import kangparks.android.vostom.utils.media.getMediaItem
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.content.StarContentViewModel
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import javax.sql.DataSource
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -90,13 +68,12 @@ import javax.sql.DataSource
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-    token: String,
     contentStoreViewModel: ContentStoreViewModel,
     starContentViewModel: StarContentViewModel,
     contentPlayerViewModel: ContentPlayerViewModel
 ) {
 
-    val testBuildString = remember { mutableStateOf("빌드 12-05-22-00") }
+    val testBuildString = remember { mutableStateOf("빌드 12-07-02-30") }
 
     val myCoverItemList = contentStoreViewModel.myCoverItemList.observeAsState(initial = listOf())
     val myGroupCoverItemList =
@@ -128,10 +105,7 @@ fun HomeScreen(
 
     LaunchedEffect(key1 = null) {
         delay(500)
-        contentStoreViewModel.initHomeContent(
-            token!!,
-            context = context
-        )
+        contentStoreViewModel.initHomeContent(context)
     }
 
     SideEffect {
@@ -216,21 +190,12 @@ fun HomeScreen(
                             navController.navigate(HomeContent.DetailMyCoverItem.route)
                         }
                     },
-                    renderItem = { item: Music ->
+                    renderItem = { item: Music, index : Int ->
                         CoverSongItem(
+                            contentPlayerViewModel = contentPlayerViewModel,
                             content = item,
-                            onClick = {
-                                val mediaSource = getMediaSource(
-                                    context = context,
-                                    token = token,
-                                    musicId = item.id
-                                )
-                                contentPlayerViewModel.setMediaSource(
-                                    context = context,
-                                    mediaSource = mediaSource
-                                )
-                                contentPlayerViewModel.playMusic(item)
-                            }
+                            index = index,
+                            playList = myCoverItemList,
                         )
                     },
                     skeletonItem = {
@@ -246,21 +211,12 @@ fun HomeScreen(
                             navController.navigate(HomeContent.DetailMyGroupCoverItem.route)
                         }
                     },
-                    renderItem = { item: Music ->
+                    renderItem = { item: Music, index : Int ->
                         UserCoverSongItem(
+                            contentPlayerViewModel = contentPlayerViewModel,
                             content = item,
-                            onClick = {
-                                val mediaSource = getMediaSource(
-                                    context = context,
-                                    token = token,
-                                    musicId = item.id
-                                )
-                                contentPlayerViewModel.setMediaSource(
-                                    context = context,
-                                    mediaSource = mediaSource
-                                )
-                                contentPlayerViewModel.playMusic(item)
-                            }
+                            index = index,
+                            playList = myGroupCoverItemList
                         )
                     },
                     skeletonItem = {
@@ -277,13 +233,12 @@ fun HomeScreen(
                         }
                     },
                     contentPaddingValue = 10,
-                    renderItem = { item: Celebrity ->
+                    renderItem = { item: Celebrity, index : Int ->
                         CelebrityItem(
                             content = item,
                             onClick = {
                                 starContentViewModel.updateCurrentSinger(
                                     context = context,
-                                    accessToken = token!!,
                                     singer = item
                                 )
                                 navController.navigate(HomeContent.DetailStarCoverItem.route)

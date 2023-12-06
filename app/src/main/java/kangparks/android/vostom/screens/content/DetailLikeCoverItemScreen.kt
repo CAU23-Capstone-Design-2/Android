@@ -53,7 +53,7 @@ fun DetailLikeCoverItemScreen(
     val context = LocalContext.current
     val isPlaying = contentPlayerViewModel.isPlaying.observeAsState(initial = false)
 
-    val myLikeCoverItemList = contentStoreViewModel.likeItemList.observeAsState()
+    val myLikeCoverItemList = contentStoreViewModel.likeItemList.observeAsState(listOf())
 
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp
@@ -143,11 +143,11 @@ fun DetailLikeCoverItemScreen(
                                             )
                                     ){
                                         UserCoverSongItem(
+                                            contentPlayerViewModel = contentPlayerViewModel,
                                             content = it[index],
                                             contentSize = (screenWidth-60)/2,
-                                            onClick = {
-                                                contentPlayerViewModel.playMusic(it[index])
-                                            }
+                                            index = index,
+                                            playList = myLikeCoverItemList
                                         )
                                     }
                                 }
@@ -161,11 +161,11 @@ fun DetailLikeCoverItemScreen(
                                             )
                                     ){
                                         UserCoverSongItem(
+                                            contentPlayerViewModel = contentPlayerViewModel,
                                             content = it[index],
                                             contentSize = (screenWidth-60)/2,
-                                            onClick = {
-                                                contentPlayerViewModel.playMusic(it[index])
-                                            }
+                                            index = index,
+                                            playList = myLikeCoverItemList
                                         )
                                     }
                                 }

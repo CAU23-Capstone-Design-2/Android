@@ -49,7 +49,6 @@ import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
 
 @Composable
 fun AddCoverToGroupScreen(
-    accessToken : String,
     navController : NavHostController,
     contentStoreViewModel: ContentStoreViewModel,
     addCoverToGroupViewModel: AddCoverToGroupViewModel= viewModel(),

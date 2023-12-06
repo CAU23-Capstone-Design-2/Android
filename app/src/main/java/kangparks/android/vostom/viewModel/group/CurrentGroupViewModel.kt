@@ -36,6 +36,7 @@ class CurrentGroupViewModel : ViewModel() {
         context: Context,
         group : Group
     ){
+        _currentGroupCoverItemList.postValue(listOf())
         if(group.isMember || group.isLeader) {
             _participate.postValue(true)
         }

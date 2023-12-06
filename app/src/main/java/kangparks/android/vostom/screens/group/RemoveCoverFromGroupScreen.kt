@@ -49,7 +49,6 @@ import kangparks.android.vostom.viewModel.group.RemoveCoverFromGroupViewModel
 
 @Composable
 fun RemoveCoverFromGroupScreen(
-    accessToken : String,
     navController : NavHostController,
     currentGroupViewModel : CurrentGroupViewModel,
     contentStoreViewModel : ContentStoreViewModel,

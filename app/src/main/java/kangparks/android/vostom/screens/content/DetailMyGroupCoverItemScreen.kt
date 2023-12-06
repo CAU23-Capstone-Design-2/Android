@@ -50,14 +50,13 @@ import kotlinx.coroutines.launch
 @Composable
 fun DetailMyGroupCoverItemScreen(
     navController: NavHostController,
-    token: String,
     contentStoreViewModel: ContentStoreViewModel,
     contentPlayerViewModel : ContentPlayerViewModel
 ) {
     val context = LocalContext.current
     val isPlaying = contentPlayerViewModel.isPlaying.observeAsState(initial = false)
 
-    val myGroupCoverItemList = contentStoreViewModel.myGroupCoverItemList.observeAsState()
+    val myGroupCoverItemList = contentStoreViewModel.myGroupCoverItemList.observeAsState(listOf())
 
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp
@@ -153,11 +152,11 @@ fun DetailMyGroupCoverItemScreen(
                                             )
                                     ){
                                         UserCoverSongItem(
+                                            contentPlayerViewModel = contentPlayerViewModel,
                                             content = it[index],
                                             contentSize = (screenWidth-60)/2,
-                                            onClick = {
-                                                contentPlayerViewModel.playMusic(it[index])
-                                            }
+                                            index = index,
+                                            playList = myGroupCoverItemList
                                         )
                                     }
                                 }
@@ -171,11 +170,11 @@ fun DetailMyGroupCoverItemScreen(
                                             )
                                     ){
                                         UserCoverSongItem(
+                                            contentPlayerViewModel = contentPlayerViewModel,
                                             content = it[index],
                                             contentSize = (screenWidth-60)/2,
-                                            onClick = {
-                                                contentPlayerViewModel.playMusic(it[index])
-                                            }
+                                            index = index,
+                                            playList = myGroupCoverItemList
                                         )
                                     }
                                 }

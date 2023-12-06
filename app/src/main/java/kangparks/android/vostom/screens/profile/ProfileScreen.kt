@@ -1,6 +1,8 @@
 package kangparks.android.vostom.screens.profile
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -58,9 +60,13 @@ import kangparks.android.vostom.components.skeleton.CoverSongItemSkeleton
 import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
 import kangparks.android.vostom.components.template.PullRefreshLayoutTemplate
 import kangparks.android.vostom.models.content.Music
+import kangparks.android.vostom.navigations.Auth
+import kangparks.android.vostom.navigations.Control
 import kangparks.android.vostom.navigations.HomeContent
+import kangparks.android.vostom.navigations.Nav
 import kangparks.android.vostom.utils.helper.media.getMediaSource
 import kangparks.android.vostom.utils.media.getMediaItem
+import kangparks.android.vostom.utils.store.deleteAccessToken
 import kangparks.android.vostom.utils.store.getAccessToken
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
@@ -227,24 +233,12 @@ fun ProfileScreen(
                             navController.navigate(HomeContent.DetailMyCoverItem.route)
                         }
                     },
-                    renderItem = { item: Music ->
+                    renderItem = { item: Music, index : Int->
                         CoverSongItem(
+                            contentPlayerViewModel = contentPlayerViewModel,
                             content = item,
-                            onClick = {
-                                val token = getAccessToken(context)
-                                if(token != null){
-                                    val mediaSource = getMediaSource(
-                                        context = context,
-                                        token = token,
-                                        musicId = item.id
-                                    )
-                                    contentPlayerViewModel.setMediaSource(
-                                        context = context,
-                                        mediaSource = mediaSource
-                                    )
-                                    contentPlayerViewModel.playMusic(item)
-                                }
-                            }
+                            index = index,
+                            playList = myCoverItemList,
                         )
                     },
                     skeletonItem = {
@@ -260,24 +254,12 @@ fun ProfileScreen(
                             navController.navigate(HomeContent.DetailLikeCoverItem.route)
                         }
                     },
-                    renderItem = { item: Music ->
+                    renderItem = { item: Music, index : Int->
                         UserCoverSongItem(
+                            contentPlayerViewModel = contentPlayerViewModel,
                             content = item,
-                            onClick = {
-                                val token = getAccessToken(context)
-                                if(token != null){
-                                    val mediaSource = getMediaSource(
-                                        context = context,
-                                        token = token,
-                                        musicId = item.id
-                                    )
-                                    contentPlayerViewModel.setMediaSource(
-                                        context = context,
-                                        mediaSource = mediaSource
-                                    )
-                                    contentPlayerViewModel.playMusic(item)
-                                }
-                            }
+                            index = index,
+                            playList = likedCoverItemList,
                         )
                     },
                     skeletonItem = {
@@ -300,7 +282,20 @@ fun ProfileScreen(
                         )
                     }
                     TextButton(
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                            deleteAccessToken(context)
+                            Toast.makeText(context, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
+
+                            val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+
+                            intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                            context.startActivity(intent)
+//                            navController.navigate(Auth.Login.route){
+//                                popUpTo(Auth.Login.route){
+//                                    inclusive = true
+//                                }
+//                            }
+                        },
                         modifier = Modifier.padding(bottom = 0.dp)
                     ) {
                         Text(
@@ -312,7 +307,9 @@ fun ProfileScreen(
                     }
 
                     TextButton(
-                        onClick = { /*TODO*/ },
+                        onClick = {
+                                  Toast.makeText(context, "아쉽게도 Vostom은 한번 가입하면 탈퇴할 수 없어요😍", Toast.LENGTH_SHORT).show()
+                                  },
                         modifier = Modifier.padding(bottom = 0.dp)
                     ) {
                         Text(

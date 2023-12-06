@@ -19,8 +19,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.google.android.exoplayer2.ExoPlayer
 import kangparks.android.vostom.R
 import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
@@ -30,7 +32,7 @@ fun ContentPlayerController(
     contentPlayerViewModel: ContentPlayerViewModel,
     contentColor : Color,
 ) {
-
+    val context = LocalContext.current
     val isPaused = contentPlayerViewModel.isPaused.observeAsState(false)
 
     Row(
@@ -51,7 +53,7 @@ fun ContentPlayerController(
                     .size(36.dp)
                     .clip(RoundedCornerShape(5.dp))
                     .clickable {
-                        contentPlayerViewModel.prevMusic()
+                        contentPlayerViewModel.prevMusic(context)
                     }
                 ,
                 tint = contentColor
@@ -99,7 +101,7 @@ fun ContentPlayerController(
                     .size(36.dp)
                     .clip(RoundedCornerShape(5.dp))
                     .clickable {
-                        contentPlayerViewModel.nextMusic()
+                        contentPlayerViewModel.nextMusic(context)
                     }
                 ,
                 tint = contentColor

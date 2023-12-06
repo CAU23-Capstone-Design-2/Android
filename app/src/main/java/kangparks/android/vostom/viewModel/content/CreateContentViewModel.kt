@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 import kangparks.android.vostom.models.item.YoutubePlayItem
 import kangparks.android.vostom.utils.networks.content.createCover
+import kangparks.android.vostom.utils.store.getAccessToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,10 +24,10 @@ class CreateContentViewModel : ViewModel() {
     }
 
     fun createCoverSong(
-        token : String,
         context : Context,
 //        navController : NavHostController
     ){
+        val token = getAccessToken(context) ?: ""
         coroutineScope.launch {
             songItem.value?.let {
                 val result = createCover(

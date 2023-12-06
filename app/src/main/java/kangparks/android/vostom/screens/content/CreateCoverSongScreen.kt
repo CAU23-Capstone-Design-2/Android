@@ -58,7 +58,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun CreateCoverSongScreen(
     navController: NavHostController,
-    token : String,
     createContentViewModel : CreateContentViewModel = viewModel()
 ) {
     val youtubeSearchViewModel = remember { YoutubeSearchViewModel() }
@@ -208,7 +207,6 @@ fun CreateCoverSongScreen(
                     else{
                         Log.d("CreateCoverSongScreen", " CreateCoverSongScreen : 서버 요청")
                         createContentViewModel.createCoverSong(
-                            token = token,
                             context = context,
 //                            navController = navController
                         )

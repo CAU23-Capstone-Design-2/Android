@@ -45,13 +45,12 @@ fun DetailStarCoverItemScreen(
     navController: NavHostController,
     startContentViewModel: StarContentViewModel,
     contentPlayerViewModel : ContentPlayerViewModel,
-    token : String
 ) {
     val context = LocalContext.current
     val isPlaying = contentPlayerViewModel.isPlaying.observeAsState(initial = false)
 
     val currentSinger = startContentViewModel.currentSinger.observeAsState()
-    val currentSingerContent = startContentViewModel.currentSingerContent.observeAsState()
+    val currentSingerContent = startContentViewModel.currentSingerContent.observeAsState(listOf())
 
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp
@@ -167,20 +166,11 @@ fun DetailStarCoverItemScreen(
                                         )
                                 ) {
                                     CoverSongItem(
+                                        contentPlayerViewModel = contentPlayerViewModel,
                                         content = coverItem,
                                         contentSize = (screenWidth - 60) / 2,
-                                        onClick = {
-                                            val mediaSource = getMediaSource(
-                                                context = context,
-                                                token = token,
-                                                musicId = coverItem.id
-                                            )
-                                            contentPlayerViewModel.setMediaSource(
-                                                context = context,
-                                                mediaSource = mediaSource
-                                            )
-                                            contentPlayerViewModel.playMusic(coverItem)
-                                        }
+                                        index= index,
+                                        playList = currentSingerContent
                                     )
                                 }
                             } else {
@@ -193,20 +183,11 @@ fun DetailStarCoverItemScreen(
                                         )
                                 ) {
                                     CoverSongItem(
+                                        contentPlayerViewModel = contentPlayerViewModel,
                                         content = coverItem,
                                         contentSize = (screenWidth - 60) / 2,
-                                        onClick = {
-                                            val mediaSource = getMediaSource(
-                                                context = context,
-                                                token = token,
-                                                musicId = coverItem.id
-                                            )
-                                            contentPlayerViewModel.setMediaSource(
-                                                context = context,
-                                                mediaSource = mediaSource
-                                            )
-                                            contentPlayerViewModel.playMusic(coverItem)
-                                        }
+                                        index= index,
+                                        playList = currentSingerContent
                                     )
                                 }
                             }

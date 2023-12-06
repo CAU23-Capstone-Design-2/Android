@@ -68,8 +68,12 @@ class LearningStateCheckerService : Service() {
                 CoroutineScope(Dispatchers.IO).launch{
                     if(userToken != null){
                         val result = getLearningState(accessToken = userToken)
-                        Log.d(TAG, "current State : ${result.state}")
-                        if(result == LearningState.AfterLearning){
+                        Log.d(TAG, "current State : ${result?.state}")
+                        if(result == null){
+                            stopForeground(true)
+                            stopSelf()
+                        }
+                        else if(result == LearningState.AfterLearning){
                             intent.putExtra("state", result.state)
 
                             LocalBroadcastManager.getInstance(context).sendBroadcast(intent)

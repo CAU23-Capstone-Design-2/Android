@@ -1,6 +1,6 @@
 package kangparks.android.vostom.screens.control
 
-import androidx.compose.foundation.Image
+ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -57,7 +57,10 @@ fun ControlScreen(
             return@LaunchedEffect
         }
         else{
-            splashViewModel.getCurrentLearningState(token)
+            splashViewModel.getCurrentLearningState(
+                token = token,
+                context = context
+            )
         }
     }
 
