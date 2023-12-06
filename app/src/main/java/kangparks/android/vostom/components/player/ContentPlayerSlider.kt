@@ -27,12 +27,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.android.exoplayer2.ExoPlayer
 import kangparks.android.vostom.utils.helper.media.formatTime
+import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 import kotlinx.coroutines.delay
 
 @Composable
 fun ContentPlayerSlider(
+    contentPlayerViewModel: ContentPlayerViewModel,
     contentColor : Color,
     exoPlayer : ExoPlayer?,
+    isPlaying : Boolean,
 ) {
     val currentProgress = remember {
         mutableFloatStateOf(
@@ -41,11 +44,45 @@ fun ContentPlayerSlider(
     }
 
     if(exoPlayer != null){
-        UpdateProgress(
-            isPlaying = exoPlayer.isPlaying,
-            currentProgress = currentProgress,
-            totalDuration = exoPlayer.duration,
-            exoPlayer = exoPlayer
+//        UpdateProgress(
+//            isPlaying = exoPlayer.isPlaying,
+//            currentProgress = currentProgress,
+//            totalDuration = exoPlayer.duration,
+//            exoPlayer = exoPlayer
+//        )
+
+//        if (exoPlayer != null) {
+//
+//        }
+        val interval = 1000L
+
+        LaunchedEffect(key1 = exoPlayer, key2 = isPlaying) {
+            if(isPlaying){
+                while (currentProgress.value < exoPlayer.duration) {
+                    delay(interval)
+                    currentProgress.value += interval
+                }
+            }
+        }
+
+        Slider(
+            value = currentProgress.value,
+            onValueChange = {
+                currentProgress.value = it
+            },
+            onValueChangeFinished = {
+                contentPlayerViewModel.resumeMusic()
+                exoPlayer?.seekTo((currentProgress.value).toLong())
+            },
+            enabled = true,
+            valueRange = 0f..exoPlayer.duration.toFloat(),
+            colors = SliderDefaults.colors(
+                thumbColor = Color(0xFF894FA8),
+                activeTrackColor = Color(0x8C894FA8)
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 5.dp)
         )
     }
 
@@ -73,64 +110,13 @@ fun ContentPlayerSlider(
     Spacer(modifier = Modifier.height(10.dp))
 }
 
-@Composable
-private fun UpdateProgress(
-    isPlaying: Boolean,
-    currentProgress : MutableFloatState,
-    totalDuration: Long,
-    exoPlayer: ExoPlayer?
-) {
-
-    if (exoPlayer != null) {
-        // 3분 동안 1초 간격으로 타이머 실행
-//        val totalDuration = 3 * 60 * 1000L // 3 minutes in milliseconds
-        val interval = 1000L // 1 second interval
-
-        // CoroutineScope를 사용하여 타이머 실행
-        LaunchedEffect(exoPlayer) {
-//            var elapsedTime = (currentProgress.value.toLong() * totalDuration).toLong()
-
-            while (currentProgress.value < totalDuration) {
-                delay(interval)
-                currentProgress.value += interval
-//                val newProgress = elapsedTime.toFloat() / totalDuration.toFloat()
-//                currentProgress.value = newProgress
-            }
-        }
-
-        Slider(
-            value = currentProgress.value,
-            onValueChange = {
-                // Slider 값 변경 시 실행되는 코드
-                Log.d("Slider", "onValueChange: $it")
-                currentProgress.value = it
-//                exoPlayer?.seekTo((currentProgress.value).toLong())
-            },
-            onValueChangeFinished = {
-                // Slider 값 변경이 완료되었을 때 실행되는 코드
-//                currentProgress.value = it
-                exoPlayer?.seekTo((currentProgress.value).toLong())
-            },
-            enabled = true,
-            valueRange = 0f..totalDuration.toFloat(),
-            colors = SliderDefaults.colors(
-                thumbColor = Color(0xFF894FA8),
-                activeTrackColor = Color(0x8C894FA8)
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 5.dp)
-        )
-
-//        LinearProgressIndicator(
-//            progress = currentProgress.value/totalDuration.toFloat(),
-//            trackColor = Color(0x8C5C5C5C),
-//            color = Color(0x8CE2E2E2),
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(vertical = 10.dp)
-//                .height(5.dp)
-//                .clip(RoundedCornerShape(5.dp))
-//        )
-    }
-}
+//@Composable
+//private fun UpdateProgress(
+//    isPlaying: Boolean,
+//    currentProgress : MutableFloatState,
+//    totalDuration: Long,
+//    exoPlayer: ExoPlayer?
+//) {
+//
+//
+//}

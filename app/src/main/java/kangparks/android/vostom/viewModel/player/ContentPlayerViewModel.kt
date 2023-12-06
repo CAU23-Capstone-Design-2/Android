@@ -47,6 +47,10 @@ class ContentPlayerViewModel : ViewModel() {
     val isPlaying: LiveData<Boolean> = _isPlaying
     val isPaused: LiveData<Boolean> = _isPaused
     val currentSong: LiveData<Music?> = _currentSong
+    val currentPlayList: LiveData<List<Music>> = _currentPlayList
+    val currentPlayIndex: LiveData<Int> = _currentPlayIndex
+
+
     val isShowPlayer: LiveData<Boolean> = _isShowPlayer
 
     val currentSongCommentList: LiveData<List<Comment>> = _currentSongCommentList
@@ -82,8 +86,13 @@ class ContentPlayerViewModel : ViewModel() {
 
     fun setMediaSource(
         context: Context,
-        mediaSource: ProgressiveMediaSource
+        mediaSource: ProgressiveMediaSource,
+        index : Int,
+        playList : List<Music>
     ) {
+        _currentPlayIndex.postValue(index)
+        _currentPlayList.postValue(playList)
+
         if (_exoPlayer == null) {
             Log.d("setMediaSource", "setMediaSource : _exoPlayer is null")
             val newPlayer = ExoPlayer.Builder(context).build().apply {

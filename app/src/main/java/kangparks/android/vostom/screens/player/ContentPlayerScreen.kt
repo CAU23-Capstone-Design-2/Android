@@ -154,8 +154,10 @@ fun ContentPlayerScreen(
                         )
 
                         ContentPlayerSlider(
+                            contentPlayerViewModel = contentPlayerViewModel,
                             contentColor = contentColor,
                             exoPlayer = exoPlayer,
+                            isPlaying = !isPaused.value
                         )
 
                         ContentPlayerController(

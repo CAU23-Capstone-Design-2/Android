@@ -55,6 +55,7 @@ import kangparks.android.vostom.components.dropdown.DropDownIconButton
 import kangparks.android.vostom.components.template.HomeContentLayoutTemplate
 import kangparks.android.vostom.components.template.PullRefreshLayoutTemplate
 import kangparks.android.vostom.navigations.HomeContent
+import kangparks.android.vostom.utils.helper.media.getMediaSource
 import kangparks.android.vostom.utils.media.getMediaItem
 import kangparks.android.vostom.viewModel.content.ContentStoreViewModel
 import kangparks.android.vostom.viewModel.group.CurrentGroupViewModel
@@ -73,7 +74,7 @@ fun GroupScreen(
 ) {
     val isPlaying = contentPlayerViewModel.isPlaying.observeAsState(initial = false)
     val currentGroup = currentGroupViewModel.currentGroup.observeAsState(initial = null)
-    val currentGroupItemList = currentGroupViewModel.currentGroupCoverItemList.observeAsState(initial = null)
+    val currentGroupItemList = currentGroupViewModel.currentGroupCoverItemList.observeAsState(initial = listOf())
     val isParticipant = currentGroupViewModel.participate.observeAsState(initial = false)
 
     val isDropDownOpen = remember {
@@ -313,9 +314,18 @@ fun GroupScreen(
                                     .fillParentMaxWidth()
                                     .padding(vertical = 5.dp)
                                     .clip(RoundedCornerShape(5.dp))
-                                    .clickable(onClick =
-                                    {
-
+                                    .clickable(onClick = {
+                                        val mediaSource = getMediaSource(
+                                            context = context,
+                                            musicId = it[index].id
+                                        )
+                                        contentPlayerViewModel.setMediaSource(
+                                            context = context,
+                                            mediaSource = mediaSource,
+                                            index = index,
+                                            playList = currentGroupItemList.value!!
+                                        )
+                                        contentPlayerViewModel.playMusic(it[index])
                                     }
                                     )
                             ){
@@ -336,14 +346,6 @@ fun GroupScreen(
                                         maxLines = 1,
                                         overflow = TextOverflow.Ellipsis
                                     )
-//                                Spacer(modifier = Modifier.height(5.dp))
-//                                Text(
-//                                    text = it[index].userName,
-//                                    fontSize = 13.sp,
-//                                    fontWeight = FontWeight.Bold,
-//                                    maxLines = 1,
-//                                    overflow = TextOverflow.Ellipsis
-//                                )
                                     Spacer(modifier = Modifier.height(5.dp))
                                     Row {
                                         AsyncImage(

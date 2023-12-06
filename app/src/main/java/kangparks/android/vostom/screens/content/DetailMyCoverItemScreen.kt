@@ -59,7 +59,7 @@ fun DetailMyCoverItemScreen(
 ) {
     val context = LocalContext.current
     val isPlaying = contentPlayerViewModel.isPlaying.observeAsState(initial = false)
-    val myCoverItemList = contentStoreViewModel.myCoverItemList.observeAsState()
+    val myCoverItemList = contentStoreViewModel.myCoverItemList.observeAsState(listOf())
 
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp
@@ -168,11 +168,11 @@ fun DetailMyCoverItemScreen(
                                             )
                                     ){
                                         CoverSongItem(
+                                            contentPlayerViewModel = contentPlayerViewModel,
                                             content = it[index],
                                             contentSize = (screenWidth-60)/2,
-                                            onClick = {
-                                                contentPlayerViewModel.playMusic(it[index])
-                                            }
+                                            index = index,
+                                            playList = myCoverItemList
                                         )
                                     }
                                 }
@@ -186,11 +186,11 @@ fun DetailMyCoverItemScreen(
                                             )
                                     ){
                                         CoverSongItem(
+                                            contentPlayerViewModel = contentPlayerViewModel,
                                             content = it[index],
                                             contentSize = (screenWidth-60)/2,
-                                            onClick = {
-                                                contentPlayerViewModel.playMusic(it[index])
-                                            }
+                                            index = index,
+                                            playList = myCoverItemList
                                         )
                                     }
                                 }

@@ -233,23 +233,12 @@ fun ProfileScreen(
                             navController.navigate(HomeContent.DetailMyCoverItem.route)
                         }
                     },
-                    renderItem = { item: Music ->
+                    renderItem = { item: Music, index : Int->
                         CoverSongItem(
+                            contentPlayerViewModel = contentPlayerViewModel,
                             content = item,
-                            onClick = {
-                                val token = getAccessToken(context)
-                                if(token != null){
-                                    val mediaSource = getMediaSource(
-                                        context = context,
-                                        musicId = item.id
-                                    )
-                                    contentPlayerViewModel.setMediaSource(
-                                        context = context,
-                                        mediaSource = mediaSource
-                                    )
-                                    contentPlayerViewModel.playMusic(item)
-                                }
-                            }
+                            index = index,
+                            playList = myCoverItemList,
                         )
                     },
                     skeletonItem = {
@@ -265,23 +254,12 @@ fun ProfileScreen(
                             navController.navigate(HomeContent.DetailLikeCoverItem.route)
                         }
                     },
-                    renderItem = { item: Music ->
+                    renderItem = { item: Music, index : Int->
                         UserCoverSongItem(
+                            contentPlayerViewModel = contentPlayerViewModel,
                             content = item,
-                            onClick = {
-                                val token = getAccessToken(context)
-                                if(token != null){
-                                    val mediaSource = getMediaSource(
-                                        context = context,
-                                        musicId = item.id
-                                    )
-                                    contentPlayerViewModel.setMediaSource(
-                                        context = context,
-                                        mediaSource = mediaSource
-                                    )
-                                    contentPlayerViewModel.playMusic(item)
-                                }
-                            }
+                            index = index,
+                            playList = likedCoverItemList,
                         )
                     },
                     skeletonItem = {

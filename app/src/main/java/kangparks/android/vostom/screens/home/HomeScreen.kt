@@ -190,20 +190,12 @@ fun HomeScreen(
                             navController.navigate(HomeContent.DetailMyCoverItem.route)
                         }
                     },
-                    renderItem = { item: Music ->
+                    renderItem = { item: Music, index : Int ->
                         CoverSongItem(
+                            contentPlayerViewModel = contentPlayerViewModel,
                             content = item,
-                            onClick = {
-                                val mediaSource = getMediaSource(
-                                    context = context,
-                                    musicId = item.id
-                                )
-                                contentPlayerViewModel.setMediaSource(
-                                    context = context,
-                                    mediaSource = mediaSource
-                                )
-                                contentPlayerViewModel.playMusic(item)
-                            }
+                            index = index,
+                            playList = myGroupCoverItemList,
                         )
                     },
                     skeletonItem = {
@@ -219,20 +211,12 @@ fun HomeScreen(
                             navController.navigate(HomeContent.DetailMyGroupCoverItem.route)
                         }
                     },
-                    renderItem = { item: Music ->
+                    renderItem = { item: Music, index : Int ->
                         UserCoverSongItem(
+                            contentPlayerViewModel = contentPlayerViewModel,
                             content = item,
-                            onClick = {
-                                val mediaSource = getMediaSource(
-                                    context = context,
-                                    musicId = item.id
-                                )
-                                contentPlayerViewModel.setMediaSource(
-                                    context = context,
-                                    mediaSource = mediaSource
-                                )
-                                contentPlayerViewModel.playMusic(item)
-                            }
+                            index = index,
+                            playList = myCoverItemList
                         )
                     },
                     skeletonItem = {
@@ -249,7 +233,7 @@ fun HomeScreen(
                         }
                     },
                     contentPaddingValue = 10,
-                    renderItem = { item: Celebrity ->
+                    renderItem = { item: Celebrity, index : Int ->
                         CelebrityItem(
                             content = item,
                             onClick = {

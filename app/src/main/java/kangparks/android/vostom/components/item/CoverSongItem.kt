@@ -9,27 +9,48 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import kangparks.android.vostom.models.content.Music
+import kangparks.android.vostom.utils.helper.media.getMediaSource
+import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 
 @Composable
 fun CoverSongItem(
+    contentPlayerViewModel : ContentPlayerViewModel,
     content: Music? = null,
     contentSize : Int = 140,
-    onClick: () -> Unit = {},
+    index : Int,
+    playList : State<List<Music>>
 ) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .width(contentSize.dp)
             .clip(RoundedCornerShape(5.dp))
-            .clickable(onClick = onClick)
+            .clickable(onClick = {
+                if(content != null){
+                    val mediaSource = getMediaSource(
+                        context = context,
+                        musicId = content.id
+                    )
+                    contentPlayerViewModel.setMediaSource(
+                        context = context,
+                        mediaSource = mediaSource,
+                        index = index,
+                        playList = playList.value
+                    )
+                    contentPlayerViewModel.playMusic(content)
+                }
+            })
     ) {
         AsyncImage(
             model = content?.albumArtUri ?: null,
