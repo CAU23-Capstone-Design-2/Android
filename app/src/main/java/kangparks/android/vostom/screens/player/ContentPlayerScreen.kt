@@ -1,6 +1,7 @@
 package kangparks.android.vostom.screens.player
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
@@ -68,7 +69,7 @@ fun ContentPlayerScreen(
     var sliderIsChanging by remember { mutableStateOf(false) }
     var localSliderValue by remember { mutableFloatStateOf(0f) }
 
-    val exoPlayer = contentPlayerViewModel.getPlayer(context)
+    val exoPlayer = contentPlayerViewModel.getPlayer()
 
     val currentSong = contentPlayerViewModel.currentSong.observeAsState(null)
     val isPaused = contentPlayerViewModel.isPaused.observeAsState(false)
@@ -82,6 +83,11 @@ fun ContentPlayerScreen(
 
     LaunchedEffect(key1 = currentSong.value){
         contentPlayerViewModel.updateCommentList(context)
+        Log.d("ContentPlayerScreen", "LaunchedEffect : ${contentPlayerViewModel.getPlayer()?.contentPosition}")
+    }
+
+    LaunchedEffect(key1 = true){
+        Log.d("ContentPlayerScreen", "LaunchedEffect : ${contentPlayerViewModel.getPlayer()?.contentPosition}")
     }
 
     SideEffect {
@@ -119,9 +125,9 @@ fun ContentPlayerScreen(
                                 )
                                 contentPlayerViewModel.hidePlayer()
                             } else if (x > 50) {
-                                contentPlayerViewModel.nextMusic()
+                                contentPlayerViewModel.nextMusic(context)
                             } else if (x < -50) {
-                                contentPlayerViewModel.prevMusic()
+                                contentPlayerViewModel.prevMusic(context)
                             }
                         }
                     },

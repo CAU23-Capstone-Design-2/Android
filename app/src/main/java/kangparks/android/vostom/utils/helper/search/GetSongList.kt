@@ -27,57 +27,65 @@ suspend fun getSongList(
 
     try {
         val docs : Document = Jsoup.connect(baseUrl+keywordForQuery).get()
+        Log.d("getJsonOnject :","docs : $docs")
 
         val videoResults = docs.select("script")
 
         for(video in videoResults){
-            val scriptData = video.data()
-            if(scriptData.contains("var ytInitialData")){
-                val startIndex = scriptData.indexOf("{\"responseContext\":")
-                val endIndex = scriptData.indexOf(";", startIndex)
-                val ytInitialData = scriptData.substring(startIndex, endIndex + 1)
+            try {
+                Log.d("getJsonOnject :","video : $video")
+                Log.d("getJsonOnject :","video.data().length : ${video.data().length}")
+                val scriptData = video.data()
+                if(scriptData.contains("var ytInitialData")){
+                    val startIndex = scriptData.indexOf("{\"responseContext\":")
+                    val endIndex = scriptData.indexOf(";", startIndex)
+                    val ytInitialData = scriptData.substring(startIndex, endIndex + 1)
 
-                val jsonObject = JSONObject(ytInitialData)
+                    val jsonObject = JSONObject(ytInitialData)
 
-                val contentsObject = jsonObject.getJSONObject("contents")
-                val twoColumnSearchResultsRenderer = contentsObject.getJSONObject("twoColumnSearchResultsRenderer")
-                val primaryContents = twoColumnSearchResultsRenderer.getJSONObject("primaryContents")
-                val sectionListRenderer = primaryContents.getJSONObject("sectionListRenderer")
-                val contentsArray = sectionListRenderer.getJSONArray("contents")
+                    val contentsObject = jsonObject.getJSONObject("contents")
+                    val twoColumnSearchResultsRenderer = contentsObject.getJSONObject("twoColumnSearchResultsRenderer")
+                    val primaryContents = twoColumnSearchResultsRenderer.getJSONObject("primaryContents")
+                    val sectionListRenderer = primaryContents.getJSONObject("sectionListRenderer")
+                    val contentsArray = sectionListRenderer.getJSONArray("contents")
 
-                val itemSectionRenderer = contentsArray.getJSONObject(0).getJSONObject("itemSectionRenderer")
-                val contents = itemSectionRenderer.getJSONArray("contents")
-                Log.d("getJsonOnject :","content : $contents")
+                    val itemSectionRenderer = contentsArray.getJSONObject(0).getJSONObject("itemSectionRenderer")
+                    val contents = itemSectionRenderer.getJSONArray("contents")
+                    Log.d("getJsonOnject :","content : $contents")
 
-                for (j in 0..<contents.length()){
-                    val content = contents.getJSONObject(j)
+                    for (j in 0..<contents.length()){
+                        val content = contents.getJSONObject(j)
 
-                    Log.d("getJsonOnject :","content : $content")
+                        Log.d("getJsonOnject :","content : $content")
 
-                    try {
-                        val videoRenderer = content.getJSONObject("videoRenderer")
+                        try {
+                            val videoRenderer = content.getJSONObject("videoRenderer")
 
-                        val thumbnail = videoRenderer.getJSONObject("thumbnail")
-                        val thumbnails = thumbnail.getJSONArray("thumbnails")
-                        val thumbnailUrl = thumbnails.getJSONObject(0).getString("url")
+                            val thumbnail = videoRenderer.getJSONObject("thumbnail")
+                            val thumbnails = thumbnail.getJSONArray("thumbnails")
+                            val thumbnailUrl = thumbnails.getJSONObject(0).getString("url")
 
-                        val title = videoRenderer.getJSONObject("title")
-                        val runs = title.getJSONArray("runs")
-                        val titleText = runs.getJSONObject(0).getString("text")
+                            val title = videoRenderer.getJSONObject("title")
+                            val runs = title.getJSONArray("runs")
+                            val titleText = runs.getJSONObject(0).getString("text")
 
-                        val navigationEndpoint = videoRenderer.getJSONObject("navigationEndpoint")
-                        val commandMetadata = navigationEndpoint.getJSONObject("commandMetadata")
-                        val webCommandMetadata = commandMetadata.getJSONObject("webCommandMetadata")
-                        val url = webCommandMetadata.getString("url")
+                            val navigationEndpoint = videoRenderer.getJSONObject("navigationEndpoint")
+                            val commandMetadata = navigationEndpoint.getJSONObject("commandMetadata")
+                            val webCommandMetadata = commandMetadata.getJSONObject("webCommandMetadata")
+                            val url = webCommandMetadata.getString("url")
 //                        val urlParts = url.split("/watch?v=", "&pp")
 
-                        listOfSong.add(YoutubePlayItem(countItem, titleText, thumbnailUrl, url))
-                        countItem++
-                    }catch(e: Exception){
-                        Log.d("Search Result :","$e")
+                            listOfSong.add(YoutubePlayItem(countItem, titleText, thumbnailUrl, url))
+                            countItem++
+                        }catch(e: Exception){
+                            Log.d("Search Result :","$e")
+                        }
                     }
                 }
+            }catch(e: Exception){
+                Log.d("loop executon :","$e")
             }
+
         }
     } catch (e: Exception){
         Log.e("Error get Youtube list :","${e.message}")

@@ -14,7 +14,7 @@ fun getMediaSource(
 ): ProgressiveMediaSource {
     val streamUri = "${BuildConfig.base_url}/api/music/stream/${musicId}"
 
-    Log.d("getMediaSource", "streamUri : $streamUri")
+//    Log.d("getMediaSource", "streamUri : $streamUri")
 
     val token = getAccessToken(context) ?: ""
 

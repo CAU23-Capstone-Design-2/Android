@@ -57,7 +57,10 @@ fun ControlScreen(
             return@LaunchedEffect
         }
         else{
-            splashViewModel.getCurrentLearningState(token)
+            splashViewModel.getCurrentLearningState(
+                token = token,
+                context = context
+            )
         }
     }
 

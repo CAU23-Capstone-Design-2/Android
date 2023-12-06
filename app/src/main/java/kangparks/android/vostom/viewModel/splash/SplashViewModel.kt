@@ -3,6 +3,7 @@ package kangparks.android.vostom.viewModel.splash
 import android.app.Application
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,6 +13,7 @@ import kangparks.android.vostom.models.learning.LearningState
 import kangparks.android.vostom.utils.networks.learning.getLearningState
 import kangparks.android.vostom.utils.store.getAccessToken
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -55,7 +57,10 @@ class SplashViewModel(application: Application) : AndroidViewModel(application) 
         _accessToken.postValue(token)
     }
 
-    fun getCurrentLearningState(token : String) {
+    fun getCurrentLearningState(
+        token : String,
+        context: Context
+    ) {
         Log.d("Test-SplashViewModel", "getCurrentLearningState")
 //        val token = getAccessToken(context)
         if (token == null) {
@@ -74,9 +79,19 @@ class SplashViewModel(application: Application) : AndroidViewModel(application) 
         coroutineScope.launch {
             val learningState = getLearningState(token)
             Log.d("Test-SplashViewModel", "learningState : $learningState")
-            _currentLearningState.postValue(learningState)
+
+            if(learningState == null){
+                CoroutineScope(Dispatchers.Main).launch{
+                    Toast.makeText(context, "네트워크 오류가 발생했습니다.\n잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                }
+                _isReceivedRequestLearningState.postValue(RequestState.AfterRequest)
+                return@launch
+            }
+            else{
+                _currentLearningState.postValue(learningState!!)
 //            _currentLearningState.postValue(LearningState.AfterLearning)
-            _isReceivedRequestLearningState.postValue(RequestState.AfterRequest)
+                _isReceivedRequestLearningState.postValue(RequestState.AfterRequest)
+            }
         }
     }
 

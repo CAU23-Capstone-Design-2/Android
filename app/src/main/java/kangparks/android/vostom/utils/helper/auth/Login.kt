@@ -111,7 +111,10 @@ fun loginWithKakaoToken(
 //                delay(500)
 //                viewModel.getCurrentLearningState()
 //                delay(500)
-                viewModel.getCurrentLearningState(result.token)
+                viewModel.getCurrentLearningState(
+                    token = result.token,
+                    context = context
+                )
 //                exoPlayer.release()
 //                navController.navigate(route = Nav.CONTENT) {
 //                    navController.popBackStack()

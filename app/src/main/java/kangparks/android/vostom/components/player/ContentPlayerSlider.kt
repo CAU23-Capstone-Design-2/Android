@@ -1,20 +1,18 @@
 package kangparks.android.vostom.components.player
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableFloatState
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,38 +35,57 @@ fun ContentPlayerSlider(
     exoPlayer : ExoPlayer?,
     isPlaying : Boolean,
 ) {
+    val currentSongDuration = contentPlayerViewModel.currentSongDuration.observeAsState(0L)
+    val currentSongCurrentProgress = contentPlayerViewModel.currentSongCurrentProgress.observeAsState(0L)
+
+
+//    val currentSongCurrentProgress = remember {
+//        mutableFloatStateOf(
+//            0f
+//        )
+//    }
     val currentProgress = remember {
         mutableFloatStateOf(
-            if(exoPlayer != null) exoPlayer.currentPosition.toFloat() else 0f
+            currentSongCurrentProgress.value.toFloat()
         )
     }
 
-    if(exoPlayer != null){
-        val interval = 1000L
+//    val interval = 1000L
 
-        LaunchedEffect(key1 = exoPlayer, key2 = isPlaying) {
-            if(isPlaying){
-                while (currentProgress.value < exoPlayer.duration) {
-                    delay(interval)
-                    currentProgress.value += interval
-                }
-            }
-        }
+//    LaunchedEffect(key1 = currentSongDuration.value, key2 = isPlaying) {
+//        val interval = 1000L
+//        if(isPlaying && exoPlayer != null){
+//
+//            while (currentSongCurrentProgress.value < currentSongDuration.value) {
+//                delay(interval)
+//                currentSongCurrentProgress.value += interval
+//            }
+//        }
+//    }
+
+    if(exoPlayer != null){
+
 
         Slider(
-            value = currentProgress.value,
+            value = currentSongCurrentProgress.value.toFloat(),
             onValueChange = {
+//                contentPlayerViewModel.setCurrentSongCurrentProgress(it.toLong())
+//                currentSongCurrentProgress.value = it
                 currentProgress.value = it
             },
             onValueChangeFinished = {
-                contentPlayerViewModel.resumeMusic()
-                exoPlayer?.seekTo((currentProgress.value).toLong())
+                if(!exoPlayer.isPlaying){
+                    contentPlayerViewModel.resumeMusic()
+                }
+
+                exoPlayer?.seekTo(currentProgress.value.toLong())
             },
             enabled = true,
-            valueRange = 0f..exoPlayer.duration.toFloat(),
+            valueRange = 0f..currentSongDuration.value.toFloat(),
             colors = SliderDefaults.colors(
-                thumbColor = Color(0xFF894FA8),
-                activeTrackColor = Color(0x8C894FA8)
+                thumbColor = Color(0xFFE0E0E0),
+                activeTrackColor = Color(0xF0D1D1D1),
+                inactiveTrackColor = Color(0xA8979797),
             ),
             modifier = Modifier
                 .fillMaxWidth()
@@ -82,19 +99,21 @@ fun ContentPlayerSlider(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = formatTime(currentProgress.value.toLong()),
+            text = formatTime(currentSongCurrentProgress.value.toLong()),
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp,
             textAlign = TextAlign.Start,
             color = contentColor
         )
-        Text(
-            text = formatTime(exoPlayer?.duration) ,
-            fontWeight = FontWeight.Normal,
-            fontSize = 14.sp,
-            textAlign = TextAlign.Start,
-            color = contentColor
-        )
+        if (exoPlayer != null) {
+            Text(
+                text = formatTime(exoPlayer.duration) ,
+                fontWeight = FontWeight.Normal,
+                fontSize = 14.sp,
+                textAlign = TextAlign.Start,
+                color = contentColor
+            )
+        }
     }
 
     Spacer(modifier = Modifier.height(10.dp))
