@@ -44,16 +44,6 @@ fun ContentPlayerSlider(
     }
 
     if(exoPlayer != null){
-//        UpdateProgress(
-//            isPlaying = exoPlayer.isPlaying,
-//            currentProgress = currentProgress,
-//            totalDuration = exoPlayer.duration,
-//            exoPlayer = exoPlayer
-//        )
-
-//        if (exoPlayer != null) {
-//
-//        }
         val interval = 1000L
 
         LaunchedEffect(key1 = exoPlayer, key2 = isPlaying) {

@@ -14,6 +14,7 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import kangparks.android.vostom.models.content.Comment
 import kangparks.android.vostom.models.content.Music
 import kangparks.android.vostom.utils.dummy.dummyCommentList
+import kangparks.android.vostom.utils.helper.media.getMediaSource
 import kangparks.android.vostom.utils.networks.comment.createComment
 import kangparks.android.vostom.utils.networks.comment.deleteComment
 import kangparks.android.vostom.utils.networks.comment.getCommentList
@@ -93,10 +94,21 @@ class ContentPlayerViewModel : ViewModel() {
         _currentPlayIndex.postValue(index)
         _currentPlayList.postValue(playList)
 
+        val mediaSources = mutableListOf<ProgressiveMediaSource>()
+
+        for (element in playList) {
+            mediaSources.add(getMediaSource(
+                context = context,
+                musicId = element.id
+            ))
+        }
+
         if (_exoPlayer == null) {
             Log.d("setMediaSource", "setMediaSource : _exoPlayer is null")
             val newPlayer = ExoPlayer.Builder(context).build().apply {
-                setMediaSource(mediaSource)
+//                setMediaSource(mediaSource)
+                setMediaSources(mediaSources.toList())
+                seekToDefaultPosition(index)
                 playWhenReady = true
                 prepare()
 
@@ -104,6 +116,7 @@ class ContentPlayerViewModel : ViewModel() {
             }
 
             _exoPlayer = newPlayer
+//            newPlayer.
 
 //            newPlayer.play()
         } else {
@@ -118,7 +131,9 @@ class ContentPlayerViewModel : ViewModel() {
 //            }
 //
 //            _exoPlayer = newPlayer
-            _exoPlayer!!.setMediaSource(mediaSource)
+//            _exoPlayer!!.setMediaSource(mediaSource)
+            _exoPlayer!!.setMediaSources(mediaSources.toList())
+            _exoPlayer!!.seekToDefaultPosition(index)
         }
     }
 
@@ -147,11 +162,19 @@ class ContentPlayerViewModel : ViewModel() {
     }
 
     fun nextMusic() {
-//        _exoPlayer?.next()
+        if(_exoPlayer != null){
+            if(_exoPlayer!!.hasNext() == true){
+                _exoPlayer?.next()
+            }
+        }
     }
 
     fun prevMusic() {
-//        _exoPlayer?.prev()
+        if(_exoPlayer != null){
+            if(_exoPlayer!!.hasPrevious() == true){
+                _exoPlayer?.previous()
+            }
+        }
     }
 
     fun stopMusic() {
