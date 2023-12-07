@@ -315,13 +315,13 @@ fun GroupScreen(
                                     .padding(vertical = 5.dp)
                                     .clip(RoundedCornerShape(5.dp))
                                     .clickable(onClick = {
-                                        val mediaSource = getMediaSource(
-                                            context = context,
-                                            musicId = it[index].id
-                                        )
+//                                        val mediaSource = getMediaSource(
+//                                            context = context,
+//                                            musicId = it[index].id
+//                                        )
                                         contentPlayerViewModel.setMediaSource(
                                             context = context,
-                                            mediaSource = mediaSource,
+//                                            mediaSource = mediaSource,
                                             index = index,
                                             playList = currentGroupItemList.value!!
                                         )

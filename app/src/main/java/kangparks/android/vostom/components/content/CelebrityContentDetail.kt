@@ -16,10 +16,12 @@ import kangparks.android.vostom.components.item.CelebrityItemHorizontal
 import kangparks.android.vostom.components.item.CelebrityMusicItem
 import kangparks.android.vostom.viewModel.bottomsheet.CelebrityContentViewModel
 import kangparks.android.vostom.viewModel.bottomsheet.CelebrityContentViewType
+import kangparks.android.vostom.viewModel.player.StarMusicPlayerViewModel
 
 @Composable
 fun CelebrityContentDetail(
-    celebrityContentViewModel : CelebrityContentViewModel
+    celebrityContentViewModel : CelebrityContentViewModel,
+    starMusicPlayerViewModel : StarMusicPlayerViewModel
 ) {
     val currentCelebrity = celebrityContentViewModel.currentCelebrity.observeAsState(initial = null)
     val listOfCoverSongs = celebrityContentViewModel.currentCelebrityMusicList.observeAsState(listOf())
@@ -48,7 +50,10 @@ fun CelebrityContentDetail(
 
             items(listOfCoverSongs.value.size) { index ->
                 CelebrityMusicItem(
-                    music = listOfCoverSongs.value[index]
+                    listOfCoverSongs = listOfCoverSongs,
+                    index = index,
+//                    music = listOfCoverSongs.value[index],
+                    starMusicPlayerViewModel = starMusicPlayerViewModel
                 )
             }
 

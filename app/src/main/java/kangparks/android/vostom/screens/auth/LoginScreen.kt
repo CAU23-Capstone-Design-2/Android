@@ -42,6 +42,7 @@ import kangparks.android.vostom.components.button.RoundedButton
 import kangparks.android.vostom.models.learning.LearningState
 import kangparks.android.vostom.navigations.HomeContent
 import kangparks.android.vostom.navigations.LearningContent
+import kangparks.android.vostom.navigations.Nav
 import kangparks.android.vostom.utils.helper.auth.withKakaoLogin
 import kangparks.android.vostom.utils.media.getMediaItem
 import kangparks.android.vostom.viewModel.player.VideoBackgroundViewModel
@@ -64,7 +65,7 @@ fun LoginScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val requestState = splashViewModel.isReceivedRequestLearningState.observeAsState(RequestState.BeforeRequest)
-    val currentLearningState = splashViewModel.currentLearningState.observeAsState(LearningState.BeforeLearning)
+    val currentLearningState = splashViewModel.currentLearningState.observeAsState(null)
 
     val mediaItem = getMediaItem(context, "login_background", "raw")
     val exoPlayer = remember(context){
@@ -93,8 +94,14 @@ fun LoginScreen(
                     navHostController.popBackStack()
                 }
             }
-            else{
+            else if(currentLearningState.value == LearningState.Learning){
                 navHostController.navigate(LearningContent.Loading.route){
+                    navHostController.popBackStack()
+                }
+            }
+            else{
+                splashViewModel.reset()
+                navHostController.navigate(Nav.AUTH){
                     navHostController.popBackStack()
                 }
             }

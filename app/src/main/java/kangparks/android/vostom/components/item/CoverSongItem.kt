@@ -38,13 +38,13 @@ fun CoverSongItem(
             .clip(RoundedCornerShape(5.dp))
             .clickable(onClick = {
                 if(content != null){
-                    val mediaSource = getMediaSource(
-                        context = context,
-                        musicId = content.id
-                    )
+//                    val mediaSource = getMediaSource(
+//                        context = context,
+//                        musicId = content.id
+//                    )
                     contentPlayerViewModel.setMediaSource(
                         context = context,
-                        mediaSource = mediaSource,
+//                        mediaSource = mediaSource,
                         index = index,
                         playList = playList.value
                     )

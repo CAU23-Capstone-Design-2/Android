@@ -29,15 +29,15 @@ class SplashViewModel(application: Application) : AndroidViewModel(application) 
     private var _accessToken: MutableLiveData<String?> = MutableLiveData<String?>(null)
     private val _isReceivedRequestLearningState: MutableLiveData<RequestState> = MutableLiveData(RequestState.BeforeRequest)
 
-    private val _currentLearningState: MutableLiveData<LearningState> = MutableLiveData(
-        LearningState.AfterLearning
+    private val _currentLearningState: MutableLiveData<LearningState?> = MutableLiveData(
+        null
     )
 
     private val _complete = MutableLiveData<Boolean>()
 
     val accessToken: LiveData<String?> get() = _accessToken
     val isReceivedRequestLearningState: LiveData<RequestState> get() = _isReceivedRequestLearningState
-    val currentLearningState: LiveData<LearningState> get() = _currentLearningState
+    val currentLearningState: LiveData<LearningState?> get() = _currentLearningState
     val complete: LiveData<Boolean> get() = _complete
 
     init {
@@ -45,6 +45,13 @@ class SplashViewModel(application: Application) : AndroidViewModel(application) 
         Log.d("Test-SplashViewModel", "token : $token")
         _accessToken.postValue(token)
         _complete.value = false
+    }
+
+    fun reset(){
+        _accessToken.postValue(null)
+        _isReceivedRequestLearningState.postValue(RequestState.BeforeRequest)
+        _currentLearningState.postValue(null)
+        _complete.postValue(false)
     }
 
     fun getUserTokenFromDevice(context: Context) {
@@ -85,10 +92,9 @@ class SplashViewModel(application: Application) : AndroidViewModel(application) 
                     Toast.makeText(context, "네트워크 오류가 발생했습니다.\n잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
                 }
                 _isReceivedRequestLearningState.postValue(RequestState.AfterRequest)
-                return@launch
             }
             else{
-                _currentLearningState.postValue(learningState!!)
+                _currentLearningState.postValue(learningState)
 //            _currentLearningState.postValue(LearningState.AfterLearning)
                 _isReceivedRequestLearningState.postValue(RequestState.AfterRequest)
             }

@@ -41,6 +41,7 @@ import kangparks.android.vostom.components.bottomsheet.CelebrityContentBottomShe
 import kangparks.android.vostom.components.template.LearningLayoutTemplate
 import kangparks.android.vostom.navigations.LearningContent
 import kangparks.android.vostom.viewModel.bottomsheet.CelebrityContentViewModel
+import kangparks.android.vostom.viewModel.player.StarMusicPlayerViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -48,9 +49,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun GuideScreen(
     navController: NavHostController,
-    celebrityContentViewModel : CelebrityContentViewModel
+    celebrityContentViewModel : CelebrityContentViewModel,
+    starMusicPlayerViewModel : StarMusicPlayerViewModel
 ) {
-    val testBuildString = remember { mutableStateOf("빌드 12-05-22-00") }
+    val testBuildString = remember { mutableStateOf("빌드 12-07-03-30") }
 
     val singingAnimation by rememberLottieComposition(
         spec = LottieCompositionSpec.Asset("singing.json")
@@ -117,6 +119,7 @@ fun GuideScreen(
             subContent = "조용한 환경에서 진행하면 학습 정확도가 높아집니다!\uD83D\uDE06",
             nextButtonContent = "나의 목소리 학습 시작하기",
             nextButtonAction = {
+                starMusicPlayerViewModel.stop()
                 celebrityContentViewModel.resetToCurrentView()
                 navController.navigate(LearningContent.DetailGuide.route)
             },
@@ -136,7 +139,8 @@ fun GuideScreen(
         }
         CelebrityContentBottomSheet(
             bottomSheetScaffoldState = bottomSheetScaffoldState,
-            celebrityContentViewModel = celebrityContentViewModel
+            celebrityContentViewModel = celebrityContentViewModel,
+            starMusicPlayerViewModel = starMusicPlayerViewModel
         )
     }
 }
