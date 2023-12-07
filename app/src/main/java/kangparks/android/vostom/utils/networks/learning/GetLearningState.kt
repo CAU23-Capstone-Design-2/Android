@@ -34,12 +34,12 @@ suspend fun getLearningState(
                     LearningState.AfterLearning
                 }
                 else ->{
-                    LearningState.BeforeLearning
+                    null
                 }
             }
         }
         else{
-            LearningState.BeforeLearning
+            null
         }
     }catch (e : HttpException){
         Log.d("NETWORK-getLearningState", "HttpException : ${e.message()}")

@@ -41,18 +41,21 @@ import kangparks.android.vostom.services.LearningStateCheckerService
 import kangparks.android.vostom.utils.helper.service.startService
 import kangparks.android.vostom.viewModel.bottomsheet.CelebrityContentViewModel
 import kangparks.android.vostom.viewModel.learning.LearningStateViewModel
+import kangparks.android.vostom.viewModel.player.StarMusicPlayerViewModel
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoadingScreen(
-    navController : NavHostController,
-    celebrityContentViewModel : CelebrityContentViewModel,
-    learningStateViewModel : LearningStateViewModel,
-    checkRunningService : (serviceClass: Class<*>)-> Boolean
-){
+    navController: NavHostController,
+    celebrityContentViewModel: CelebrityContentViewModel,
+    learningStateViewModel: LearningStateViewModel,
+    starMusicPlayerViewModel: StarMusicPlayerViewModel,
+    checkRunningService: (serviceClass: Class<*>) -> Boolean
+) {
     val testBuildString = remember { mutableStateOf("빌드 12-05-22-00") }
-    val currentLearningState = learningStateViewModel.currentLearningState.observeAsState(LearningState.Learning)
+    val currentLearningState =
+        learningStateViewModel.currentLearningState.observeAsState(LearningState.Learning)
 
     val context = LocalContext.current
     val loadingAnimation by rememberLottieComposition(
@@ -65,11 +68,11 @@ fun LoadingScreen(
 
     val countValue = remember { mutableIntStateOf(5) }
 
-    LaunchedEffect(key1 = null){
+    LaunchedEffect(key1 = null) {
         delay(500)
 
         val resultIsRunningService = checkRunningService(LearningStateCheckerService::class.java)
-        if(!resultIsRunningService){
+        if (!resultIsRunningService) {
             startService(context, LearningStateCheckerService::class.java)
         }
 
@@ -80,8 +83,9 @@ fun LoadingScreen(
         )
     }
 
-    LaunchedEffect(key1 = currentLearningState.value){
-        if(currentLearningState.value == LearningState.AfterLearning){
+    LaunchedEffect(key1 = currentLearningState.value) {
+        if (currentLearningState.value == LearningState.AfterLearning) {
+            starMusicPlayerViewModel.stop()
             navController.navigate(LearningContent.Welcome.route)
         }
     }
@@ -112,10 +116,12 @@ fun LoadingScreen(
             subContent = "작업이 완료되면 알려드릴게요.\uD83D\uDE0E",
             contentModifier = Modifier.padding(bottom = 140.dp),
             contentAlignment = Alignment.Center
-        ){
-            Box(modifier = Modifier
-                .height(200.dp)
-                .width(200.dp)) {
+        ) {
+            Box(
+                modifier = Modifier
+                    .height(200.dp)
+                    .width(200.dp)
+            ) {
                 LottieAnimation(
                     composition = loadingAnimation,
                     progress = { progress },
@@ -124,7 +130,8 @@ fun LoadingScreen(
             }
         }
         CelebrityContentBottomSheet(
-            celebrityContentViewModel = celebrityContentViewModel
+            celebrityContentViewModel = celebrityContentViewModel,
+            starMusicPlayerViewModel = starMusicPlayerViewModel
         )
     }
 

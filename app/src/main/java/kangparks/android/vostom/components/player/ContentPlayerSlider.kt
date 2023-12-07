@@ -81,7 +81,7 @@ fun ContentPlayerSlider(
                 exoPlayer?.seekTo(currentProgress.value.toLong())
             },
             enabled = true,
-            valueRange = 0f..currentSongDuration.value.toFloat(),
+            valueRange = 0f..if(currentSongDuration.value > 0 )currentSongDuration.value.toFloat() else 0f,
             colors = SliderDefaults.colors(
                 thumbColor = Color(0xFFE0E0E0),
                 activeTrackColor = Color(0xF0D1D1D1),
@@ -107,7 +107,7 @@ fun ContentPlayerSlider(
         )
         if (exoPlayer != null) {
             Text(
-                text = formatTime(exoPlayer.duration) ,
+                text = formatTime(if(currentSongDuration.value > 0 )currentSongDuration.value else 0f.toLong() ) ,
                 fontWeight = FontWeight.Normal,
                 fontSize = 14.sp,
                 textAlign = TextAlign.Start,

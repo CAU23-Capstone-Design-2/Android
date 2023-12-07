@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
+import com.google.android.exoplayer2.Tracks
 import com.google.android.exoplayer2.source.ProgressiveMediaSource
 import kangparks.android.vostom.models.content.Comment
 import kangparks.android.vostom.models.content.Music
@@ -42,6 +43,7 @@ class ContentPlayerViewModel : ViewModel() {
 
     private val _currentPlayList : MutableLiveData<List<Music>> = MutableLiveData<List<Music>>(listOf())
     private var _currentPlayIndex : Int = 0
+    private var _previousPlayIndex : Int = 0
 
     private val _currentSong: MutableLiveData<Music?> = MutableLiveData<Music?>(null)
     private val _currentSongCurrentProgress : MutableLiveData<Long> = MutableLiveData<Long>(0L)
@@ -67,14 +69,14 @@ class ContentPlayerViewModel : ViewModel() {
 
     val currentSongCommentList: LiveData<List<Comment>> = _currentSongCommentList
 
-    init {
-        Log.d("ContentPlayerViewModel", "ContentPlayerViewModel init")
-        if(_exoPlayer == null){
-            Log.d("ContentPlayerViewModel", "ContentPlayerViewModel init : _exoPlayer is null")
-        }else{
-            Log.d("ContentPlayerViewModel", "ContentPlayerViewModel init : _exoPlayer is not null")
-        }
-    }
+//    init {
+//        Log.d("ContentPlayerViewModel", "ContentPlayerViewModel init")
+//        if(_exoPlayer == null){
+//            Log.d("ContentPlayerViewModel", "ContentPlayerViewModel init : _exoPlayer is null")
+//        }else{
+//            Log.d("ContentPlayerViewModel", "ContentPlayerViewModel init : _exoPlayer is not null")
+//        }
+//    }
 
     private fun startUpdatePositionCoroutine() {
         updatePositionJob = viewModelScope.launch {
@@ -92,15 +94,7 @@ class ContentPlayerViewModel : ViewModel() {
     }
 
     fun getPlayer(): ExoPlayer? {
-//        Log.d("getPlayer", "getPlayer : ${_exoPlayer}")
-//        return if (_exoPlayer == null) {
-//            Log.d("getPlayer", "getPlayer : _exoPlayer is null")
-//            _exoPlayer = ExoPlayer.Builder(context).build()
-//            _exoPlayer as ExoPlayer
-//        } else {
-//            Log.d("getPlayer", "getPlayer : _exoPlayer is not null")
-//            _exoPlayer as ExoPlayer
-//        }
+
         return _exoPlayer
     }
 
@@ -108,19 +102,9 @@ class ContentPlayerViewModel : ViewModel() {
         _currentSongCurrentProgress.postValue(progress)
     }
 
-//    fun runCurrentSongCurrentProgress(){
-//        coroutineScope.launch {
-//            while (_currentSongCurrentProgress.value!! < _currentSongDuration.value!!) {
-//                delay(1000L)
-//                _currentSongCurrentProgress.value = _currentSongCurrentProgress.value!! + 1000L
-//                Log.d("runCurrentSongCurrentProgress", "runCurrentSongCurrentProgress : ${_currentSongCurrentProgress.value} / ${_currentSongDuration.value}")
-//            }
-//        }
-//    }
-
     fun setMediaSource(
         context: Context,
-        mediaSource: ProgressiveMediaSource,
+//        mediaSource: ProgressiveMediaSource,
         index : Int,
         playList : List<Music>
     ) {
@@ -152,27 +136,49 @@ class ContentPlayerViewModel : ViewModel() {
                         Log.d("setMediaSource", "setMediaSource - ExoPlayer.STATE_READY : ${newPlayer.duration}")
                         val realDurationMillis: Long = newPlayer.duration
                         _currentSongDuration.postValue(realDurationMillis)
-//
-//                        if(!_isPlaying.value!!){
-//                            runCurrentSongCurrentProgress()
-//                        }
                     }
-//                    if (playbackState == ExoPlayer.STATE_ENDED) {
-////                        performEndExoPlayer()
-//                    }
                 }
 
                 override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
                     super.onMediaItemTransition(mediaItem, reason)
                     _currentSongCurrentProgress.value = 0L
 
-//                    Log.d("setMediaSource", "setMediaSource - onMediaItemTransition : ${mediaItem?.mediaId} ${_exoPlayer!!.contentPosition}")
+                    if(reason == 1){
+                        Log.d("setMediaSource", "setMediaSource - onMediaItemTransition :  언제 출력되는지 보자1111 $reason")
+                        _currentPlayIndex += 1
+                        _currentSong.postValue(_currentPlayList.value?.get(_currentPlayIndex))
+
+                        _currentSongCurrentProgress.value = 0L
+
+                        updateCommentList(context)
+
+                    }
+
+                    Log.d("setMediaSource", "setMediaSource - onMediaItemTransition :  언제 출력되는지 보자2222 $reason")
+//                    if(_currentPlayIndex == _exoPlayer?){
+//                        Log.d("setMediaSource", "setMediaSource - onMediaItemTransition :  언제 출력되는지 보자3333")
+//                    }
                 }
 
-//                override fun onIsPlayingChanged(isPlaying: Boolean) {
-//                    _isPlaying.postValue(isPlaying)
-//                    _isPaused.postValue(!isPlaying)
-//                }
+                override fun onTracksChanged(tracks: Tracks) {
+                    super.onTracksChanged(tracks)
+                    _currentSongCurrentProgress.value = 0L
+
+                    Log.d("setMediaSource", "setMediaSource - onTracksChanged : 언제 출력되는지 보자")
+                }
+
+                override fun onSeekForwardIncrementChanged(seekForwardIncrementMs: Long) {
+                    super.onSeekForwardIncrementChanged(seekForwardIncrementMs)
+
+                    Log.d("setMediaSource", "setMediaSource - onSeekForwardIncrementChanged : 다음 곡 재생")
+                }
+
+                override fun onSeekBackIncrementChanged(seekBackIncrementMs: Long) {
+                    super.onSeekBackIncrementChanged(seekBackIncrementMs)
+
+                    Log.d("setMediaSource", "setMediaSource - onSeekBackIncrementChanged : 이전 곡 재생")
+                }
+
             })
             _currentSongDuration.postValue(newPlayer.duration)
             Log.d("setMediaSource", "setMediaSource : ${newPlayer.duration}")
@@ -182,18 +188,7 @@ class ContentPlayerViewModel : ViewModel() {
             startUpdatePositionCoroutine()
             _exoPlayer = newPlayer
         } else {
-            Log.d("setMediaSource", "setMediaSource : _exoPlayer is not null")
-
-//            val newPlayer = ExoPlayer.Builder(context).build().apply {
-//                setMediaSource(mediaSource)
-//                playWhenReady = true
-//                prepare()
-//
-//                volume = 1f
-//            }
-//
-//            _exoPlayer = newPlayer
-//            _exoPlayer!!.setMediaSource(mediaSource)
+//            _exoPlayer!!.
             _exoPlayer!!.setMediaSources(mediaSources.toList())
             _exoPlayer!!.seekToDefaultPosition(index)
 
@@ -233,7 +228,7 @@ class ContentPlayerViewModel : ViewModel() {
     fun nextMusic(context: Context) {
         if(_exoPlayer != null){
             if(_exoPlayer!!.hasNextMediaItem()){
-
+//                _exoPlayer?.
                 _exoPlayer?.seekToNextMediaItem()
                 _currentPlayIndex += 1
 //                val currentIndex = _currentPlayIndex.value!!.plus(1)
@@ -407,6 +402,9 @@ class ContentPlayerViewModel : ViewModel() {
 
     override fun onCleared() {
         updatePositionJob?.cancel()
+
+        _exoPlayer?.stop()
+        _exoPlayer = null
         super.onCleared()
     }
 

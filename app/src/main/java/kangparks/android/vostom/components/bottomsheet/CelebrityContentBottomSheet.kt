@@ -23,13 +23,15 @@ import kangparks.android.vostom.components.content.CelebrityContentDetail
 import kangparks.android.vostom.components.content.CelebrityContentList
 import kangparks.android.vostom.viewModel.bottomsheet.CelebrityContentViewModel
 import kangparks.android.vostom.viewModel.bottomsheet.CelebrityContentViewType
+import kangparks.android.vostom.viewModel.player.StarMusicPlayerViewModel
 
 @SuppressLint("UnusedCrossfadeTargetStateParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CelebrityContentBottomSheet(
     bottomSheetScaffoldState : BottomSheetScaffoldState = rememberBottomSheetScaffoldState(),
-    celebrityContentViewModel : CelebrityContentViewModel
+    celebrityContentViewModel : CelebrityContentViewModel,
+    starMusicPlayerViewModel : StarMusicPlayerViewModel
 ) {
     val currentView = celebrityContentViewModel.currentView.observeAsState(initial = CelebrityContentViewType.CelebrityContentList)
     val currentCelebrity = celebrityContentViewModel.currentCelebrity.observeAsState(initial = null)
@@ -63,6 +65,7 @@ fun CelebrityContentBottomSheet(
                 ) {
                     CelebrityContentDetail(
                         celebrityContentViewModel = celebrityContentViewModel,
+                        starMusicPlayerViewModel = starMusicPlayerViewModel,
                     )
                 }
             }

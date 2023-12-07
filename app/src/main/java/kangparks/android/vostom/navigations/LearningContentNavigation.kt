@@ -24,6 +24,7 @@ import kangparks.android.vostom.viewModel.bottomsheet.CelebrityContentViewModel
 import kangparks.android.vostom.viewModel.learning.LearningStateViewModel
 import kangparks.android.vostom.viewModel.learning.ScriptProviderViewModel
 import kangparks.android.vostom.viewModel.learning.SingingViewModel
+import kangparks.android.vostom.viewModel.player.StarMusicPlayerViewModel
 import kangparks.android.vostom.viewModel.recorder.RecordFileViewModel
 
 sealed class LearningContent(val route: String) {
@@ -52,6 +53,7 @@ fun NavGraphBuilder.learningContentNavigation(
     val recordFileViewModel = RecordFileViewModel()
     val scriptProvider = ScriptProviderViewModel()
     val celebrityContentViewModel = CelebrityContentViewModel()
+    val starMusicPlayerViewModel =  StarMusicPlayerViewModel()
 
     navigation(
         route = Nav.LEARNING_CONTENT,
@@ -60,7 +62,8 @@ fun NavGraphBuilder.learningContentNavigation(
         composable(LearningContent.Guide.route) {
             GuideScreen(
                 navController = navController,
-                celebrityContentViewModel = celebrityContentViewModel
+                celebrityContentViewModel = celebrityContentViewModel,
+                starMusicPlayerViewModel= starMusicPlayerViewModel
             )
         }
         composable(LearningContent.DetailGuide.route) { DetailGuideScreen(navController = navController) }
@@ -122,6 +125,7 @@ fun NavGraphBuilder.learningContentNavigation(
                 navController = navController,
                 celebrityContentViewModel = celebrityContentViewModel,
                 learningStateViewModel = learningStateViewModel,
+                starMusicPlayerViewModel = starMusicPlayerViewModel,
                 checkRunningService = checkRunningService
             )
         }

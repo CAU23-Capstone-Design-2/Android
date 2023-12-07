@@ -76,8 +76,14 @@ fun ControlScreen(
                     navController.popBackStack()
                 }
             }
-            else{
+            else if(currentLearningState.value == LearningState.Learning){
                 navController.navigate(LearningContent.Loading.route){
+                    navController.popBackStack()
+                }
+            }
+            else{
+                splashViewModel.reset()
+                navController.navigate(Nav.AUTH){
                     navController.popBackStack()
                 }
             }
