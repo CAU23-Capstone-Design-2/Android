@@ -81,14 +81,14 @@ interface ContentService {
     @POST("/api/music/like")
     suspend fun likeMusic(
         @Header("accessToken") accessToken: String,
-        @Query("id") id : String
+        @Query("id") id : Int
     ) : Response<VostomResponse<ResponseBody>>
 
     @Headers("Content-Type: application/json")
     @DELETE("/api/music/like/undo")
     suspend fun undoLikeMusic(
         @Header("accessToken") accessToken: String,
-        @Query("id") id : String
+        @Query("id") id : Int
     ) : Response<VostomResponse<ResponseBody>>
 
 

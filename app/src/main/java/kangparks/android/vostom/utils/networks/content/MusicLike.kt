@@ -6,7 +6,7 @@ import kangparks.android.vostom.utils.helper.builder.createApiService
 
 suspend fun likeMusic(
     accessToken : String,
-    musicId : String
+    musicId : Int
 ){
     val contentService: ContentService = createApiService()
 
@@ -29,7 +29,7 @@ suspend fun likeMusic(
 
 suspend fun undoLikeMusic(
     accessToken : String,
-    musicId : String
+    musicId : Int
 ){
     val contentService: ContentService = createApiService()
 

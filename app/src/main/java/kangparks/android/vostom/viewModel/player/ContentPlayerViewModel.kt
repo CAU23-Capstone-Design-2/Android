@@ -177,12 +177,13 @@ class ContentPlayerViewModel : ViewModel() {
                     if(reason == 1){
                         Log.d("setMediaSource", "setMediaSource - onMediaItemTransition :  언제 출력되는지 보자1111 $reason")
                         _currentPlayIndex += 1
+                        _currentSong.postValue(_currentPlayList.value?.get(_currentPlayIndex))
 
                         coroutineScope.launch {
                             if(accessToken != null) {
                                 val result = getMusic(
                                     accessToken = accessToken!!,
-                                    id = playList[index].id
+                                    id = _currentPlayList.value!![_currentPlayIndex].id
                                 )
                                 if(result != null) {
                                     _currentSong.postValue(Music(
@@ -197,14 +198,15 @@ class ContentPlayerViewModel : ViewModel() {
                                         userName = currentSong.value!!.userName
                                     ))
                                 }
-                            }else{
-                                _currentSong.postValue(playList[index])
                             }
                         }
 
 //                        _currentSong.postValue(_currentPlayList.value?.get(_currentPlayIndex))
 
                         _currentSongCurrentProgress.value = 0L
+
+                        val realDurationMillis: Long = newPlayer.duration
+                        _currentSongDuration.postValue(realDurationMillis)
 
                         updateCommentList(context)
 
@@ -256,10 +258,11 @@ class ContentPlayerViewModel : ViewModel() {
     }
 
     fun setLikeMusic(id : Int){
+        Log.d("setLikeMusic", "setUnLikeMusic : ${id}")
         coroutineScope.launch {
             likeMusic(
                 accessToken = accessToken!!,
-                musicId = currentSong.value?.id.toString()
+                musicId = id
             )
 
             val result = getMusic(
@@ -283,10 +286,11 @@ class ContentPlayerViewModel : ViewModel() {
     }
 
     fun setUnLikeMusic(id : Int){
+        Log.d("setUnLikeMusic", "setUnLikeMusic : ${id}")
         coroutineScope.launch {
             undoLikeMusic(
                 accessToken = accessToken!!,
-                musicId = currentSong.value?.id.toString()
+                musicId = id
             )
             val result = getMusic(
                 accessToken = accessToken!!,
@@ -345,6 +349,27 @@ class ContentPlayerViewModel : ViewModel() {
 //                _currentSong.postValue( _currentPlayList.value?.get(currentIndex))
                 _currentSong.postValue(_currentPlayList.value?.get(_currentPlayIndex))
 
+                coroutineScope.launch {
+                    if(accessToken != null) {
+                        val result = getMusic(
+                            accessToken = accessToken!!,
+                            id = _currentPlayList.value!![_currentPlayIndex].id
+                        )
+                        if(result != null) {
+                            _currentSong.postValue(Music(
+                                albumArtUri = result!!.albumArtUri,
+                                contentUri = result!!.contentUri,
+                                id = result!!.id,
+                                likeCount = result!!.likeCount,
+                                likedByUser = result!!.likedByUser,
+                                title = result!!.title,
+                                userId = currentSong.value!!.userId,
+                                userImgUri = currentSong.value!!.userImgUri,
+                                userName = currentSong.value!!.userName
+                            ))
+                        }
+                    }
+                }
 //                _currentSongDuration.value = _exoPlayer!!.duration
                 _currentSongCurrentProgress.value = 0L
 
@@ -372,6 +397,27 @@ class ContentPlayerViewModel : ViewModel() {
 //                val currentIndex = _currentPlayIndex.value!!.minus(1)
                 _currentSong.postValue(_currentPlayList.value?.get(_currentPlayIndex))
 
+                coroutineScope.launch {
+                    if(accessToken != null) {
+                        val result = getMusic(
+                            accessToken = accessToken!!,
+                            id = _currentPlayList.value!![_currentPlayIndex].id
+                        )
+                        if(result != null) {
+                            _currentSong.postValue(Music(
+                                albumArtUri = result!!.albumArtUri,
+                                contentUri = result!!.contentUri,
+                                id = result!!.id,
+                                likeCount = result!!.likeCount,
+                                likedByUser = result!!.likedByUser,
+                                title = result!!.title,
+                                userId = currentSong.value!!.userId,
+                                userImgUri = currentSong.value!!.userImgUri,
+                                userName = currentSong.value!!.userName
+                            ))
+                        }
+                    }
+                }
 
 //                _currentSongDuration.value = _exoPlayer!!.duration
                 _currentSongCurrentProgress.value = 0L

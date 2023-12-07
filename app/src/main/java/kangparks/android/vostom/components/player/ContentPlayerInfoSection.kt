@@ -1,5 +1,6 @@
 package kangparks.android.vostom.components.player
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -54,22 +55,8 @@ fun ContentPlayerInfoSection(
     contentColor : Color,
 ){
     val currentSong = contentPlayerViewModel.currentSong.observeAsState(initial = null)
-//    val context = LocalContext.current
-////    val likeCount = remember {
-////        currentSong.value?.let { mutableIntStateOf(it.likeCount) }
-////    }
-////    val likedByUser = remember {
-////        currentSong.value?.let { mutableStateOf(it.likedByUser) }
-////    }
-//
-////    LaunchedEffect(key1 = currentSong.value){
-////        if (likeCount != null) {
-////            likeCount.value = currentSong.value?.likeCount ?: 0
-////        }
-////        if (likedByUser != null) {
-////            likedByUser.value = currentSong.value?.likedByUser ?: false
-////        }
-////    }
+
+    Log.d("ContentPlayerInfoSection", "${currentSong.value}")
 
     Column {
         AsyncImage(
@@ -102,10 +89,12 @@ fun ContentPlayerInfoSection(
                 modifier = Modifier
                     .clip(RoundedCornerShape(5.dp))
                     .clickable {
-                        currentSong.value?.setLikeState()
+//                        currentSong.value?.setLikeState()
                         if (currentSong.value?.likedByUser == true) {
+                            Log.d("ContentPlayerInfoSection", " setUnLikeMusic - currentSong.value?.likedByUser ${currentSong.value?.likedByUser}")
                             contentPlayerViewModel.setUnLikeMusic(currentSong.value!!.id)
                         } else {
+                            Log.d("ContentPlayerInfoSection", "setLikeMusic - currentSong.value?.likedByUser ${currentSong.value?.likedByUser}")
                             contentPlayerViewModel.setLikeMusic(currentSong.value!!.id)
                         }
                     },
@@ -157,6 +146,5 @@ fun ContentPlayerInfoSection(
                 color = contentColor
             )
         }
-//        Spacer(modifier = Modifier.height(10.dp))
     }
 }

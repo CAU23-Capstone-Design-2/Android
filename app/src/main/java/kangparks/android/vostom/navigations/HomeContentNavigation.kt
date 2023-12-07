@@ -165,6 +165,7 @@ fun NavGraphBuilder.homeContentNavigation(
                 navController = navController,
                 startContentViewModel = startContentViewModel,
                 contentPlayerViewModel = contentPlayerViewModel,
+                contentStoreViewModel = contentStoreViewModel,
             )
         }
         composable(HomeContent.DetailLikeCoverItem.route){
