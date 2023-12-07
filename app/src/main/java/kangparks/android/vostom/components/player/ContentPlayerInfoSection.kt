@@ -17,6 +17,7 @@ import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -58,6 +59,15 @@ fun ContentPlayerInfoSection(
         currentSong.value?.let { mutableStateOf(it.likedByUser) }
     }
 
+    LaunchedEffect(key1 = currentSong.value){
+        if (likeCount != null) {
+            likeCount.value = currentSong.value?.likeCount ?: 0
+        }
+        if (likedByUser != null) {
+            likedByUser.value = currentSong.value?.likedByUser ?: false
+        }
+    }
+
     Column {
         AsyncImage(
             model = currentSong.value?.albumArtUri ?: null,
@@ -90,8 +100,8 @@ fun ContentPlayerInfoSection(
                     .clip(RoundedCornerShape(5.dp))
                     .clickable {
                         currentSong.value?.setLikeState()
-                        if(likedByUser != null){
-                            if(likedByUser.value){
+                        if (likedByUser != null) {
+                            if (likedByUser.value) {
                                 likedByUser.value = false
                                 if (likeCount != null) {
                                     likeCount.value -= 1
@@ -99,14 +109,14 @@ fun ContentPlayerInfoSection(
 
                                 CoroutineScope(Dispatchers.IO).launch {
                                     val token = getAccessToken(context = context)
-                                    if(token != null){
+                                    if (token != null) {
                                         undoLikeMusic(
                                             accessToken = token,
                                             musicId = currentSong.value?.id.toString()
                                         )
                                     }
                                 }
-                            }else{
+                            } else {
                                 likedByUser.value = true
                                 if (likeCount != null) {
                                     likeCount.value += 1
@@ -114,7 +124,7 @@ fun ContentPlayerInfoSection(
 
                                 CoroutineScope(Dispatchers.IO).launch {
                                     val token = getAccessToken(context = context)
-                                    if(token != null){
+                                    if (token != null) {
                                         likeMusic(
                                             accessToken = token,
                                             musicId = currentSong.value?.id.toString()
