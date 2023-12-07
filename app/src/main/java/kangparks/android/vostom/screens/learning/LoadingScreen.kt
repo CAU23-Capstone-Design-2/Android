@@ -105,12 +105,12 @@ fun LoadingScreen(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        Text(
-            text = testBuildString.value,
-            fontSize = 10.sp,
-            modifier = Modifier
-                .windowInsetsPadding(WindowInsets.statusBars)
-        )
+//        Text(
+//            text = testBuildString.value,
+//            fontSize = 10.sp,
+//            modifier = Modifier
+//                .windowInsetsPadding(WindowInsets.statusBars)
+//        )
         LearningLayoutTemplate(
             mainContent = "Vostom에서 사용자의 목소리를 열심히 학습하고 있어요!",
             subContent = "작업이 완료되면 알려드릴게요.\uD83D\uDE0E",

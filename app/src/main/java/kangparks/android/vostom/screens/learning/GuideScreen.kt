@@ -108,12 +108,12 @@ fun GuideScreen(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        Text(
-            text = testBuildString.value,
-            fontSize = 10.sp,
-            modifier = Modifier
-                .windowInsetsPadding(WindowInsets.statusBars)
-        )
+//        Text(
+//            text = testBuildString.value,
+//            fontSize = 10.sp,
+//            modifier = Modifier
+//                .windowInsetsPadding(WindowInsets.statusBars)
+//        )
         LearningLayoutTemplate(
             mainContent = "내 목소리에 어울리는 노래를 찾기 위해 목소리 학습을 진행해주세요.",
             subContent = "조용한 환경에서 진행하면 학습 정확도가 높아집니다!\uD83D\uDE06",
