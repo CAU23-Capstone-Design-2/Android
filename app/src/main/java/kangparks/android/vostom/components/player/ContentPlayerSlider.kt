@@ -38,30 +38,11 @@ fun ContentPlayerSlider(
     val currentSongDuration = contentPlayerViewModel.currentSongDuration.observeAsState(0L)
     val currentSongCurrentProgress = contentPlayerViewModel.currentSongCurrentProgress.observeAsState(0L)
 
-
-//    val currentSongCurrentProgress = remember {
-//        mutableFloatStateOf(
-//            0f
-//        )
-//    }
     val currentProgress = remember {
         mutableFloatStateOf(
             currentSongCurrentProgress.value.toFloat()
         )
     }
-
-//    val interval = 1000L
-
-//    LaunchedEffect(key1 = currentSongDuration.value, key2 = isPlaying) {
-//        val interval = 1000L
-//        if(isPlaying && exoPlayer != null){
-//
-//            while (currentSongCurrentProgress.value < currentSongDuration.value) {
-//                delay(interval)
-//                currentSongCurrentProgress.value += interval
-//            }
-//        }
-//    }
 
     if(exoPlayer != null){
 
@@ -69,8 +50,6 @@ fun ContentPlayerSlider(
         Slider(
             value = currentSongCurrentProgress.value.toFloat(),
             onValueChange = {
-//                contentPlayerViewModel.setCurrentSongCurrentProgress(it.toLong())
-//                currentSongCurrentProgress.value = it
                 currentProgress.value = it
             },
             onValueChangeFinished = {
@@ -118,14 +97,3 @@ fun ContentPlayerSlider(
 
     Spacer(modifier = Modifier.height(10.dp))
 }
-
-//@Composable
-//private fun UpdateProgress(
-//    isPlaying: Boolean,
-//    currentProgress : MutableFloatState,
-//    totalDuration: Long,
-//    exoPlayer: ExoPlayer?
-//) {
-//
-//
-//}

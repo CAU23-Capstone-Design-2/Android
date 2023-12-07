@@ -43,3 +43,24 @@ data class Music(
 
     }
 }
+
+data class MusicForPlayer(
+    @SerializedName("albumArtUri")
+    val albumArtUri: String,
+
+    @SerializedName("contentUri")
+    val contentUri: String,
+
+    @SerializedName("id")
+    val id: Int,
+
+    @SerializedName("likeCount")
+    var likeCount: Int,
+
+    @SerializedName("likedByUser")
+    var likedByUser: Boolean,
+
+    @SerializedName("title")
+    val title: String,
+
+)

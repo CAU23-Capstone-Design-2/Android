@@ -21,6 +21,10 @@ import kangparks.android.vostom.utils.networks.comment.getCommentList
 import kangparks.android.vostom.utils.networks.comment.likeComment
 import kangparks.android.vostom.utils.networks.comment.unlikeComment
 import kangparks.android.vostom.utils.networks.comment.updateComment
+import kangparks.android.vostom.utils.networks.content.getMusic
+import kangparks.android.vostom.utils.networks.content.likeMusic
+import kangparks.android.vostom.utils.networks.content.undoLikeMusic
+import kangparks.android.vostom.utils.store.getAccessToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -33,6 +37,7 @@ class ContentPlayerViewModel : ViewModel() {
     private val coroutineScope = CoroutineScope(viewModelScope.coroutineContext)
 
     private var _exoPlayer: ExoPlayer? = null
+    private var accessToken : String? = null
 
 //    private var _mediaSession = null
 //    private var mediaSessionCompat : MediaSessionCompat? = null
@@ -108,6 +113,32 @@ class ContentPlayerViewModel : ViewModel() {
         index : Int,
         playList : List<Music>
     ) {
+        accessToken = getAccessToken(context)
+
+        coroutineScope.launch {
+            if(accessToken != null) {
+                val result = getMusic(
+                    accessToken = accessToken!!,
+                    id = playList[index].id
+                )
+                if(result != null) {
+                    _currentSong.postValue(Music(
+                        albumArtUri = result!!.albumArtUri,
+                        contentUri = result!!.contentUri,
+                        id = result!!.id,
+                        likeCount = result!!.likeCount,
+                        likedByUser = result!!.likedByUser,
+                        title = result!!.title,
+                        userId = playList[index].userId,
+                        userImgUri = playList[index].userImgUri,
+                        userName = playList[index].userName
+                    ))
+                }
+            }else{
+                _currentSong.postValue(playList[index])
+            }
+        }
+
         _currentPlayIndex = index
         _currentPlayList.postValue(playList)
 
@@ -146,7 +177,32 @@ class ContentPlayerViewModel : ViewModel() {
                     if(reason == 1){
                         Log.d("setMediaSource", "setMediaSource - onMediaItemTransition :  언제 출력되는지 보자1111 $reason")
                         _currentPlayIndex += 1
-                        _currentSong.postValue(_currentPlayList.value?.get(_currentPlayIndex))
+
+                        coroutineScope.launch {
+                            if(accessToken != null) {
+                                val result = getMusic(
+                                    accessToken = accessToken!!,
+                                    id = playList[index].id
+                                )
+                                if(result != null) {
+                                    _currentSong.postValue(Music(
+                                        albumArtUri = result!!.albumArtUri,
+                                        contentUri = result!!.contentUri,
+                                        id = result!!.id,
+                                        likeCount = result!!.likeCount,
+                                        likedByUser = result!!.likedByUser,
+                                        title = result!!.title,
+                                        userId = currentSong.value!!.userId,
+                                        userImgUri = currentSong.value!!.userImgUri,
+                                        userName = currentSong.value!!.userName
+                                    ))
+                                }
+                            }else{
+                                _currentSong.postValue(playList[index])
+                            }
+                        }
+
+//                        _currentSong.postValue(_currentPlayList.value?.get(_currentPlayIndex))
 
                         _currentSongCurrentProgress.value = 0L
 
@@ -199,10 +255,63 @@ class ContentPlayerViewModel : ViewModel() {
         }
     }
 
+    fun setLikeMusic(id : Int){
+        coroutineScope.launch {
+            likeMusic(
+                accessToken = accessToken!!,
+                musicId = currentSong.value?.id.toString()
+            )
+
+            val result = getMusic(
+                accessToken = accessToken!!,
+                id = id
+            )
+            if(result != null) {
+                _currentSong.postValue(Music(
+                    albumArtUri = result!!.albumArtUri,
+                    contentUri = result!!.contentUri,
+                    id = result!!.id,
+                    likeCount = result!!.likeCount,
+                    likedByUser = result!!.likedByUser,
+                    title = result!!.title,
+                    userId = currentSong.value!!.userId,
+                    userImgUri = currentSong.value!!.userImgUri,
+                    userName = currentSong.value!!.userName
+                ))
+            }
+        }
+    }
+
+    fun setUnLikeMusic(id : Int){
+        coroutineScope.launch {
+            undoLikeMusic(
+                accessToken = accessToken!!,
+                musicId = currentSong.value?.id.toString()
+            )
+            val result = getMusic(
+                accessToken = accessToken!!,
+                id = id
+            )
+            if(result != null) {
+                _currentSong.postValue(Music(
+                    albumArtUri = result!!.albumArtUri,
+                    contentUri = result!!.contentUri,
+                    id = result!!.id,
+                    likeCount = result!!.likeCount,
+                    likedByUser = result!!.likedByUser,
+                    title = result!!.title,
+                    userId = currentSong.value!!.userId,
+                    userImgUri = currentSong.value!!.userImgUri,
+                    userName = currentSong.value!!.userName
+                ))
+            }
+        }
+    }
+
     fun playMusic(music: Music) {
         _isPlaying.value = true
         _isPaused.value = false
-        _currentSong.value = music
+//        _currentSong.value = music
     }
 
     fun showPlayer() {

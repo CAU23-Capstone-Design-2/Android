@@ -154,7 +154,7 @@ fun ContentPlayerScreen(
                         )
 
                         ContentPlayerInfoSection(
-                            currentSong = currentSong,
+                            contentPlayerViewModel = contentPlayerViewModel,
                             screenWidth = screenWidth,
                             contentColor = contentColor
                         )

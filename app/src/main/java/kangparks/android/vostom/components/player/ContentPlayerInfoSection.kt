@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,6 +41,7 @@ import kangparks.android.vostom.models.content.Music
 import kangparks.android.vostom.utils.networks.content.likeMusic
 import kangparks.android.vostom.utils.networks.content.undoLikeMusic
 import kangparks.android.vostom.utils.store.getAccessToken
+import kangparks.android.vostom.viewModel.player.ContentPlayerViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -47,26 +49,27 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ContentPlayerInfoSection(
-    currentSong :  State<Music?>,
+    contentPlayerViewModel: ContentPlayerViewModel,
     screenWidth : Dp,
     contentColor : Color,
 ){
-    val context = LocalContext.current
-    val likeCount = remember {
-        currentSong.value?.let { mutableIntStateOf(it.likeCount) }
-    }
-    val likedByUser = remember {
-        currentSong.value?.let { mutableStateOf(it.likedByUser) }
-    }
-
-    LaunchedEffect(key1 = currentSong.value){
-        if (likeCount != null) {
-            likeCount.value = currentSong.value?.likeCount ?: 0
-        }
-        if (likedByUser != null) {
-            likedByUser.value = currentSong.value?.likedByUser ?: false
-        }
-    }
+    val currentSong = contentPlayerViewModel.currentSong.observeAsState(initial = null)
+//    val context = LocalContext.current
+////    val likeCount = remember {
+////        currentSong.value?.let { mutableIntStateOf(it.likeCount) }
+////    }
+////    val likedByUser = remember {
+////        currentSong.value?.let { mutableStateOf(it.likedByUser) }
+////    }
+//
+////    LaunchedEffect(key1 = currentSong.value){
+////        if (likeCount != null) {
+////            likeCount.value = currentSong.value?.likeCount ?: 0
+////        }
+////        if (likedByUser != null) {
+////            likedByUser.value = currentSong.value?.likedByUser ?: false
+////        }
+////    }
 
     Column {
         AsyncImage(
@@ -100,58 +103,28 @@ fun ContentPlayerInfoSection(
                     .clip(RoundedCornerShape(5.dp))
                     .clickable {
                         currentSong.value?.setLikeState()
-                        if (likedByUser != null) {
-                            if (likedByUser.value) {
-                                likedByUser.value = false
-                                if (likeCount != null) {
-                                    likeCount.value -= 1
-                                }
-
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    val token = getAccessToken(context = context)
-                                    if (token != null) {
-                                        undoLikeMusic(
-                                            accessToken = token,
-                                            musicId = currentSong.value?.id.toString()
-                                        )
-                                    }
-                                }
-                            } else {
-                                likedByUser.value = true
-                                if (likeCount != null) {
-                                    likeCount.value += 1
-                                }
-
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    val token = getAccessToken(context = context)
-                                    if (token != null) {
-                                        likeMusic(
-                                            accessToken = token,
-                                            musicId = currentSong.value?.id.toString()
-                                        )
-                                    }
-                                }
-                            }
+                        if (currentSong.value?.likedByUser == true) {
+                            contentPlayerViewModel.setUnLikeMusic(currentSong.value!!.id)
+                        } else {
+                            contentPlayerViewModel.setLikeMusic(currentSong.value!!.id)
                         }
-
-
                     },
                 verticalAlignment = Alignment.CenterVertically,
 
             ) {
                 Spacer(modifier = Modifier.width(5.dp))
-                if (likedByUser != null) {
+                if (currentSong.value?.likedByUser != null) {
                     Icon(
-                        imageVector = if (likedByUser.value) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                        imageVector = if (currentSong.value?.likedByUser!!) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                         contentDescription = null,
                         modifier = Modifier.size(22.dp),
                         tint = Color(0xFFFF6078),
                     )
                 }
                 Spacer(modifier = Modifier.width(5.dp))
-                if (likeCount != null) {
+                if (currentSong.value?.likeCount != null) {
                     Text(
-                        text = likeCount.value.toString(),
+                        text = currentSong.value?.likeCount.toString(),
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
                         color = contentColor,
