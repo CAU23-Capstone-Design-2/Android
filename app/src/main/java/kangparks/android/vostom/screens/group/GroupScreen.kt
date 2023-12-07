@@ -3,6 +3,9 @@ package kangparks.android.vostom.screens.group
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -11,6 +14,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -76,6 +80,7 @@ fun GroupScreen(
     val currentGroup = currentGroupViewModel.currentGroup.observeAsState(initial = null)
     val currentGroupItemList = currentGroupViewModel.currentGroupCoverItemList.observeAsState(initial = listOf())
     val isParticipant = currentGroupViewModel.participate.observeAsState(initial = false)
+    val isLoaded = currentGroupViewModel.isLoadContent.observeAsState(initial = false)
 
     val isDropDownOpen = remember {
         mutableStateOf(false)
@@ -307,68 +312,90 @@ fun GroupScreen(
                         }
                         Spacer(modifier = Modifier.height(20.dp))
                     }
-                    currentGroupItemList.value?.let {
-                        items(it.size){index ->
-                            Row(
-                                modifier = Modifier
-                                    .fillParentMaxWidth()
-                                    .padding(vertical = 5.dp)
-                                    .clip(RoundedCornerShape(5.dp))
-                                    .clickable(onClick = {
-//                                        val mediaSource = getMediaSource(
-//                                            context = context,
-//                                            musicId = it[index].id
-//                                        )
-                                        contentPlayerViewModel.setMediaSource(
-                                            context = context,
-//                                            mediaSource = mediaSource,
-                                            index = index,
-                                            playList = currentGroupItemList.value!!
-                                        )
-                                        contentPlayerViewModel.playMusic(it[index])
-                                    }
-                                    )
-                            ){
-                                AsyncImage(
-                                    model = it[index].albumArtUri ?: null,
-                                    contentDescription = null,
-                                    modifier = Modifier
-                                        .size(80.dp)
-                                        .clip(RoundedCornerShape(5.dp)),
-                                    contentScale = ContentScale.Crop
-                                )
-                                Spacer(modifier = Modifier.width(15.dp))
-                                Column {
+                    if(currentGroupItemList.value!!.isEmpty() && isLoaded.value){
+                        item {
+                            AnimatedVisibility(
+                                visible = isLoaded.value,
+                                enter = fadeIn(),
+                                exit = fadeOut()
+                            ) {
+                                Box(
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentAlignment = Alignment.Center
+                                ){
                                     Text(
-                                        text = it[index].title,
-                                        fontSize = 15.sp,
+                                        text = "그룹에 노래를 공유해봐요!😎",
+                                        fontSize = 18.sp,
                                         fontWeight = FontWeight.Bold,
-                                        maxLines = 1,
-                                        overflow = TextOverflow.Ellipsis
                                     )
-                                    Spacer(modifier = Modifier.height(5.dp))
-                                    Row {
-                                        AsyncImage(
-                                            model = it[index].userImgUri?:"",
-                                            contentDescription = null,
-                                            modifier = Modifier
-                                                .size(20.dp)
-                                                .clip(CircleShape),
-                                            contentScale = ContentScale.Crop
+                                }
+                            }
+
+                        }
+
+                    }
+                    else{
+                        currentGroupItemList.value?.let {
+                            items(it.size){index ->
+                                Row(
+                                    modifier = Modifier
+                                        .fillParentMaxWidth()
+                                        .padding(vertical = 5.dp)
+                                        .clip(RoundedCornerShape(5.dp))
+                                        .clickable(onClick = {
+                                            contentPlayerViewModel.setMediaSource(
+                                                context = context,
+                                                index = index,
+                                                playList = currentGroupItemList.value!!
+                                            )
+                                            contentPlayerViewModel.playMusic(it[index])
+                                        }
                                         )
-                                        Spacer(modifier = Modifier.width(5.dp))
+                                ){
+                                    AsyncImage(
+                                        model = it[index].albumArtUri ?: null,
+                                        contentDescription = null,
+                                        modifier = Modifier
+                                            .size(80.dp)
+                                            .clip(RoundedCornerShape(5.dp))
+                                            .background(Color(0xFFD1D1D1))
+                                        ,
+                                        contentScale = ContentScale.Crop
+                                    )
+                                    Spacer(modifier = Modifier.width(15.dp))
+                                    Column {
                                         Text(
-                                            text = it[index].userName + "님의 커버" ?: "",
-                                            fontSize = 12.sp,
-                                            fontWeight = FontWeight.Normal,
+                                            text = it[index].title,
+                                            fontSize = 15.sp,
+                                            fontWeight = FontWeight.Bold,
                                             maxLines = 1,
                                             overflow = TextOverflow.Ellipsis
                                         )
+                                        Spacer(modifier = Modifier.height(5.dp))
+                                        Row {
+                                            AsyncImage(
+                                                model = it[index].userImgUri?:"",
+                                                contentDescription = null,
+                                                modifier = Modifier
+                                                    .size(20.dp)
+                                                    .clip(CircleShape),
+                                                contentScale = ContentScale.Crop
+                                            )
+                                            Spacer(modifier = Modifier.width(5.dp))
+                                            Text(
+                                                text = it[index].userName + "님의 커버" ?: "",
+                                                fontSize = 12.sp,
+                                                fontWeight = FontWeight.Normal,
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis
+                                            )
+                                        }
                                     }
                                 }
                             }
                         }
                     }
+                    
                 }
             }
         }

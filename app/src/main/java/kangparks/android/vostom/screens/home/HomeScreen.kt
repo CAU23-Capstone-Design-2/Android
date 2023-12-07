@@ -148,12 +148,12 @@ fun HomeScreen(
             navController = navController,
             isPlaying = isPlaying
         ) {
-            Text(
-                text = testBuildString.value,
-                fontSize = 10.sp,
-                modifier = Modifier
-                    .windowInsetsPadding(WindowInsets.statusBars)
-            )
+//            Text(
+//                text = testBuildString.value,
+//                fontSize = 10.sp,
+//                modifier = Modifier
+//                    .windowInsetsPadding(WindowInsets.statusBars)
+//            )
             Column(
                 modifier = Modifier
                     .fillMaxSize()

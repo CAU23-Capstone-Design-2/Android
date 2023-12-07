@@ -25,17 +25,20 @@ class CurrentGroupViewModel : ViewModel() {
     private val _currentGroupCoverItemList : MutableLiveData<List<Music>?> = MutableLiveData(listOf())
     private val _currentGroupCoverMyItemList : MutableLiveData<List<Music>?> = MutableLiveData(listOf())
     private val _participate : MutableLiveData<Boolean> = MutableLiveData(false)
+    private val _isLoadContent : MutableLiveData<Boolean> = MutableLiveData(false)
 
     val currentGroup : LiveData<Group?> = _currentGroup
     val currentGroupCoverItemList : LiveData<List<Music>?> = _currentGroupCoverItemList
     val currentGroupCoverMyItemList : LiveData<List<Music>?> = _currentGroupCoverMyItemList
     val participate : LiveData<Boolean> = _participate
+    val isLoadContent : LiveData<Boolean> = _isLoadContent
 
     fun selectGroup(
         userId : Int,
         context: Context,
         group : Group
     ){
+        _isLoadContent.postValue(false)
         _currentGroupCoverItemList.postValue(listOf())
         if(group.isMember || group.isLeader) {
             _participate.postValue(true)
@@ -48,6 +51,7 @@ class CurrentGroupViewModel : ViewModel() {
                 groupId = group.teamId
             )
             _currentGroupCoverItemList.postValue(result)
+            _isLoadContent.postValue(true)
 
             _currentGroupCoverMyItemList.postValue(result.filter { it.userId == userId })
             Log.d("network", "selectGroup : ${_currentGroupCoverMyItemList.value}")

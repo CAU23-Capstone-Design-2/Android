@@ -1,5 +1,6 @@
 package kangparks.android.vostom.components.item
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -38,13 +40,8 @@ fun CoverSongItem(
             .clip(RoundedCornerShape(5.dp))
             .clickable(onClick = {
                 if(content != null){
-//                    val mediaSource = getMediaSource(
-//                        context = context,
-//                        musicId = content.id
-//                    )
                     contentPlayerViewModel.setMediaSource(
                         context = context,
-//                        mediaSource = mediaSource,
                         index = index,
                         playList = playList.value
                     )
@@ -57,7 +54,9 @@ fun CoverSongItem(
             contentDescription = null,
             modifier = Modifier
                 .size(contentSize.dp)
-                .clip(RoundedCornerShape(5.dp)),
+                .clip(RoundedCornerShape(5.dp))
+                .background(Color(0xFFD1D1D1))
+            ,
             contentScale = ContentScale.Crop
         )
         Spacer(modifier = Modifier.height(10.dp))
